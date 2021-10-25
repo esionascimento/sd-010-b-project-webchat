@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2 id="welcome-message">Olá, Seja bem-vindo ao chat!</h2>
+    <h3>Você pode alterá-lo no campo abaixo</h3>
+    <form id="nickname-form">
+        <input placeholder="Novo nickname" id="nickname-input" data-testid="nickname-box">
+        <button data-testid="nickname-button">Salvar</button>
+    </form>
+    <ul id="users-online">Usuários conectados</ul>
+    <ul id="messages-list">
+        <% messages.forEach((message) => { %>
+            <li data-testid='message'><%= message %></li>
+            <%}) %>
+    </ul>
+    <form id="message-form">
+        <input type="text" placeholder="Olá, pessoal!" id="message-input"
+        data-testid="message-box">
+        <button data-testid="send-button">Enviar</button>
+        <!-- since there is a button inside the form tag, that is enough to trigger the form event listener. If the button is outside the form tag, clicking on it won't trigger the 'submit' event listener  -->
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/webchat.js"></script>
+</body>
+</html>
