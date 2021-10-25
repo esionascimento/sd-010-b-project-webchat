@@ -6,10 +6,10 @@ const socketMessage = (io, socket) => {
         const { chatMessage, nickname } = payload;
 
         const date = new Date();
-        const brazilianDate = date.toLocaleDateString();
+        const brDate = date.toLocaleDateString().split('/');
+        const formattedBrazilianDate = `${brDate[0]}-${brDate[1]}-${brDate[2]}`;
         const timeHMS = ` ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-        const formattedDate = `${brazilianDate} ${timeHMS}`;
-
+        const formattedDate = `${formattedBrazilianDate} ${timeHMS}`;
         await webchatController.saveMessage({ chatMessage, nickname, formattedDate });
 
         const formattedMessage = `${formattedDate} - ${nickname}: ${chatMessage}`;
