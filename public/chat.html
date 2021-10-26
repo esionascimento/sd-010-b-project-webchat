@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WebChat</title>
+    <link rel="stylesheet" href="./css/chat.css" />
+  </head>
+  <body>
+    <main>
+      <section class="user-container">
+        <div class="form__container">
+          <form id="form-nick" action="#">
+            <div class="nick__container">
+              <input data-testid="nickname-box" id="nick-input" type="text" />
+            </div>
+            <div class="save__container">
+              <button data-testid="nickname-button" id="save-btn" type="submit">
+                Salvar
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="user-list__container">
+          <ul id="user-list"></ul>
+        </div>
+      </section>
+      <section class="chat__container">
+        <div class="msgs__container">
+          <ul id="messages-list"></ul>
+        </div>
+      </section>
+    </main>
+    <div class="input-msg__container">
+      <form action="#" id="send-message">
+        <div class="msg__container">
+          <input
+            data-testid="message-box"
+            type="text"
+            id="send-message-input"
+          />
+        </div>
+        <div class="send-msg__container">
+          <button data-testid="send-button" type="submit">Enviar</button>
+        </div>
+      </form>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/chat.js"></script>
+  </body>
+</html>

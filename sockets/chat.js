@@ -15,5 +15,15 @@ const conn = (io) => io.on('connection', (socket) => {
       io.emit('newUser', { users: getAllUsers(), msgs });
     });
 
+    socket.on('updateUser', (user) => {
+      const users = updateUser(socket.id, user);
+      io.emit('newUser', { users });
+    });
+
+    socket.on('disconnect', () => {
+    const users = removeUser(socket.id);
+      io.emit('newUser', { users });
+    });
+  });
 
   module.exports = conn;
