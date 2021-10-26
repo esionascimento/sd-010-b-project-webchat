@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO - Trybe</title>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js ."></script> -->
+    <script src="/socket.io/socket.io.js"></script>
+    
+  </head>
+  <body>
+
+    <ul id="mensagens"></ul>
+
+    <form action="">
+      <input id="mensagemInput" autocomplete="off"><button>Send</button>
+    </form>
+
+    <script>
+      const socket = io();
+      const form = document.querySelector('form')
+      const inputMessage = document.querySelector('#mensagemInput')
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        socket.emit('mensagem', inputMessage.value)
+        inputMessage.value = ''
+        return false;
+      })
+
+      const createMessage = (message) => {
+        const messagesUl = document.querySelector('#mensagens');
+        const li = document.createElement('li');
+        li.innerText = message;
+        messagesUl.appendChild(li);
+      }
+
+      socket.on('message', (message) => {
+        createMessage(message);
+      })
+
+      socket.on('serverMessage', (object) => {
+        createMessage(object.message);
+      })
+    </script>
+  </body>
+</html>
