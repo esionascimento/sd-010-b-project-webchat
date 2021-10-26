@@ -44,7 +44,7 @@ socket.on('messages', (messages) => {
 socket.on('users', (usersList) => {
   onlineUsers.innerHTML = '';
   const userLi = document.createElement('li');
-  userLi.innerText = user;
+  userLi.innerText = `${user}: entrou`;
   userLi.setAttribute('data-testid', 'online-user');
   onlineUsers.appendChild(userLi);
   usersList.forEach((element) => {
