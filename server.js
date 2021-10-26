@@ -1,21 +1,24 @@
-const express = require('express');
 require('dotenv').config();
+const express = require('express');
 
 const app = express();
 const http = require('http').createServer(app);
 
 const PORT = process.env.PORT || 3000;
 
-app.use(express.urlencoded({ extended: true }));
+const io = require('socket.io')(http, {
+  cors: {
+    origin: `https://localhost:${PORT}`,
+    method: ['GET', 'POST'],
+  },
+});
+
 app.set('view engine', 'ejs');
 
 app.set('views', './views');
 
-const io = require('socket.io')(http, {
-  cors: {
-    origin: `http://localhost:${PORT}`,
-    methods: ['GET', 'POST'],
-  },
+app.get('/', (req, res) => {
+  res.status(200).render('index');
 });
 
 io.on('connection', (socket) => {
@@ -26,8 +29,6 @@ io.on('connection', (socket) => {
   });
 });
 
-app.use(express.static(`${__dirname}/public`));
-
 http.listen(PORT, () => {
-  console.log(`Servidor ouvindo na porta ${PORT}`);
+  console.log(`listening on ${PORT}`);
 });
