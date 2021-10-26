@@ -1,0 +1,38 @@
+const messageModel = require('../models/messages');
+
+const getFormatedDate = (date) => {
+  const day = date.getDay() < 10 ? `0${date.getDay()}` : date.getDay();
+  const month = date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth();
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+};
+
+// https://stackoverflow.com/questions/8888491/how-do-you-display-javascript-datetime-in-12-hour-am-pm-format
+const getAMPM = (date) => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours %= 12;
+  hours = hours || 12; 
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  const strTime = `${hours}:${minutes}:${seconds} ${ampm}`;
+  return strTime;
+};
+
+const newDate = () => {
+  const date = new Date();
+  const now = `${getFormatedDate(date)} ${getAMPM(date)}`;
+  return now;
+};
+
+const sendMessage = async (message, nickname, now) => messageModel
+  .sendMessage(message, nickname, now);
+
+const getAllMessages = async () => messageModel.getAllMessages();
+
+module.exports = {
+  sendMessage,
+  getAllMessages,
+  newDate,
+};
