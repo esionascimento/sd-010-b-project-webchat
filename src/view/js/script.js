@@ -46,7 +46,6 @@ const createMessage = (text) => {
 };
 
 const renderUsers = () => {
-
 }; */
 
 const renderMessages = (messages) => {
