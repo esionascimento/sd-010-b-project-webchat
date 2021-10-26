@@ -4,9 +4,27 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Chat</title>
 </head>
-<body>
-  <p>Cheguei no index</p>
+<body> 
+
+  <div>
+    <ul id="ul-msg"></ul>
+
+    <form action="">
+      <input data-testid="message-box" type="text" id="input-message"/>
+      <button data-testid="send-button" id="enviar-msg">Enviar</button>
+    </form> 
+  </div>
+
+  <p id="nick-tela" data-testid="online-user"></p>
+
+  <form action="">
+    <input data-testid="nickname-box" type="text" id="input-nick">
+    <button data-testid="nickname-button" id="enviar-novo-nick">Trocar nick</button>
+  </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./js/script.js"></script>
 </body>
 </html>

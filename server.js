@@ -19,11 +19,13 @@ app.get('/', (req, res) => {
   res.render(`${__dirname}/views/index.ejs`);
 });
 
+app.use(express.static(`${__dirname}/views`));
+
 io.on('connection', (socket) => { // agradecimentos Lucas Martins da Silva PR: https://github.com/tryber/sd-010-b-project-webchat/pull/14
   socket.on('message', (message) => {
     const { chatMessage, nickname } = message;
-    const now = new Date().toLocaleString().replace(/\//g, '-');
-    io.emit('message', `${now} - ${nickname} ${chatMessage}`);
+    const dateNow = new Date().toLocaleString().replace(/\//g, '-');
+    io.emit('message', `${dateNow} - ${nickname} ${chatMessage}`);
   });
 });
 
