@@ -12,6 +12,10 @@ const io = require('socket.io')(http, {
     methods: ['GET', 'POST'],
   } });
 
+app.get('/', (req, res) => {
+  res.sendFile(`${__dirname}/views/index.html`);
+});
+
 io.on('connection', (socket) => { // agradecimentos Lucas Martins da Silva PR: https://github.com/tryber/sd-010-b-project-webchat/pull/14
   socket.on('message', (message) => {
     const { chatMessage, nickname } = message;
