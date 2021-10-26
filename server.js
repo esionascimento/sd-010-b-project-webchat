@@ -23,6 +23,7 @@ const dataAtual = new Date();
 const dia = (dataAtual.getDate() < 10 ? '0' : '') + dataAtual.getDate();
 const mes = ((dataAtual.getMonth() + 1) < 10 ? '0' : '') + (dataAtual.getMonth() + 1);
 
+// Peguei no site https://www.devmedia.com.br/como-criar-um-chat-com-node-js/33719
 function dataHora() {
   const ano = dataAtual.getFullYear();
   const hora = (dataAtual.getHours() < 10 ? '0' : '') + dataAtual.getHours();
@@ -53,8 +54,3 @@ app.get('/', async (req, res) => {
 http.listen(3000, () => {
   console.log('Servidor ouvindo na porta 3000');
 });
-
-/* app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/views/client.ejs`);
-}); 
- */
