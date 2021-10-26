@@ -4,6 +4,9 @@ require('dotenv').config();
 const app = express();
 const http = require('http').createServer(app);
 
+app.set('view engine', 'ejs');
+app.set('views', './views');
+
 const PORT = process.env.PORT || 3000;
 
 const io = require('socket.io')(http, {
@@ -13,7 +16,7 @@ const io = require('socket.io')(http, {
   } });
 
 app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/views/index.html`);
+  res.sendFile(`${__dirname}/views/index.ejs`);
 });
 
 io.on('connection', (socket) => { // agradecimentos Lucas Martins da Silva PR: https://github.com/tryber/sd-010-b-project-webchat/pull/14
