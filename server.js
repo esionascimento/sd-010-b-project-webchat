@@ -24,7 +24,7 @@ app.use(express.static(__dirname));
 
 require('./sockets/chat')(io);
 
- app.get('/chat', chatController.chat);
+app.get('/', chatController.chat);
 
 const PORT = process.env.PORT || 3000;
 
