@@ -5,7 +5,8 @@ const messageInput = document.querySelector('#messageInput');
 const nicknameInput = document.querySelector('#nicknameInput');
 const chooseNickname = document.querySelector('#chooseNickname');
 const userNickname = document.querySelector('#userNickname');
-const messages = document.querySelector('#messages');
+const messageList = document.querySelector('#messages');
+/* const onlineUsers = document.querySelector('#onlineUsers'); */
 
 const generateNickname = () => {
   let id = '';
@@ -30,13 +31,46 @@ sendButton.addEventListener('click', () => {
   socket.emit('message', { chatMessage, nickname });
 });
 
-socket.on('message', (receivedMessage) => {
+const createMessage = (text) => {
   const message = document.createElement('li');
-  message.textContent = receivedMessage;
+  message.textContent = text;
   message.setAttribute('data-testid', 'message');
-  messages.appendChild(message);
+  messageList.appendChild(message);
+};
+
+/* const createLoggedUser = (user) => {
+  const bullet = document.createElement('li');
+  bullet.textContent = user;
+  bullet.setAttribute('data-testid', 'online-user');
+  onlineUsers.appendChild(bullet);
+};
+
+const renderUsers = () => {
+
+}; */
+
+const renderMessages = (messages) => {
+  messages.forEach((message) => {
+    createMessage(message);
+  });
+};
+
+const getMessages = async () => {
+  fetch('http://localhost:3000/messages')
+    .then((data) => data.json())
+    .then((result) => renderMessages(result));
+};
+
+/* socket.on('logged', (user) => {
+
+}); */
+
+socket.on('message', (receivedMessage) => {
+  createMessage(receivedMessage);
 });
 
-window.onload = () => {
+window.onload = async () => {
   userNickname.textContent = nickname;
+  socket.emit('logged', nickname);
+  await getMessages();
 };

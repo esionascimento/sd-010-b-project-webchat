@@ -6,4 +6,8 @@ module.exports = (io) => io.on('connection', (socket) => {
     await messageController.sendMessage(chatMessage, nickname, now);
     io.emit('message', `${now} - ${nickname}: ${chatMessage}`);
   });
+
+  socket.on('logged', (user) => {
+    io.broadcast.emit('logged', user);
+  });
 });
