@@ -70,7 +70,6 @@ const createUser = (users, msgs = []) => {
 
 socket.on('currUser', (rand) => {
   const user = { nick: randomNick };
-  console.log(randomNick);
   nickname = rand;
   listItemGenerator(user);
 });

@@ -1,5 +1,7 @@
 const users = [];
 
+const getAllUsers = () => users;
+
 const removeUser = (id) => {
   const cli = users.findIndex((el) => el.id === id);
   users.splice(cli, 1);
@@ -14,13 +16,10 @@ const addUser = (id, user) => {
 };
 
 const updateUser = (id, user) => {
-  console.log(users);
   const currUser = users.findIndex((el) => el.id === id);
   users[currUser].nick = user.nickname;
 
-  return users;
+  return getAllUsers();
 };
-
-const getAllUsers = () => users;
 
 module.exports = { removeUser, addUser, updateUser, getAllUsers };
