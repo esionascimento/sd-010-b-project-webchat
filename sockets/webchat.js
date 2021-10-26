@@ -1,26 +1,37 @@
+const getNow = () => {
+  const date = new Date();
+  const DD = date.getDate();
+  const MM = date.getMonth() + 1;
+  const yyyy = date.getFullYear();
+  const HH = date.getHours();
+  const mm = date.getMinutes();
+  const ss = date.getSeconds();
+  
+  return `${DD}-${MM}-${yyyy} ${HH}:${mm}:${ss}`;
+};
+
+let count = 0;
+
 module.exports = (io) => io.on('connection', (socket) => {
-  const nickname = 'Fabio';
-  // const Room = 'public';
+  count += 1;
+  const nicknames = `User ${count}`;
+  const Room = 'public';
 
-  // socket.on('joinRoom', ({ username, room }) => {
-  //   console.log(`${username} se conectou na sala ${room}!`);
-  //   userName = username;
-  //   Room = room;
+  console.log(`${nicknames} se conectou a sala !`);
+  socket.join(Room);
 
-  //   socket.join(room);
+  socket.on('message', ({ chatMessage: message, room = Room, nickname }) => {
+    io.to(room)
+    .emit('message', `${getNow()} - ${nickname}: ${message}`);
+  });
 
-  //   socket.emit('serverMessage', `Bem vindo ${username} a sala sobre ${room}`);
+  // socket.emit('message', `Bem vindo ${nickname}`);
 
-  //   socket.broadcast.to(room).emit('serverMessage', `${username} acabou de entrar na sala`);
-
-  //   socket.on('roomClientMessage', ({ message, roons }) => {
-  //     io.to(roons)
-  //     .emit('serverMessage', `${username}: ${message}`);
-  //   });
-  // });
+  // socket.broadcast.to(Room)
+  //   .emit('message', `${nickname} acabou de entrar na sala`);
 
   socket.on('disconnect', () => {
-    console.log(`${nickname} se desconectou na sala !`);
-    socket.broadcast.emit('serverMessage', `${nickname} acabou de sair na sala`);
+    socket.broadcast.to(Room)
+      .emit('message', `${nicknames} acabou de sair na sala`);
   });
 });
