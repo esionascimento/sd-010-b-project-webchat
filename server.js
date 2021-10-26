@@ -16,7 +16,7 @@ const io = require('socket.io')(http, {
   } });
 
 app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/views/index.ejs`);
+  res.render(`${__dirname}/views/index.ejs`);
 });
 
 io.on('connection', (socket) => { // agradecimentos Lucas Martins da Silva PR: https://github.com/tryber/sd-010-b-project-webchat/pull/14
