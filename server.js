@@ -23,6 +23,12 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('saida');
   });
+
+  socket.on('newMessage', (msg) => {
+    console.log(msg);
+    io.emit('serverMessage', { message: msg });
+  });
+  socket.broadcast.emit('serverMessage', { message: 'conection done' });
 });
 
 app.get('/', (req, res) => {

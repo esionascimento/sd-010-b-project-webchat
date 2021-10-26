@@ -11,6 +11,13 @@
         font-size: 20px;
       }
 
+      li {
+        list-style-type: none;
+      }
+
+      .nicknames li {
+      }
+
       .top-screen {
         display: flex;
         margin-bottom: 20px;
@@ -110,10 +117,6 @@
       }
     </style>
   </head>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-  </script>
   <body>
     <div class="top-screen">
       <div class="name-screen">
@@ -126,13 +129,15 @@
           data-testid="nickname-box"
         />
         <button class="ok-btn" data-testid="nickname-button">Ok</button>
-        <ul>
-          <li>Nome</li>
+        <ul class="nicknames">
+          <li>jf83hf38hfeu</li>
+          <li>f4fewfewfewf</li>
+          <li>n65n5nrtntehb</li>
         </ul>
       </div>
       <div class="message-screen">
-        <ul>
-          <li data-testid="message">Mensagem</li>
+        <ul class="messages">
+          <!-- <li data-testid="message">Mensagem</li> -->
         </ul>
       </div>
     </div>
@@ -140,14 +145,39 @@
       <form action="">
         <input
           type="text"
-          name="message"
           id="message"
           class="message"
           placeholder="Type..."
           data-testid="message-box"
+          autocomplete="off"
         />
         <button class="send-btn" data-testid="send-button">Enviar</button>
       </form>
     </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      const form = document.querySelector('form');
+      const sendMessage = document.getElementById('message');
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        socket.emit('newMessage', sendMessage.value);
+        sendMessage.value = '';
+        return false;
+      });
+
+      const getMessage = (message) => {
+        const messagesUl = document.querySelector('.messages');
+        const li = document.createElement('li');
+        li.innerText = message;
+        messagesUl.appendChild(li);
+      };
+
+      socket.on('serverMessage', ({ message }) => {
+        getMessage(message);
+      });
+    </script>
   </body>
 </html>
