@@ -62,15 +62,14 @@ const createUpdateUserList = (users) => {
 const createUser = (users, msgs = []) => {
   createHistory(msgs);
   ulUserList.innerHTML = '';
-  const user = { nick: nickname };
+  const user = { nick: randomNick };
   listItemGenerator(user);
-  const filteredUsers = users.filter((el) => el.nick !== nickname);
+  const filteredUsers = users.filter((el) => el.nick !== randomNick);
   createUpdateUserList(filteredUsers);
 };
 
 socket.on('currUser', (rand) => {
   const user = { nick: randomNick };
-  nickname = rand;
   listItemGenerator(user);
 });
 
