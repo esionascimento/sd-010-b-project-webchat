@@ -11,6 +11,7 @@ const getNow = () => {
 };
 
 let count = 0;
+// moment
 
 module.exports = (io) => io.on('connection', (socket) => {
   count += 1;
@@ -25,13 +26,13 @@ module.exports = (io) => io.on('connection', (socket) => {
     .emit('message', `${getNow()} - ${nickname}: ${message}`);
   });
 
-  // socket.emit('message', `Bem vindo ${nickname}`);
+  // socket.emit('wellCome', `Bem vindo ${nickname}`);
 
   // socket.broadcast.to(Room)
-  //   .emit('message', `${nickname} acabou de entrar na sala`);
+  //   .emit('entryRoom', `${nickname} acabou de entrar na sala`);
 
   socket.on('disconnect', () => {
     socket.broadcast.to(Room)
-      .emit('message', `${nicknames} acabou de sair na sala`);
+      .emit('outRoom', `${nicknames} acabou de sair na sala`);
   });
 });

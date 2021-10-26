@@ -8,7 +8,7 @@ const http = require('http').createServer(app);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 const io = require('socket.io')(http, {
   cors: {

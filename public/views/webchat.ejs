@@ -9,10 +9,15 @@
 </head>
 <body>
   <h1>WebChat</h1>
-  <ul id="messages"></ul>
-  <form action="">
-    <input id="messageInput" autocomplete="off" /><button>Send</button>
+  <h2 data-testid="online-user" id="online-user"></h2>
+  <form action="" id='formNick'>
+    <input id="inputNick" autocomplete="off" data-testid="nickname-box"/><button data-testid="nickname-button">Alter Nick</button>
   </form>
+  
+  <form action="" id='formMessage'>
+    <input id="messageInput" autocomplete="off" data-testid="message-box"/><button data-testid="send-button">Send</button>
+  </form>  
+  <ul id="messages"></ul>
   <script src="/socket.io/socket.io.js"></script>
   <script src="../js/webchat.js"></script>
 </body>
