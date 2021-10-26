@@ -8,7 +8,7 @@ app.use(express.json());
 const http = require('http').createServer(app);
 
 const port = 3000;
-const guest = [];
+
 const io = require('socket.io')(http, {
     cors: {
         origin: 'http://localhost:3000',
