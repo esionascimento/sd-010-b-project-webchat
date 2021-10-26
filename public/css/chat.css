@@ -42,8 +42,8 @@ main {
 
 .save__container button {
   border-radius: 5px;
-  margin-left: .5rem;
-  padding: .5rem 1rem;
+  margin-left: 0.5rem;
+  padding: 0.5rem 1rem;
 }
 
 .user-list__container {
@@ -71,8 +71,8 @@ main {
 
 .input-msg__container form {
   display: flex;
-  margin-left: 10rem;
   justify-content: space-between;
+  margin-left: 10rem;
   width: 100%;
 }
 
@@ -85,15 +85,16 @@ main {
 }
 
 .msg__container input {
+  padding: 0.5rem;
   width: 100%;
-  padding: .5rem;
 }
 
 .send-msg__container {
   width: 20%;
 }
+
 .send-msg__container button {
   border-radius: 5px;
-  margin-left: .5rem;
-  padding: .5rem 1rem;
+  margin-left: 0.5rem;
+  padding: 0.5rem 1rem;
 }
