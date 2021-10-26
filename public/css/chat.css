@@ -32,7 +32,7 @@ main {
 
 .nick__container input {
   border-radius: 10px;
-  padding: .5rem;
+  padding: 0.5rem;
   width: 100%;
 }
 
