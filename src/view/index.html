@@ -4,10 +4,14 @@
   <title>zapzap :D</title>
 </head>
 <body>
+  <p data-testid="online-user" id="userNickname"></p>
   <form>
-    <input type="text" name="messageInput" id="messageInput" />
-    <button type="button" id="sendButton">Enviar</button>
+    <input data-testid="message-box" type="text" name="messageInput" id="messageInput" />
+    <button data-testid="send-button" type="button" id="sendButton">Enviar</button>
   </form>
+  <li >
+
+  </li>
   <script src="/socket.io/socket.io.js"></script>
   <script type="module" src="js/script.js"></script>
 </body>
