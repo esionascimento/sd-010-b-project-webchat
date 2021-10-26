@@ -44,5 +44,3 @@ socket.on('message', (message) => {
 // socket.on('userName', (nick) => {
 //   createUser(nick);
 // });
-
-socket.on('ola', (message) => createMessage(message));

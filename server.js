@@ -26,7 +26,7 @@ require('./sockets/chat')(io);
 
  app.get('/chat', chatController.chat);
 
-const { PORT } = process.env;
+const { PORT } = process.env || 3000;
 
 // trocar para http
 http.listen(PORT, () => console.log(`Ouvindo na porta ${PORT}`));
