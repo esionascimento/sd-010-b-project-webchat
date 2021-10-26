@@ -129,6 +129,7 @@
           data-testid="nickname-box"
         />
         <button class="ok-btn" data-testid="nickname-button">Ok</button>
+        <p>Usuários</p>
         <ul class="nicknames">
           <li>jf83hf38hfeu</li>
           <li>f4fewfewfewf</li>
@@ -138,6 +139,9 @@
       <div class="message-screen">
         <ul class="messages">
           <!-- <li data-testid="message">Mensagem</li> -->
+          <% messages.forEach((message) => { %>
+          <li data-testid="message"><%= message %></li>
+          <%}) %>
         </ul>
       </div>
     </div>

@@ -7,6 +7,9 @@ const http = require('http').createServer(app);
 
 const PORT = 3000;
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const io = require('socket.io')(http, {
   cors: {
     origin: `http://localhost:${PORT}`, 
@@ -16,6 +19,7 @@ const io = require('socket.io')(http, {
 app.use(cors());
 
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 io.on('connection', (socket) => {
   console.log('Teste conexao');
@@ -32,7 +36,7 @@ io.on('connection', (socket) => {
 });
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/chat/index.html'));
+  res.render('wechat.ejs');
 });
 
 http.listen(PORT, () => {
