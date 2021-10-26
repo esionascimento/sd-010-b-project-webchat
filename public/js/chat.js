@@ -46,16 +46,34 @@ const createHistory = (arrMsgs) => {
   });
 };
 
+const listItemGenerator = (user) => {
+  const li = document.createElement('li');
+  li.setAttribute(TESTID, 'online-user');
+  li.textContent = user.nick;
+  ulUserList.appendChild(li);
+};
+
+const createUpdateUserList = (users) => {
+  users.forEach((user) => {
+    listItemGenerator(user);
+  });
+};
+
 const createUser = (users, msgs = []) => {
   createHistory(msgs);
   ulUserList.innerHTML = '';
-  users.forEach((user) => {
-    const li = document.createElement('li');
-    li.setAttribute(TESTID, 'online-user');
-    li.textContent = user.nick;
-    ulUserList.appendChild(li);
-  });
+  const user = { nick: nickname };
+  listItemGenerator(user);
+  const filteredUsers = users.filter((el) => el.nick !== nickname);
+  createUpdateUserList(filteredUsers);
 };
+
+socket.on('currUser', (rand) => {
+  const user = { nick: randomNick };
+  console.log(randomNick);
+  nickname = rand;
+  listItemGenerator(user);
+});
 
 socket.on('message', (msg) => createMessage(msg));
 socket.on('newUser', ({ users, msgs }) => createUser(users, msgs));

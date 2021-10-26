@@ -8,15 +8,15 @@ const removeUser = (id) => {
 
 const addUser = (id, user) => {
   const currUser = { id, nick: user };
-  users.unshift(currUser);
+  users.push(currUser);
+
   return users;
 };
 
 const updateUser = (id, user) => {
+  console.log(users);
   const currUser = users.findIndex((el) => el.id === id);
-  const newUser = { id, nick: user.nickname };
-  users.splice(currUser, 1);
-  users.unshift(newUser);
+  users[currUser].nick = user.nickname;
 
   return users;
 };

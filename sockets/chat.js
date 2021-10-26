@@ -10,9 +10,9 @@ const conn = (io) => io.on('connection', (socket) => {
     });
 
     socket.on('newUser', async (user) => {
-      addUser(socket.id, user);
-      const msgs = await getAll();
-      io.emit('newUser', { users: getAllUsers(), msgs });
+      const users = addUser(socket.id, user);
+      socket.emit('currUser', user); const msgs = await getAll();
+      io.emit('newUser', { users, msgs });
     });
 
     socket.on('updateUser', (user) => {
@@ -21,8 +21,8 @@ const conn = (io) => io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-    const users = removeUser(socket.id);
-      io.emit('newUser', { users });
+      removeUser(socket.id);
+      io.emit('newUser', { users: getAllUsers() });
     });
   });
 
