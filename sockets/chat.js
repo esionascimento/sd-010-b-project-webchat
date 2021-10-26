@@ -1,6 +1,7 @@
 const moment = require('moment');
 const CreateMessage = require('../models/chat');
 // https://momentjs.com/
+// https://momentjscom.readthedocs.io/en/latest/moment/04-displaying/01-format/
 moment.defaultFormat = 'DD-MM-yyyy HH:mm:ss';
 
 let users = [];
@@ -20,6 +21,10 @@ const createMessage = async (io, socket, timestamp) => {
   });
 };
 
+const getMessages = async () => CreateMessage.getAllMessages()
+  .then((db) =>
+    db.map(({ message, nickname, timestamp }) => `${timestamp} ${nickname} ${message}`));
+
 module.exports = (io) => io.on('connection', async (socket) => {
   const timestamp = moment().format();
 
@@ -27,6 +32,9 @@ module.exports = (io) => io.on('connection', async (socket) => {
   
   userList(socket, io);
   
+  const allMessages = await getMessages();
+
+  socket.emit('messages', allMessages);
   let user = '';
   user = socket.id.slice(0, 16);
 
@@ -37,7 +45,7 @@ module.exports = (io) => io.on('connection', async (socket) => {
     user = nickname;
     io.emit('users', users);
   });
-
+// https://oieduardorabelo.medium.com/node-js-usando-websockets-5d642456d1f3
   socket.on('disconnect', () => {
     users = users.filter((name) => name !== user);
     io.emit('users', user);

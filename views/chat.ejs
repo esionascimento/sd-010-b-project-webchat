@@ -8,23 +8,26 @@
 </head>
 <body>
   <section>
-    <ul id="ulNicks"></ul>
+    <ul id="online-users"></ul>
       <input
+      type="text"
       id="inputName"
       placeholder="Insira seu nickname"
       data-testid="nickname-box"
     />
-    <button id="btn" data-testid="nickname-button">Salvar</button>
+    <button type="submit" id="btn" data-testid="nickname-button">Salvar</button>
   </section>
   <section>
     <ul id="messages"></ul>
       <form action="">
         <input
+          type="text"
           id="messageInput"
           autocomplete="off"
+          placeholder="Digite uma nova mensagem aqui"
           data-testid="message-box"
         />
-        <button data-testid="send-button">Enviar</button>
+        <button type="submit" data-testid="send-button">Enviar</button>
       </form>
   </section>
   <script src="/socket.io/socket.io.js"></script>

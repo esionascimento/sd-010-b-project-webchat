@@ -2,7 +2,7 @@ const socket = window.io();
 
 const form = document.querySelector('form');
 const chatMessage = document.querySelector('#messageInput');
-const ulForm = document.querySelector('#ulNicks');
+const onlineUsers = document.querySelector('#online-users');
 const ulmessage = document.querySelector('#messages');
 const save = document.querySelector('#btn');
 const dataTestid = 'data-testid';
@@ -42,17 +42,17 @@ socket.on('messages', (messages) => {
 });
 
 socket.on('users', (usersList) => {
-  ulForm.innerHTML = '';
+  onlineUsers.innerHTML = '';
   const userLi = document.createElement('li');
   userLi.innerText = user;
   userLi.setAttribute('data-testid', 'online-user');
-  ulForm.appendChild(userLi);
+  onlineUsers.appendChild(userLi);
   usersList.forEach((element) => {
     if (element !== user) {
       const li = document.createElement('li');
       li.innerText = element;
-      userLi.setAttribute(dataTestid, 'online-user');
-      ulForm.appendChild(li);
+      li.setAttribute(dataTestid, 'online-user');
+      onlineUsers.appendChild(li);
     }
   });
 });
