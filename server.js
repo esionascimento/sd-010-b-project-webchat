@@ -29,5 +29,5 @@ io.on('connection', (socket) => {
 app.use(express.static(`${__dirname}/public`));
 
 http.listen(PORT, () => {
-  console.log('Servidor ouvindo na porta 3000');
+  console.log(`Servidor ouvindo na porta ${PORT}`);
 });
