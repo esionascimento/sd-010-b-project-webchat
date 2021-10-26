@@ -37,4 +37,9 @@ module.exports = (io) => io.on('connection', async (socket) => {
     user = nickname;
     io.emit('users', users);
   });
+
+  socket.on('disconnect', () => {
+    users = users.filter((name) => name !== user);
+    io.emit('users', user);
+  });
 });
