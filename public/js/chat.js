@@ -10,9 +10,8 @@ const ulUserList = document.querySelector('#user-list');
 // const getCurrentTime = require('../utils/getTime');
 const TESTID = 'data-testid';
 
-const randomNick =
-  Math.random().toString(36).substring(2, 10) +
-  Math.random().toString(36).substring(2, 10);
+const randomNick = Math.random().toString(36).substring(2, 10)
+  + Math.random().toString(36).substring(2, 10);
 
 let nickname = '';
 
