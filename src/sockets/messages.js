@@ -7,7 +7,7 @@ module.exports = (io) => io.on('connection', (socket) => {
     io.emit('message', `${now} - ${nickname}: ${chatMessage}`);
   });
 
-  socket.on('logged', (user) => {
+  /* socket.on('logged', (user) => {
     io.broadcast.emit('logged', user);
-  });
+  }); */
 });
