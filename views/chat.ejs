@@ -1,47 +1,77 @@
 <!-- based on https://socket.io/get-started/chat -->
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>TRYBE - WebChat</title>
     <style>
     </style>
-  </head>
-  <body>
-      <h1> WebChat</h1>
+</head>
+
+<body>
+    <h1> WebChat</h1>
+    <div id="div-nickname">
+        <input id="input-nickname" data-testid="nickname-box"/>
+        <button id ="nickname-button" data-testid="nickname-button" type="button" >Ok</button>
+    </div>
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="nickname"/>
-      <input id="input"/>
-      <button>Send</button>
-    </form> 
+        <input id="input" data-testid="message-box"/>
+        <button data-testid="send-button" >Send</button>
+    </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const socket = io();
-    
-      const form = document.getElementById('form');
-      const input = document.getElementById('input');
-      const nickname = document.getElementById('nickname');
-     
+        const socket = io();
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (input.value) {
-    const data = {nickname: nickname.value, chatMessage:input.value};
-    console.log(data);
-      socket.emit('message', data);
-      input.value = '';
-    }
-  });
-    socket.on('message', (message)=>{
-        const ul = document.getElementById('messages');
-        console.log(message);
-        const { dataAtual, horaAtual, data, nickname} = message;
-        const li = document.createElement('li');
-        li.textContent = message;
-        ul.appendChild(li);
-    })
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const nicknameBtn = document.getElementById('nickname-button');
+
+        nicknameBtn.addEventListener('click',(e)=>{
+            const inputNickname = document.getElementById('input-nickname');
+             const div = document.getElementById('div-nickname');
+             const dSpan = document.querySelector('span');
+             div.removeChild(dSpan);
+            const span = document.createElement('span');
+            span.setAttribute("data-testid","online-user");
+            span.textContent = inputNickname.value;
+            div.appendChild(span);
+        });
+
+        window.onload = () => {
+            let nickname = document.getElementById('nickname');
+            // https://gist.github.com/6174/6062387
+            let random = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
+           console.log(random.length);
+            const div = document.getElementById('div-nickname');
+            const span = document.createElement('span');
+            span.setAttribute("data-testid","online-user");
+            span.textContent = random;
+            div.appendChild(span);
+        };
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const span = document.querySelector('span');
+            console.log(span.innerText);
+            if (input.value) {
+                const data = { nickname: span.innerText, chatMessage: input.value };
+                console.log(data);
+                socket.emit('message', data);
+                input.value = '';
+            }
+        });
+        socket.on('message', (message) => {
+            const ul = document.getElementById('messages');
+            console.log(message);
+            const { dataAtual, horaAtual, data, nickname } = message;
+            const li = document.createElement('li');
+            li.setAttribute("data-testid","message");
+            li.textContent = message;
+            ul.appendChild(li);
+        })
 
     </script>
-  </body>
- 
+</body>
+
 </html>

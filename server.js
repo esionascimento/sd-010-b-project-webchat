@@ -7,17 +7,19 @@ app.use(express.json());
 
 const http = require('http').createServer(app);
 
-const port = process.env.PORT || 3000;
-
+const port = 3000;
+const guest = [];
 const io = require('socket.io')(http, {
     cors: {
         origin: 'http://localhost:3000',
         method: ['GET', 'POST'],
     },
 });
+const chatController = require('./controller/chatController');
 
 io.on('connection', (socket) => {
-    console.log('Connect', socket.id);
+    console.log('Connect', socket);
+    
     socket.on('disconnect', () => {
         console.log('Disconnect', socket.id);
     });
@@ -33,8 +35,6 @@ io.on('connection', (socket) => {
         io.emit('message', dados);
     });
 });
-
-const chatController = require('./controller/chatController');
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
