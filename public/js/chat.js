@@ -10,9 +10,8 @@ const ulUserList = document.querySelector('#user-list');
 // const getCurrentTime = require('../utils/getTime');
 const TESTID = 'data-testid';
 
-const randomNick =
-  Math.random().toString(36).substring(2, 10) +
-  Math.random().toString(36).substring(2, 10);
+const randomNick = Math.random().toString(36).substring(2, 10)
+  + Math.random().toString(36).substring(2, 10);
 
 let nickname = '';
 
@@ -22,6 +21,21 @@ formNick.addEventListener('submit', (e) => {
   socket.emit('updateUser', { nickname, randomNick });
   nickInput.value = '';
 });
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const chatMessage = inputMessage.value;
+  socket.emit('message', { chatMessage, nickname });
+  inputMessage.value = '';
+  return false;
+});
+
+const createMessage = (msg) => {
+  const li = document.createElement('li');
+  li.setAttribute(TESTID, 'message');
+  li.textContent = msg;
+  ulList.appendChild(li);
+};
 
 const createUser = (users, msgs = []) => {
   // createHistory(msgs);
@@ -34,7 +48,7 @@ const createUser = (users, msgs = []) => {
   });
 };
 
-
+socket.on('message', (msg) => createMessage(msg));
 socket.on('newUser', ({ users, msgs }) => createUser(users, msgs));
 socket.emit('newUser', randomNick);
 socket.emit('userConnected');
