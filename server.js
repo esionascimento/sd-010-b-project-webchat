@@ -1,8 +1,11 @@
 // Faça seu código aqui
 const express = require('express');
+require('dotenv');
 
 const app = express();
 const http = require('http').createServer(app);
+
+const port = process.env.PORT || 3000;
 
 const io = require('socket.io')(http, {
   cors: {
@@ -22,6 +25,6 @@ app.get('/', (req, res) => {
   res.render('chat');
 });
 
-http.listen(3000, () => {
-  console.log('Servidor ouvindo na porta 3000');
+http.listen(port, () => {
+  console.log(`Servidor ouvindo na porta ${port}`);
 });

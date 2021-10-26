@@ -2,8 +2,10 @@ const socket = window.io();
 
 const form = document.querySelector('form');
 const chatMessage = document.querySelector('#messageInput');
-const ulForm = document.querySelector('#ulForm');
+const ulForm = document.querySelector('#ulNicks');
 const ulmessage = document.querySelector('#messages');
+const save = document.querySelector('#btn');
+const dataTestid = 'data-testid';
 
 let user;
 
@@ -18,9 +20,18 @@ form.addEventListener('submit', (e) => {
   chatMessage.value = '';
 });
 
+save.addEventListener('click', (e) => {
+  e.preventDefault();
+  const input = document.querySelector('#inputName');
+  user = input.value;
+  socket.emit('updateNickname', user);
+  input.value = '';
+});
+
 const createMessage = (message) => {
   const li = document.createElement('li');
   li.innerText = message;
+  li.setAttribute(dataTestid, 'message');
   ulmessage.appendChild(li);
 };
 
@@ -34,11 +45,13 @@ socket.on('users', (usersList) => {
   ulForm.innerHTML = '';
   const userLi = document.createElement('li');
   userLi.innerText = user;
+  userLi.setAttribute('data-testid', 'online-user');
   ulForm.appendChild(userLi);
   usersList.forEach((element) => {
     if (element !== user) {
       const li = document.createElement('li');
       li.innerText = element;
+      userLi.setAttribute(dataTestid, 'online-user');
       ulForm.appendChild(li);
     }
   });
