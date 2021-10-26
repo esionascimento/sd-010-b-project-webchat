@@ -16,5 +16,6 @@ body {
 .users {
   border: 1px solid blue;
   display: flex;
+  flex-direction: column;
   width: 30%;
 }

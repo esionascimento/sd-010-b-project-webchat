@@ -42,6 +42,10 @@ io.on('connection', (socket) => {
     messages.push(`${date} ${time} - ${nickname}: ${chatMessage}`);
     io.emit('message', `${date} ${time} - ${nickname}: ${chatMessage}`);
   });
+
+  socket.on('changeNickname', (nickname) => {
+    users[socket.id] = nickname;
+  });
 });
 
 app.get('/', async (req, res) => {
