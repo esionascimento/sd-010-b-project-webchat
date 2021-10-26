@@ -14,6 +14,15 @@ const randomNick =
   Math.random().toString(36).substring(2, 10) +
   Math.random().toString(36).substring(2, 10);
 
+let nickname = '';
+
+formNick.addEventListener('submit', (e) => {
+  e.preventDefault();
+  nickname = nickInput.value;
+  socket.emit('updateUser', { nickname, randomNick });
+  nickInput.value = '';
+});
+
 const createUser = (users, msgs = []) => {
   // createHistory(msgs);
   ulUserList.innerHTML = '';
@@ -25,5 +34,9 @@ const createUser = (users, msgs = []) => {
   });
 };
 
+
 socket.on('newUser', ({ users, msgs }) => createUser(users, msgs));
 socket.emit('newUser', randomNick);
+socket.emit('userConnected');
+// socket.on('userConnected', (msgs) => createHistory(msgs));
+// socket.on('disc', (curr, users) => removeUser(curr, users));
