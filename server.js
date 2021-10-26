@@ -30,8 +30,15 @@ io.on('connection', (socket) => {
     user.name = name;
   });
   socket.on('salveMessage', (message) => {
-    const d = new Date(); 
-    user.data = d.toLocaleString();
+    /* https://stackoverflow.com/questions/18229022/how-to-show-current-time-in-javascript-in-the-format-hhmmss
+    https://pt.stackoverflow.com/questions/6526/como-formatar-data-no-javascript */
+    const d = new Date();
+    const data = d.toISOString().substr(0, 10).split('-').reverse()
+    .join('-');
+    const horas = d.toLocaleTimeString();
+    console.log('dta', data);
+    console.log('horas :', horas);
+    user.data = `${data} ${horas}`;
     user.message = message;
     console.log('message back :', user);
     io.emit('receivedMessage', user);
