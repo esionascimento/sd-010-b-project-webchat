@@ -16,6 +16,8 @@ const io = require('socket.io')(http, {
     methods: ['GET', 'POST'],
   } });
   
+const { getAllMessages } = require('./controllers/webchatController');
+
 app.use(cors());
 
 app.set('view engine', 'ejs');
@@ -35,9 +37,7 @@ io.on('connection', (socket) => {
   socket.broadcast.emit('serverMessage', { message: 'conection done' });
 });
 
-app.get('/', (req, res) => {
-  res.render('wechat.ejs');
-});
+app.get('/', getAllMessages);
 
 http.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
