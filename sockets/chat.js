@@ -1,5 +1,16 @@
+const onlineList = [];
+
+const newUser = (socket, io) => {
+  socket.on('new-user', (user) => {
+    onlineList.push({ id: socket.id, nickname: user });
+    console.log(onlineList);
+    io.emit('online', onlineList);
+  });
+};
+
 const chat = (io) => {
   io.on('connection', (socket) => {
+    newUser(socket, io);
     console.log(`Um usuário conectou em ${socket.id}`); // baseado na documentação
     socket.on('disconnect', () => {
       console.log(`um usuário desconectou em ${socket.id}`);  

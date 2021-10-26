@@ -8,18 +8,26 @@
 </head>
 <body>
   <h1>WEBCHAT</h1>
-  <ul id="messages"></ul>
+  <div>
+    <h3>Usuários Online</h3>
+    <ul id="online-list">
+    </ul>
+  </div>
+  <ul id="messages"data-testid="message-box"></ul>
+  <input id="nickname" autocomplete="on" data-testid="nickname-box"/><button data-testid="nickname-button">Send</button>
     <form id="form" action="">
-      <input id="nickname" autocomplete="on" /><input id="input" autocomplete="off" /><button>Send</button>
+      <input id="input" autocomplete="off" /><button data-testid="send-button">Send</button>
     </form>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
 
     window.onload = () => {
-    const user = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const user = (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)).substring(0, 16);
     // https://gist.github.com/6174/6062387
     document.getElementById('nickname').value = user;
+    socket.emit('new-user', user); 
+    //envia novo usuário para o servidor
     }
     
     const form = document.getElementById('form');
@@ -38,8 +46,20 @@
     socket.on('message', (message) => {
       const messages = document.getElementById('messages');
       const li = document.createElement('li');
+      li.setAttribute('data-testid', 'message');
       li.textContent = message;
       messages.appendChild(li);
+    });
+
+    socket.on('online', (onlineList) => {
+      const ul = document.getElementById('online-list');
+      consolelog(onlineList);
+      onlineList.forEach((user) => {
+        const li = document.createElement('li');
+        li.setAttribute('data-testid', 'online-user');
+        li.textContent = user.nickname;
+        ul.appendChild(li);
+      })
     });
   </script>
 </body>
