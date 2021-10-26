@@ -68,7 +68,7 @@ const createUser = (users, msgs = []) => {
   createUpdateUserList(filteredUsers);
 };
 
-socket.on('currUser', (rand) => {
+socket.on('currUser', () => {
   const user = { nick: randomNick };
   listItemGenerator(user);
 });

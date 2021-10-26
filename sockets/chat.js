@@ -11,7 +11,7 @@ const conn = (io) => io.on('connection', (socket) => {
 
     socket.on('newUser', async (user) => {
       const users = addUser(socket.id, user);
-      socket.emit('currUser', user); const msgs = await getAll();
+      socket.emit('currUser'); const msgs = await getAll();
       io.emit('newUser', { users, msgs });
     });
 
