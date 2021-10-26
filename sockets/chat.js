@@ -7,7 +7,7 @@ const chat = (io) => {
     socket.on('message', (message) => {
       const messageDate = new Date();
       const messageTime = messageDate.toLocaleTimeString();
-      const messageDateFormatted = messageDate.toLocaleDateString();
+      const messageDateFormatted = messageDate.toLocaleDateString().replaceAll('/', '-');
       const messageFormatted = `${messageDateFormatted} ${messageTime}
        - ${message.nickname}: ${message.chatMessage}`;
       io.emit('message', messageFormatted);
