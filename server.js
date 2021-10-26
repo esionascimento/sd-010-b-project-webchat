@@ -25,13 +25,18 @@ const io = require('socket.io')(server, {
 });
 
 io.on('connection', (socket) => {
+  console.log('socket', socket.id);
   socket.on('salveUser', (name) => {
-    const now = new Date();
     user.name = name;
-    user.data = now.toISOString().substr(0, 10).split('-').reverse()
-    .join('-');
-    console.log('user :', user);
   });
+  socket.on('salveMessage', (message) => {
+    const d = new Date(); 
+    user.data = d.toLocaleString();
+    user.message = message;
+    console.log('message back :', user);
+    io.emit('receivedMessage', user);
+  });
+  /* socket.emit('messagesBody', user); */
 });
 
 app.set('view engine', 'ejs');

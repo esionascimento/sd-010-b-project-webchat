@@ -17,7 +17,11 @@
       <button id="salvar">Salvar</button>
     </div>
     <div>
-
+      <section>
+        <ul id="ul">
+          
+        </ul>
+      </section>
     </div>
     <div>
       <label htmlFor="message">
@@ -28,11 +32,32 @@
   </div>
 
   <script>
-    const socket = window.io('http://localhost:3000/');
+    const socket = io('http://localhost:3000/');
     const salvar = document.getElementById('salvar');
+    const enviar = document.getElementById('enviar');
+
+    function renderMessage(user) {
+      const ul = document.getElementById("ul");
+      const li = document.createElement("li");
+      const data = user.data;
+      const name = user.name;
+      const message = user.message;
+      const text = `${data} > ${name}: ${message}`;
+      li.appendChild(document.createTextNode(text));
+      ul.appendChild(li);
+    }
+    socket.on('receivedMessage', (user) => {
+      console.log('recebido',user);
+      renderMessage(user);
+    });
     salvar.addEventListener('click', () => {
       const name = document.getElementById('name').value;
       socket.emit('salveUser', name);
+    });
+    enviar.addEventListener('click', () => {
+      const message = document.getElementById('message').value;
+
+      socket.emit('salveMessage', message);
     });
   </script>
 </body>
