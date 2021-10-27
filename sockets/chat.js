@@ -26,13 +26,13 @@ const createNickname = (io, socket) => {
       const { chatMessage, nickname } = msg;
 
       const date = new Date();
-      const brDate = date.toLocaleDateString().split('/');
-      const formattedBrazilianDate = `${brDate[1]}-${brDate[0]}-${brDate[2]}`;
-      const timeHMS = ` ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-      const formattedDate = `${formattedBrazilianDate} ${timeHMS}`;
-      await createMessages({ chatMessage, nickname, formattedDate });
+      const BrazilDate = date.toLocaleDateString().split('/');
+      const dayMonthYear = `${BrazilDate[1]}-${BrazilDate[0]}-${BrazilDate[2]}`;
+      const hourMinute = ` ${date.getHours()}:${date.getMinutes()}`;
+      const finalDate = `${dayMonthYear} ${hourMinute}`;
+      await createMessages({ chatMessage, nickname, finalDate });
 
-      const formattedMessage = `${formattedDate} - ${nickname}: ${chatMessage}`;
+      const formattedMessage = `${finalDate} - ${nickname}: ${chatMessage}`;
       console.log(formattedMessage);
 
       io.emit('message', formattedMessage);
