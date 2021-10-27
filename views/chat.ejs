@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebChat</title>
+  <link rel="stylesheet" href="../public/assets/style.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <form method="POST">
+    <label for='nickname'>Insira seu nickname</label>
+    <input type="text" id="nickname" name="nickname">
+    <input type="submit" value="Salvar">
+  </form>
+  <h3>Usuários</h3>
+  <ul>
+    <%dataDb.users.forEach((user)=>{%><li><%= user %></li><%})%>
+  </ul>
+  <h3>Mensagens</h3>
+  <ul id="messages">
+    <%dataDb.messages.forEach((message)=>{%><li><%= message %></li><%})%>
+  </ul>
+  <form id='newMessageForm'>
+    <input type="text" placeholder="Digite uma nova mensagem aqui" id="newMessage">
+    <input type="submit" value="Enviar" id="submitNewMessage"> 
+  </form>
+
+  <script>
+    const socket = io();
+    console.log(socket);
+
+    socket.on('message', (data) => {
+      const { chatMessage, nickname } = data;
+      const li = document.createElement('li');
+      li.innerText = chatMessage;
+      document.getElementById('messages').appendChild(li);
+    });
+
+    const newMessageForm = document.getElementById('newMessageForm');
+    newMessageForm.addEventListener('submit', (e)=> e.preventDefault());
+
+    const btn = document.getElementById('submitNewMessage');
+      btn.addEventListener('click', () => {
+        const text = document.getElementById('newMessage');
+        const nickname = 'teste Nickname'        
+        socket.emit('message', { chatMessage: text.value, nickname });
+        text.value = '';
+      });
+  </script>
+</body>
+</html>
