@@ -17,8 +17,6 @@ app.use(cors());
 app.set('view engine', 'ejs');
 app.set('views', './view');
 
-// MOMENT
-
 let newUsers = [];
 
 const mensagem = async (message) => {
