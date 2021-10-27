@@ -41,6 +41,7 @@ io.on('connection', (socket) => {
     console.log(`Usuário conectado. ID: ${socket.id} `);
     socket.on('message', (data) => {
       allMessage.push(data);
+      console.log(data);
       io.emit('message', `${newDataHora} - ${data.nickname}: ${data.chatMessage}`);
     });
 
