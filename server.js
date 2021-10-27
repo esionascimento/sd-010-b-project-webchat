@@ -45,9 +45,6 @@ io.on('connection', (socket) => {
     console.log(`Usuário conectado. ID: ${socket.id} `);
     
     socket.on('message', (data) => {
-        if (!data.nickname) {
-           return data.nickname === data.id;
-        }
         message = ` ${horaCerta()} - ${data.nickname}: ${data.chatMessage}`;
         console.log(message);
         io.emit('message', message);
