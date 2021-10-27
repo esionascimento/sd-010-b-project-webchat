@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 
-const { PORT } = process.env || '3000';
+const { PORT } = process.env || 3000;
 
 const app = express();
 app.use(express.static(`${__dirname}/src`));
@@ -13,7 +13,7 @@ const http = require('http').createServer(app);
 
 const io = require('socket.io')(http, {
   cors: {
-    origin: 'http//localhost:3000',
+    origin: `http//localhost:${PORT}`,
     methods: ['GET', 'POST'], 
   },
 });
