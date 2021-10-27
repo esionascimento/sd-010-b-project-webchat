@@ -58,10 +58,10 @@
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const span = document.querySelector('span');
-            console.log(span.innerText);
+            // console.log(span.innerText);
             if (input.value) {
                 const data = { nickname: span.innerText, chatMessage: input.value };
-                console.log(data);
+                // console.log(data);
                 socket.emit('message', data);
                 input.value = '';
             }
@@ -77,18 +77,37 @@
         socket.on('guests', (guests) => {
             const indexAchado = guests.findIndex((item) => item.id === socket.id)
             guests.splice(indexAchado, 1);
-            console.log(guests);
+            //console.log(guests);
             const div = document.getElementById('others');
             div.innerText = ""
             for (let i = 0; i < guests.length; i++) {
-                console.log(guests[i].nome);
+                //  console.log(guests[i].nome);
                 const span = document.createElement('span');
-                span.setAttribute("data-testid","online-user");
-                span.setAttribute("id",`online-user-${guests[i].id}`);
+                span.setAttribute("data-testid", "online-user");
+                span.setAttribute("id", `online-user-${guests[i].id}`);
                 span.textContent = guests[i].nome;
                 div.appendChild(span);
             }
-
+        })
+        socket.on('history', (history) => {
+            console.log(history);
+            const ul = document.getElementById('messages');
+            if (history.length === 0) {
+                console.log('vazio');
+            } else {
+                for (let i = 0; i < history.length; i++) {
+                    const { message, nickname } = history[i];
+                    const date = new Date();
+                    // https://codare.aurelio.net/2009/04/03/javascript-obter-e-mostrar-data-e-hora/
+                    const dataAtual = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+                    const horaAtual = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+                    const dados = `${dataAtual} ${horaAtual} - ${nickname}: ${message}`;
+                    const li = document.createElement('li');
+                    li.setAttribute("data-testid", "message");
+                    li.textContent = dados;
+                    ul.appendChild(li);
+                }
+            }
         })
 
     </script>

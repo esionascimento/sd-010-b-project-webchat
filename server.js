@@ -16,31 +16,11 @@ const io = require('socket.io')(http, {
     },
 });
 
-const guestControler = require('./helpers/helpers');
 const chatController = require('./controller/chatController');
-const midlewares = require('./midlewares/midlewares');
 
-io.on('connection', (socket) => {
-    console.log('Connect', socket.id);
-    socket.on('disconnect', () => {
-        guestControler.excludeGuest(socket);
-        io.emit('guests', guestControler.getGuests());
-    });
-    socket.on('adduser', (random) => {
-        guestControler.addGuest(random, socket);
-      io.emit('guests', guestControler.getGuests());
-    });
-    socket.on('nickname', (nickname) => {
-        guestControler.editGuest(nickname, socket);
-        io.emit('guests', guestControler.getGuests());
-    });
+const socket = require('./sockets/sockets');
 
-    socket.on('message', (message) => {
-        const { chatMessage, nickname } = message;
-        const dados = midlewares.getDate(chatMessage, nickname);
-        io.emit('message', dados);
-    });
-});
+socket(io); // baseado na documentação do socket.io, mas separando em arquivos
 
 app.set('view engine', 'ejs');
 app.set('views', './views');

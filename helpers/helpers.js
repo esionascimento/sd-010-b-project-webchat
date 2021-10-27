@@ -17,7 +17,7 @@ const getGuests = () => xablau;
 const excludeGuest = (socket) => {
   const indexAchado = xablau.findIndex((item) => item.id === socket.id);
   xablau.splice(indexAchado, 1);
-  console.log(xablau);
+ // console.log(xablau);
 };
 
 module.exports = { addGuest, getGuests, editGuest, excludeGuest };
