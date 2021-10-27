@@ -18,23 +18,26 @@ const io = require('socket.io')(http, {
 
 const guestControler = require('./helpers/helpers');
 const chatController = require('./controller/chatController');
+const midlewares = require('./midlewares/midlewares');
 
 io.on('connection', (socket) => {
     console.log('Connect', socket.id);
-    
     socket.on('disconnect', () => {
-        console.log('Disconnect', socket.id);
+        guestControler.excludeGuest(socket);
+        io.emit('guests', guestControler.getGuests());
     });
+    socket.on('adduser', (random) => {
+        guestControler.addGuest(random, socket);
+      io.emit('guests', guestControler.getGuests());
+    });
+    socket.on('nickname', (nickname) => {
+        guestControler.editGuest(nickname, socket);
+        io.emit('guests', guestControler.getGuests());
+    });
+
     socket.on('message', (message) => {
-        guestControler.addGuest(message.nickname, socket.id);
-        console.log(message);
         const { chatMessage, nickname } = message;
-        const date = new Date();
-        // https://codare.aurelio.net/2009/04/03/javascript-obter-e-mostrar-data-e-hora/
-        const dataAtual = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-        const horaAtual = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-        
-        const dados = `${dataAtual} ${horaAtual} - ${nickname}: ${chatMessage}`;
+        const dados = midlewares.getDate(chatMessage, nickname);
         io.emit('message', dados);
     });
 });
@@ -42,6 +45,7 @@ io.on('connection', (socket) => {
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.get('/', chatController.get);
+
 http.listen(port, () => {
     console.log('message', port);
 });

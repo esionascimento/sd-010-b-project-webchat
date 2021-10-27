@@ -11,13 +11,14 @@
 <body>
     <h1> WebChat</h1>
     <div id="div-nickname">
-        <input id="input-nickname" data-testid="nickname-box"/>
-        <button id ="nickname-button" data-testid="nickname-button" type="button" >Ok</button>
+        <input id="input-nickname" data-testid="nickname-box" />
+        <button id="nickname-button" data-testid="nickname-button" type="button">Ok</button>
     </div>
+    <div id="others"></div>
     <ul id="messages"></ul>
     <form id="form" action="">
-        <input id="input" data-testid="message-box"/>
-        <button data-testid="send-button" >Send</button>
+        <input id="input" data-testid="message-box" />
+        <button data-testid="send-button">Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -27,15 +28,18 @@
         const input = document.getElementById('input');
         const nicknameBtn = document.getElementById('nickname-button');
 
-        nicknameBtn.addEventListener('click',(e)=>{
+        nicknameBtn.addEventListener('click', (e) => {
             const inputNickname = document.getElementById('input-nickname');
-             const div = document.getElementById('div-nickname');
-             const dSpan = document.querySelector('span');
-             div.removeChild(dSpan);
+            const div = document.getElementById('div-nickname');
+            const dSpan = document.getElementById('online-user')
+            div.removeChild(dSpan);
             const span = document.createElement('span');
-            span.setAttribute("data-testid","online-user");
+            span.setAttribute("data-testid", "online-user");
+            span.setAttribute("id", "online-user");
             span.textContent = inputNickname.value;
             div.appendChild(span);
+
+            socket.emit('nickname', inputNickname.value);
         });
 
         window.onload = () => {
@@ -44,9 +48,11 @@
             let random = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
             const div = document.getElementById('div-nickname');
             const span = document.createElement('span');
-            span.setAttribute("data-testid","online-user");
+            span.setAttribute("data-testid", "online-user");
+            span.setAttribute("id", "online-user");
             span.textContent = random;
             div.appendChild(span);
+            socket.emit('adduser', random);
         };
 
         form.addEventListener('submit', (e) => {
@@ -62,12 +68,27 @@
         });
         socket.on('message', (message) => {
             const ul = document.getElementById('messages');
-            console.log(message);
             const { dataAtual, horaAtual, data, nickname } = message;
             const li = document.createElement('li');
-            li.setAttribute("data-testid","message");
+            li.setAttribute("data-testid", "message");
             li.textContent = message;
             ul.appendChild(li);
+        })
+        socket.on('guests', (guests) => {
+            const indexAchado = guests.findIndex((item) => item.id === socket.id)
+            guests.splice(indexAchado, 1);
+            console.log(guests);
+            const div = document.getElementById('others');
+            div.innerText = ""
+            for (let i = 0; i < guests.length; i++) {
+                console.log(guests[i].nome);
+                const span = document.createElement('span');
+                span.setAttribute("data-testid","online-user");
+                span.setAttribute("id",`online-user-${guests[i].id}`);
+                span.textContent = guests[i].nome;
+                div.appendChild(span);
+            }
+
         })
 
     </script>
