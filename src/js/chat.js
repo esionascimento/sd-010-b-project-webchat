@@ -1,11 +1,31 @@
 const socket = window.io();
+const ENDPOINT = 'http://localhost:3000/messages';
 
-window.onload = () => {
+const fetchAPI = async () => {
+  const response = await fetch(ENDPOINT);
+  return response.json();
+};
+
+const renderMessages = (messageList) => {
+  const messagesUl = document.querySelector('#messages');
+  messageList.forEach((el) => {
+    console.log(el);
+    const li = document.createElement('li');
+    li.innerText = `${el.timestamp} - ${el.nickname}: ${el.message}`;
+    li.setAttribute('data-testid', 'message');
+    messagesUl.appendChild(li);
+  });
+};
+
+window.onload = async () => {
   const newUser = Math.random().toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
   // creates a random nickname with 16 characteres
   sessionStorage.setItem('@user', JSON.stringify(newUser));
 
   socket.emit('userOnline', newUser);
+
+  const messages = await fetchAPI();
+  renderMessages(messages);
 };
 
 const messageBtn = document.querySelector('#send-msg-btn');

@@ -15,10 +15,14 @@ const io = require('socket.io')(server, {
   },
 });
 
+const { getAllMessages } = require('./src/controllers/messagesController');
+
 require('./src/sockets/message')(io);
 require('./src/sockets/onlineUsers')(io);
 
 app.use(express.static(`${__dirname}/src`));
+
+app.get('/messages', getAllMessages);
 
 app.get('/', (_req, res) => {
   res.sendFile(`${__dirname}/src/views/index.html`);
