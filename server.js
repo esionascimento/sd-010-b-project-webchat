@@ -14,6 +14,8 @@ const io = require('socket.io')(http, {
 
  const { getDate } = require('./utils');
 
+ const date = getDate();
+
  app.use(cors());
 
  const everyMessage = [];
@@ -22,15 +24,19 @@ const io = require('socket.io')(http, {
  io.on('connection', (socket) => {
   console.log(`${socket.id} conectado`);
   socket.on('message', (message) => {
-    everyMessage.push(message);
-    io.emit('message', ` ${getDate()} - ${message.nickname}: ${message.chatMessage}`);
+    everyMessage.push({ date, message });
+    io.emit('message', { date, message });
+  });
+  
+  socket.on('new-user', (user) => {
+    io.emit('new-user', user);
   });
 
   socket.emit('mensagem',
   console.log(everyMessage, `send by ${socket.id}`));
 });
 
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.sendFile(`${__dirname}/views/index.html`);
  });
 
