@@ -54,20 +54,10 @@ const createArrayOfNicks = (array) => {
 const sendBtn = document.getElementById('sendBtn');
 const inputMessage = document.getElementById('messageInput');
 
-sendBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  // const nick = params.get('username');
-
-  // if (!nick) {
-  //   return socket.emit('clientMessage', {
-  //       nickname,
-  //       message: inputMessage.value,
-  //   }); 
-  // }
-  
-  socket.emit('clientMessage', {
+sendBtn.addEventListener('click', () => {
+  socket.emit('message', {
     nickname,
-    message: inputMessage.value,
+    chatMessage: inputMessage.value,
   });
 
   inputMessage.value = '';
