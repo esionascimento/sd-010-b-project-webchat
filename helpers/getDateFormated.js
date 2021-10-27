@@ -12,7 +12,7 @@ const getDateFormated = () => {
   const mm = formatNumber(currentDate.getMinutes());
   const ss = formatNumber(currentDate.getSeconds());
 
-  const meridiem = (HH > 0 && HH < 12) ? 'AM' : 'PM';
+  const meridiem = (HH >= 0 && HH <= 12) ? 'AM' : 'PM';
 
   return `${DD}-${MM}-${yyyy} ${HH}:${mm}:${ss} ${meridiem}`;
 };
