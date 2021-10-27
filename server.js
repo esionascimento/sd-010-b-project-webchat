@@ -24,7 +24,7 @@ io.on('connection', (socket) => {
 
   console.log('alguem entrou');
   console.log(onlineUsers);
-  socket.on('message', async ({ message }) => { 
+  socket.on('message', async (message) => { 
     const { chatMessage, nickname } = message;
     const date = new Date().toLocaleString().replace(/\//g, '-');
     io.emit('message', `${date} - ${nickname}: ${chatMessage}`);

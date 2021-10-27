@@ -32,7 +32,7 @@
     
     formMessage.addEventListener('submit', (event) => {
       event.preventDefault();
-      socket.emit('message', { message: { chatMessage: inputMessage.value, nickname: randomNick } });
+      socket.emit('message', { chatMessage: inputMessage.value, nickname: randomNick });
       inputMessage.value = '';
       return false;
     });
@@ -65,6 +65,7 @@
 
     socket.on('loggedUsers', (users) => createOnlineUsers(users));
     socket.on('message', (message) => createMessage(message));
+
   </script>
 
 </body>
