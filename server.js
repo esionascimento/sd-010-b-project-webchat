@@ -15,15 +15,18 @@ const io = require('socket.io')(http, {
         method: ['GET', 'POST'],
     },
 });
+
+const guestControler = require('./helpers/helpers');
 const chatController = require('./controller/chatController');
 
 io.on('connection', (socket) => {
-    console.log('Connect', socket);
+    console.log('Connect', socket.id);
     
     socket.on('disconnect', () => {
         console.log('Disconnect', socket.id);
     });
     socket.on('message', (message) => {
+        guestControler.addGuest(message.nickname, socket.id);
         console.log(message);
         const { chatMessage, nickname } = message;
         const date = new Date();
