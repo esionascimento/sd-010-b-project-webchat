@@ -30,10 +30,15 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const dataDb = { messages: ['09-10-2020 2:35:09 PM - Joel: Olá meu caros amigos!',
+'09-10-2024 2:35:09 PM - Paulin: CATAPIMBAS! CADÊ MEU CAFÉ?'],
+users: ['Joel', 'Paulin', 'DEUS'] };
+
 io.on('connection', (socket) => {
   console.log(`${socket.id} conectado`);
   socket.on('message', (data) => {
     const { chatMessage, nickname } = data;
+    dataDb.messages.push(chatMessage);
     io.emit('message', { chatMessage, nickname });
   });
 });
@@ -42,9 +47,6 @@ io.on('connection', (socket) => {
 //   console.log(`App listening onx port ${PORT}`);
 // });
 
-const dataDb = { messages: ['09-10-2020 2:35:09 PM - Joel: Olá meu caros amigos!',
-'09-10-2024 2:35:09 PM - Paulin: CATAPIMBAS! CADÊ MEU CAFÉ?'],
-users: ['Joel', 'Paulin', 'DEUS'] };
 app.get('/', (req, res) => res.status(200).render('chat', { dataDb }));
 
 app.post('/', (req, res) => {
