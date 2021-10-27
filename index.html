@@ -26,7 +26,7 @@
         <input id="nickname" autocomplete="off" />
         <label for="mensagemInput">Mensagem</label>
         <input id="mensagemInput" autocomplete="off" />
-        <button>send</button>
+        <button data-testid="send-button">send</button>
     </form>
     <script>
         // const socket = io();
@@ -35,10 +35,13 @@
         const nickname = document.querySelector('#nickname')
         form.addEventListener('submit', (event) => {
             // pagina não deve ser atualizada com rpevent default
+            console.log()
             event.preventDefault()
-            socket.emit('mensagem', `${nickname.value} : ${inputMensage.value}`);
-            inputMensage.value = ''
+            sessionStorage.setItem('nickname', JSON.stringify(nickname.value));
+            socket.emit('message',
+                `${JSON.parse(sessionStorage.getItem('nickname'))} : ${inputMensage.value}`);
             nickname.value = ''
+            inputMensage.value = ''
             return false
         })
         // Esse metodo acessa a minha ul e depois cria um li dentro dela!!

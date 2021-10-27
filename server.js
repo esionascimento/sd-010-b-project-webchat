@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
 const cors = require('cors');
+const moment = require('moment');
 
 // Cors basicamente é nosso servidor!!!
 const io = require('socket.io')(http, {
@@ -25,10 +26,13 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('Alguém se desconectou');
     });
-    socket.on('mensagem', (msg) => {
-      io.emit('newConnection', { message: msg });
+    socket.on('message', (msg) => {
+      // acertando o momento e verifico falta ir formando conforme o
+      io.emit('newConnection', { message: `${moment().format('DD-MM-yyyy, h:mm:ss a')} ${msg}` });
     });
-    socket.emit('message', ' Seja bem vindo ao chat!! Este back emitindo pro front!');
+
+    // Estava conflitando!!!
+    // socket.emit('message', ' Seja bem vindo ao chat!! Este back emitindo pro front!');
 
     socket.broadcast.emit('newConnection', { message: 'Eba urro front alguém se conectou' });
 });
