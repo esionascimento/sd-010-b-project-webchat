@@ -10,14 +10,14 @@ module.exports = (io) => io.on('connection', (socket) => {
     io.emit('message', `${dataForm} ${time} - ${nickname}: ${chatMessage}`);
   });
 
-  socket.on('userConnect', (nickname) => {
+  socket.on('userConn', (nickname) => {
     const usersList = userModel.newUser(socket.id, nickname);
-    socket.emit('userConnect', usersList);
+    io.emit('userConn', usersList);
   });
 
   socket.on('disconnect', () => {
     // console.log(socket.id)
     const usersList = userModel.removeUser(socket.id);
-    socket.emit('userConnect', usersList);
+    io.emit('userConn', usersList);
   });  
 });

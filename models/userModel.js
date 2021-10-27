@@ -4,6 +4,7 @@ const newUser = (socketId, userName) => {
   const objUser = { id: socketId, name: userName };
   listUsers.push(objUser);
   console.log(listUsers.length);
+  console.log(listUsers);
   return listUsers;
 };
 
