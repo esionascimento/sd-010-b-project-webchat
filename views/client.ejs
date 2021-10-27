@@ -86,11 +86,11 @@
         form.addEventListener('submit', (e) => {
           const nickStorage = sessionStorage.getItem('nickname');
           e.preventDefault();
-          socket.emit('message', { chatMessage: inputMessage.value, nickname: nickStorage /* inputNick.value */ });
+          socket.emit('message', { chatMessage: inputMessage.value, nickname: nickStorage });
           inputMessage.value = '';
           return false;
         });
-        
+
         const createMessage = (msg) => {
             const messageUl = document.querySelector('#mensagens');
             const li = document.createElement('li');
