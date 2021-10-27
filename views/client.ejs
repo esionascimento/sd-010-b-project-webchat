@@ -75,22 +75,22 @@
         const inputMessage = document.querySelector('#messageInput');
         const formNickname = document.querySelector('#form_nickname');
         const inputNick = document.querySelector('#nicknameInput');
-        const nickStorage = sessionStorage.getItem('nickname');
-
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          socket.emit('message', { chatMessage: inputMessage.value, nickname: nickStorage /* inputNick.value */ });
-          inputMessage.value = '';
-          return false;
-        });
-
+        
         formNickname.addEventListener('submit', (e) => {
           e.preventDefault();
           const saveNick = sessionStorage.setItem('nickname', inputNick.value);
           inputNick.value = '';
           return false;
         });
-
+        
+        form.addEventListener('submit', (e) => {
+          const nickStorage = sessionStorage.getItem('nickname');
+          e.preventDefault();
+          socket.emit('message', { chatMessage: inputMessage.value, nickname: nickStorage /* inputNick.value */ });
+          inputMessage.value = '';
+          return false;
+        });
+        
         const createMessage = (msg) => {
             const messageUl = document.querySelector('#mensagens');
             const li = document.createElement('li');
