@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+      #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #input:focus { outline: none; }
+      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages > li { padding: 0.5rem 1rem; }
+      #messages > li:nth-child(odd) { background: #efefef; }
+    </style>
+  </head>
+  <body>
+
+    <div>
+      <ul id="ul-id"></ul>
+
+      <form action="">
+        <input data-testid="message-box" type="text" id="message"/>
+        <button data-testid="send-button" id="enviar-btn">Enviar</button>
+      </form> 
+    </div>
+
+<p id="user-on" data-testid="online-user"></p>
+
+    <div>
+      <form action="">
+        <input data-testid="nickname-box" type="text" id="input-nickname">
+        <button data-testid="nickname-button" id="enviar-btn2">Trocar Nome</button>
+      </form>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script> 
+    
+    const socket = io();
+    let nick = Math.random().toString(16)
+    .substr(2, 8) + Math.random().toString(16).substr(2, 8);
+
+      const ul = document.getElementById('ul-id');
+      const inputMessage = document.getElementById('message');
+      const btn1 = document.getElementById('enviar-btn');
+      const userOn = document.getElementById('user-on');
+      const inputNickname = document.getElementById('input-nickname');
+      const btn2 = document.getElementById('enviar-btn2');
+      userOn.innerText = nick;
+
+      console.log(userOn);
+    btn1.addEventListener('click', (e) => {
+    e.preventDefault();
+    let chatMessage = inputMessage.value;
+    if (chatMessage) {
+      socket.emit('message', { chatMessage, nickname: nick });
+      chatMessage = '';
+    }
+  });
+
+  btn2.addEventListener('click', (e) => {
+    e.preventDefault();
+    nick = inputNickname.value;
+    userOn.innerText = nick;
+    inputNickname.value = '';
+  });
+
+  socket.on('message', (message) => {
+    const item = document.createElement('li');
+    item.setAttribute('data-testid', 'message');
+    item.innerText = message;
+    ul.appendChild(item);
+  });
+    
+    </script>
+    <script src="js/script.js"></script>
+  </body>
+</html>
