@@ -37,12 +37,14 @@
     const nickButton = document.getElementById('nickname-button');
     const nickBox = document.getElementById('nickname');
     nickButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      
+      e.preventDefault();      
       if (nickBox.value) {
-        const apelido = document.getElementById('online-user');
-        nickname = nickBox.value;
-        apelido.innerHTML = nickname;        
+        socket.emit('update', (nickBox.value));
+
+        // Req.4
+        // const apelido = document.getElementById('online-user');
+        // nickname = nickBox.value;
+        // apelido.innerHTML = nickname;        
         nickBox.value = '';
       }
     })
@@ -56,13 +58,15 @@
     });
 
     window.onload = function() {
-      socket.emit('nickname', {nickname: nickname});
-      const usuario = document.getElementById('users-online');
-      const apelido = document.createElement('li');
-      apelido.innerHTML = nickname;
-      apelido.setAttribute("data-testid", "online-user");
-      apelido.setAttribute("id", "online-user");
-      usuario.appendChild(apelido);
+      socket.emit('login', nickname);
+
+      // req 04
+      // const usuario = document.getElementById('users-online');
+      // const apelido = document.createElement('li');
+      // apelido.innerHTML = nickname;
+      // apelido.setAttribute("data-testid", "online-user");
+      // apelido.setAttribute("id", "online-user");
+      // usuario.appendChild(apelido);
     };
 
     socket.on('message', function(param) {
@@ -72,6 +76,24 @@
       li.setAttribute("data-testid", "message");
       messages.appendChild(li);
     });
+
+    socket.on('users', function(users) {
+      const usuario = document.getElementById('users-online');
+      usuario.innerHTML = '';
+      users.forEach(function({ nickname, socketId }) {
+        const apelido = document.createElement('li');
+        apelido.innerHTML = nickname;
+        apelido.setAttribute("data-testid", "online-user");
+        apelido.setAttribute("id", "online-user");        
+        // LEANDRO
+        if (socketId === socket.id) {
+          usuario.prepend(apelido); // JOGA PARA PRIMEIRA POSIÇÃO
+        } else {
+          usuario.appendChild(apelido); // JOGA PARA ULTIMA POSIÇÃO
+        }
+      });
+    });
+
   </script>
 </body>
 </html>
