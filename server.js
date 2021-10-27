@@ -12,7 +12,7 @@ const io = require('socket.io')(http, {
   },
  });
 
- const { getDate } = require('./utils/currentDate');
+ const { getDate, /* randomString, */ randomNickName } = require('./utils');
 
  app.use(cors());
 
@@ -23,7 +23,7 @@ const io = require('socket.io')(http, {
   console.log(`${socket.id} conectado`);
   socket.on('message', (message) => {
     everyMessage.push(message);
-    io.emit('message', ` ${getDate()} - ${message.nickname}: ${message.chatMessage}`);
+    io.emit('message', ` ${getDate()} - ${randomNickName()} - ${message.nickname}: ${message.chatMessage}`);
   });
 
   socket.emit('mensagem',
