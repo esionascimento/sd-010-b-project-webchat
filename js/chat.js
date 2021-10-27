@@ -74,7 +74,8 @@ const createMessage = (message) => {
 
 const renderMessages = (messages) => {
   messages.forEach((message) => {
-    createMessage(message);
+    const allMenssage = `${message.timestamp} ${message.nickname}: ${message.message}`;
+    createMessage(allMenssage);
   });
 };
 
