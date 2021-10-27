@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Socket.IO - Trybe</title>
+    <title>ChatWeb</title>
     <script src="/socket.io/socket.io.js"></script>
     
   </head>
@@ -16,8 +16,10 @@
     </div>
 
     <div id="users">
-      <p id="user-nick" data-testid="online-user"></p>
-      <input id="inputEditNick" data-testid="nickname-box" autocomplete="off"><button id="editar-nome" data-testid="nickname-button">Editar Nome</button>
+      <form action="">
+        <p id="user-nick" data-testid="online-user"></p>
+        <input id="inputEditNick" data-testid="nickname-box" autocomplete="off"><button id="editar-nome" data-testid="nickname-button">Editar Nome</button>
+    </form>
     </div>
 
     <script>
@@ -26,15 +28,14 @@
       let nickname = Math.random()
         .toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
       
-      // const button = document.querySelector('#button-send-message')
-      const formDoChat = document.querySelector('form');
+      const buttonChat = document.getElementById('button-send-message');
       const elementImput = document.querySelector('#elementImput')
       const nick = document.getElementById("user-nick")
       const editarNome = document.getElementById("editar-nome");
 
       nick.innerText = nickname;
 
-      formDoChat.addEventListener('submit', (e) => {
+      buttonChat.addEventListener('click', (e) => {
         e.preventDefault();
         const chatMessage = elementImput.value;
         socket.emit('message', { chatMessage, nickname })
@@ -45,7 +46,6 @@
         e.preventDefault();
         nickname = inputEditNick.value;
         nick.innerText = nickname;
-        // nick.innerText = nickname;
         inputEditNick.value = ''
       })
 
@@ -59,10 +59,6 @@
 
       socket.on('message', (message) => {
         createMessage(message);
-      })
-
-      socket.on('serverMessage', (object) => {
-        createMessage(object.message);
       })
     </script>
   </body>

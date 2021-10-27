@@ -19,7 +19,7 @@ io.on('connection', (socket) => {
   });
 });
 
-app.use(express.static(`${__dirname}/public`));
+// app.use(express.static(`${__dirname}/public`)); // fornece permissão para arquivo externo
 
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/index.html`);
