@@ -9,7 +9,7 @@ class CustomExpress {
     this.app = express();
     this.server = http.createServer(this.app);
     this.io = baseSocket(this.server, socketConfig);
-    this.socketInstance = new Socket();
+    this.socketInstance = new Socket(this.io);
 
     this.config();
   }
@@ -25,7 +25,7 @@ class CustomExpress {
   }
 
   socket() {
-    this.socketInstance.connect(this.io);
+    this.socketInstance.connect();
   }
 }
 

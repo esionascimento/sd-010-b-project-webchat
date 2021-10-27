@@ -1,8 +1,12 @@
-const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
-
 class Nickname {
   static createRandomNickname() {
-    return uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] });
+    let text = '';
+    const nickLength = 16;
+    const possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    for (let i = 0; i < nickLength; i += 1) {
+      text += possibleChars.charAt(Math.floor(Math.random() * possibleChars.length));
+    }
+    return text;
   }
 }
 

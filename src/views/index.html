@@ -14,22 +14,13 @@
         <div class="upper__left__nickname">
           <div class="upper__left__input">
             <label for="nickname">nickname</label>
-            <input id="nickname" type="text" />
+            <input data-testid="nickname-box" id="nickname" type="text" />
           </div>
-          <button>save</button>
+          <button data-testid="nickname-button" id="changeNickname">save</button>
         </div>
-        <ul id="userList">
-          <li>user 1</li>
-          <li>user 2</li>
-        </ul>
+        <ul id="userList"></ul>
       </div>
-      <ul id="messageList" class="upper__right">
-        <li>message 1</li>
-        <li>message 2</li>
-        <li>message 3</li>
-        <li>message 4</li>
-        <li>message 5</li>
-      </ul>
+      <ul id="messageList" class="upper__right"></ul>
     </div>
     <div class="bottom">
       <input data-testid="message-box" id="sendText" type="text" />
