@@ -122,11 +122,19 @@
       })
 
       socket.on('usersConnected', (usersConnected) => {
-        console.log(usersConnected);
         createUsersOnline(usersConnected)
       })
 
       socket.emit('usersConnected', { nickname })
+
+      window.onload = () => {
+        fetch('http://localhost:3000/messages')
+        .then((res) => res.json())
+        .then((result) => {
+          result.forEach((msg) => {
+          createMessage(msg);
+        })
+      })}
 
     </script>
   </body>

@@ -1,19 +1,21 @@
 const connection = require('./connection');
 
-const chatUpdate = async ({ dateNow, nickname, chatMessage }) => {
+const createMessage = async (timestamp, nickname, message) => {
+  console.log('model', timestamp, nickname, message);
   const webchat = await connection();
-  const user = await webchat.collection('webchat');
+  const user = await webchat.collection('messages');
+  const query = { timestamp, nickname, message };
+  await user.insertOne(query);
+};
 
-  const { insertedId: _id } = await user.findAndUpdate({ nickname }, { dateNow, chatMessage });
-
-  return {
-    _id,
-    nickname,
-    dateNow,
-    chatMessage,
-  };
+const getAllMessages = async () => {
+  const webchat = await connection();
+  const getAll = await webchat.collection('messages');
+  const result = await getAll.find().toArray();
+  return result;
 };
 
 module.exports = {
-  chatUpdate,
+  createMessage,
+  getAllMessages,
 };

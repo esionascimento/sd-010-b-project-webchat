@@ -1,18 +1,20 @@
 const chatModel = require('../../models/chatModel');
 
-const chatUpdate = async (req, res) => {
-  const { dateNow, nickname, chatMessage } = req.body;
+const serialise = (db) => {
+  const { timestamp, nickname, message } = db;
+  return `${timestamp} - ${nickname} ${message}`;
+};
 
-  const user = await chatModel
-    .chatUpdate({ dateNow, nickname, chatMessage });
+const createMessage = async (timestamp, nickname, message) => {
+  chatModel.createMessage(timestamp, nickname, message);
+};
 
-  if (user === 'emailExist') {
-    return res.status(409).json({ message: 'Email already registered' });
-  }
-
-  res.status(201).json({ user });
+const getAllMessages = async () => {
+  const result = await chatModel.getAllMessages();
+  return result.map(serialise);
 };
 
 module.exports = {
-  chatUpdate,
+  createMessage,
+  getAllMessages,
 };

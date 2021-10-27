@@ -1,18 +1,15 @@
 const chatService = require('../service/chatService');
 
-const chatUpdate = async (req, res) => {
-  const { dateNow, nickname, chatMessage } = req.body;
+const createMessage = async (dateNow, nickname, chatMessage) => {
+  await chatService.createMessage(dateNow, nickname, chatMessage);
+};
 
-  const user = await chatService
-    .chatUpdate({ dateNow, nickname, chatMessage });
-
-  if (user === 'emailExist') {
-    return res.status(409).json({ message: 'Email already registered' });
-  }
-
-  res.status(201).json({ user });
+const getAllMessages = async (req, res) => {
+  const getAll = await chatService.getAllMessages();
+  res.status(201).json(getAll);
 };
 
 module.exports = {
-  chatUpdate,
+  createMessage,
+  getAllMessages,
 };

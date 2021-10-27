@@ -13,15 +13,17 @@ const io = require('socket.io')(http, {
   },
 });
 
+const { getAllMessages, createMessage} = require('./src/controllers/chatControler');
+
 let usersConnected = [];
+
+const disconectar = (socketId) => {
+  usersConnected = usersConnected.filter((id) => socketId !== id.id);
+  return usersConnected; 
+};
 
 io.on('connection', (socket) => {
   // usersConnected.push(socket.id);
-
-  const disconectar = (socketId) => {
-    usersConnected = usersConnected.filter((id) => socketId !== id.id);
-    return usersConnected;
-  };
 
   socket.on('usersConnected', ({ nickname }) => {
     usersConnected = usersConnected.filter((id) => socket.id !== id.id);
@@ -34,13 +36,17 @@ io.on('connection', (socket) => {
     io.emit('usersConnected', usersConnected);
   });
 
-  socket.on('message', (message) => {
+  socket.on('message', async (message) => {
     const { chatMessage, nickname } = message;
+    const timestamp = new Date().toLocaleString().replace(/\//g, '-');
+    console.log(timestamp);
+    await createMessage(timestamp, nickname, chatMessage);
     
-    const dateNow = new Date().toLocaleString().replace(/\//g, '-');
-    io.emit('message', `${dateNow} - ${nickname} ${chatMessage}`);
+    io.emit('message', `${timestamp} - ${nickname} ${chatMessage}`);
   });
 });
+
+app.get('/messages', getAllMessages);
 
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/index.html`);
