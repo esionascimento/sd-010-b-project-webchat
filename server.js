@@ -13,7 +13,7 @@ const io = require('socket.io')(htttp, {
 
 require('./sockets/chat')(io);
 
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, '/index.html'));
 });
 
