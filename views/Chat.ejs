@@ -17,8 +17,8 @@
       <button id="salvar" data-testid="nickname-button">Ssalvar</button>
     </div>
     <div>
-      <section id="esquerda">
-        <ul id="li-esquerda"></ul>
+      <section id="esquerda" data-index="3">
+        <ul id="idUl" class="classUl"></ul>
       </section>
       <section id="direita">
         <ul id="ul"></ul>
@@ -37,30 +37,58 @@
     const salvar = document.getElementById('salvar');
     const enviar = document.getElementById('enviar');
     let nickname;
+    console.log(nickname);
+
+    function removeUl() {
+      const pai = document.getElementById('esquerda');
+      pai.removeChild(pai.children[0]);
+    }
+
+    function addUl() {
+      const esquerda = document.getElementById("esquerda");
+      const ul = document.createElement("ul");
+      ul.setAttribute("id", "idUl");
+      ul.classList.add("classUl");
+      esquerda.appendChild(ul);
+    }
+    
+    function renderNamesLogados(namesLogados) {
+      removeUl();
+      addUl();
+      const ul = document.getElementById("idUl");
+      namesLogados.forEach((names) => {
+        const li = document.createElement("li");
+        li.appendChild(document.createTextNode(names));
+        li.classList.add("content-li");
+        li.setAttribute('data-testid', 'online-user');
+        ul.appendChild(li);
+      });
+    }
 
     function renderMessage(user) {
       const ul = document.getElementById("ul");
       const li = document.createElement("li");
-      console.log('user', user);
-      /* const data = user.data;
-      const name = user.name;
-      const message = user.message;
-      const text = `${data} - ${nickname}: ${chatMessage}`; */
-      /* li.appendChild(document.createTextNode(user)); */
       li.innerText = user;
       li.setAttribute('data-testid', 'message');
       ul.appendChild(li);
     }
-    function renderNamesLogados(namesLogados) {
-      const ul = document.getElementById("li-esquerda");
-      namesLogados.forEach((names) => {
+    
+    function renderGetMessages(all) {
+      const ul = document.getElementById("ul");
+      console.log('all db', all);
+      all.forEach((messages) => {
+        const { message, nickname, timestamp } = messages;
         const li = document.createElement("li");
-        li.appendChild(document.createTextNode(names));
-        li.setAttribute('data-testid', 'online-user');
+        li.innerText = `${timestamp} - ${nickname} : ${message}`;
+        li.setAttribute('data-testid', 'message');
         ul.appendChild(li);
       })
-      
-    }
+    };
+
+    socket.on('html', (all) => {
+      renderGetMessages(all)
+    });
+
     socket.on('nomeAleatorio', randomAll => {
       renderNamesLogados(randomAll);
     });
