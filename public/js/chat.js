@@ -14,9 +14,8 @@ const createMessage = (message) => {
   const messagesUl = document.querySelector('#messages');
   const li = document.createElement('li');
   console.log(message);
-  const { nickname, chatMessage, time } = message;
-  li.innerText = `${nickname}: ${chatMessage} - ${time}`;
+  li.innerText = message;
   messagesUl.appendChild(li);
 };
 
-socket.on('serverMessage', (message) => createMessage(message));
+socket.on('message', (message) => createMessage(message));
