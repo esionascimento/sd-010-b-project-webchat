@@ -11,6 +11,10 @@ const io = require('socket.io')(server, {
   },
 });
 
+const webController = require('./controllers/webControler');
+
+app.use(express.json());
+
 const dataCerta = () => {
   const date = new Date();
   const data = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
@@ -34,11 +38,12 @@ app.use(express.static(`${__dirname}/public`));
 
 io.on('connection', (client) => {
   console.log(`client on ID: ${client.id}`);
-  client.on('message', ({ chatMessage, nickname = client.id }) => {
+  client.on('message', ({ chatMessage, nickname }) => {
     const message = `${dataCerta()} ${horaCerta()} - ${nickname}: ${chatMessage}`;
     io.emit('message', message);
   });
 });
 
 app.get('/', (req, res) => res.render('index'));
+app.post('/', webController.saveMessages);
 server.listen(port);
