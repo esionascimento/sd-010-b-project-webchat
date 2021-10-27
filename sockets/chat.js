@@ -23,6 +23,7 @@ const offlineUser = (socket, io) => {
     console.log(`um usuário desconectou em ${socket.id}`); 
     const userIndex = onlineList.findIndex((item) => item.id === socket.id);
     onlineList.splice(userIndex, 1);
+    console.log(onlineList);
     io.emit('online', onlineList);
   });
 };

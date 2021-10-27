@@ -21,11 +21,11 @@
   </div>
   <form id="nickname-container">
     <input id="nickname" autocomplete="on" data-testid="nickname-box"/>
-    <button data-testid="nickname-button">Send</button>
+    <button data-testid="nickname-button">Novo Nome</button>
   </form>  
     <form id="message-container" action="">
       <input id="input" autocomplete="off" data-testid="message-box"/>
-      <button data-testid="send-button">Send</button>
+      <button data-testid="send-button">Enviar Mensagem</button>
     </form>
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -35,7 +35,7 @@
     window.onload = () => {
     user = (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)).substring(0, 16);
     // https://gist.github.com/6174/6062387
-    document.getElementById('nickname').value = user;
+    
     document.getElementById('main-user').innerText = '';
     document.getElementById('main-user').innerText = user;
     socket.emit('new-user', user); 
@@ -78,7 +78,7 @@
 
     socket.on('online', (onlineList) => {
       const ul = document.getElementById('online-list');
-      while (ul.childNodes.length > 1) {
+      while (ul.childNodes.length > 0) {
         ul.removeChild(ul.lastChild);
       }
       const userIndex = onlineList.findIndex((item) => item.nickname === user);
@@ -86,7 +86,7 @@
       onlineList.forEach((user) => {
         const li = document.createElement('li');
         li.setAttribute('data-testid', 'online-user');
-        li.textContent = user.nickname;
+        li.innerText = user.nickname;
         ul.appendChild(li);
       })
     });
