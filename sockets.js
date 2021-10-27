@@ -6,18 +6,18 @@ const usersLogados = [];
 
 const filterUserLogados = (nameAleatorio) => {
   usersLogados.push(nameAleatorio);
-  console.log('usersLogados', usersLogados);
-  console.log('nameAleatorio :', nameAleatorio);
+  console.log('nameAleatorio :', usersLogados);
   
-  const result = usersLogados.map((curr) => {
-    if (curr === nameAleatorio) {
+  /* const result = usersLogados.map((curr) => {
+    console.log('usersLogados', usersLogados);
+    if (curr !== nameAleatorio) {
       console.log('curr1 :', curr);
       return nameAleatorio;
     }
     console.log('nameAleatorio2 :', nameAleatorio);
     return null;
   });
-  return result;
+  return result; */
 };
 
 const salveMessage = async (message, nickname, io) => {
@@ -48,26 +48,26 @@ const disconnect = (id) => {
 };
 
 module.exports = (io) => 
-io.on('connection', async (socket) => {
-  const nameAleatorio = socket.id.slice(0, 16);
-  filterUserLogados(nameAleatorio);
-  
-  io.emit('nomeAleatorio', usersLogados);
-  
-  socket.on('salveUserr', (nickname) => {
-    user.nickname = nickname;
-  });
-  
-  socket.on('message', ({ chatMessage, nickname }) => {
-    salveMessage(chatMessage, nickname, io);
-  });
-  const getAlls = await getAllMessages();
-
-  io.emit('html', getAlls);
-  
-  socket.on('disconnect', () => {
-    console.log('disconnect :', nameAleatorio);
-    disconnect(nameAleatorio);
+  io.on('connection', async (socket) => {
+    const idAleatorio = socket.id.slice(0, 16);
+    filterUserLogados(idAleatorio);
+    console.log(socket.id);
     io.emit('nomeAleatorio', usersLogados);
-  });
+    
+    socket.on('salveUserr', (nickname) => {
+      user.nickname = nickname;
+    });
+    
+    socket.on('message', ({ chatMessage, nickname }) => {
+      salveMessage(chatMessage, nickname, io);
+    });
+    const getAlls = await getAllMessages();
+
+    io.emit('html', getAlls);
+    
+    socket.on('disconnect', () => {
+      console.log('disconnect :', socket.id);
+      disconnect(idAleatorio);
+      io.emit('nomeAleatorio', usersLogados);
+    });
 });
