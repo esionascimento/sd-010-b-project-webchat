@@ -38,24 +38,37 @@ const getAllMessages = async () => {
 };
 
 const disconnect = (id) => {
-  const result = usersLogados.map((curr) => {
+  const result = usersLogados.map((curr, index) => {
     if (curr === id) {
-      usersLogados.pop(id);
+      usersLogados.splice(index, 1);
     }
     return curr;
   });
   return result;
 };
 
+const atualizarNome = (nickname, idAleatorio) => {
+  const result = usersLogados.map((curr, index) => {
+    if (curr === idAleatorio) {
+      usersLogados.splice(index, 1);
+      usersLogados.push(nickname);
+    }
+    return curr;
+  });
+  usersLogados.sort();
+  return result;
+};
+
 module.exports = (io) => 
   io.on('connection', async (socket) => {
-    const idAleatorio = socket.id.slice(0, 16);
+    let idAleatorio = socket.id.slice(0, 16);
     filterUserLogados(idAleatorio);
-    console.log(socket.id);
     io.emit('nomeAleatorio', usersLogados);
     
-    socket.on('salveUserr', (nickname) => {
-      user.nickname = nickname;
+    socket.on('salveUser', (nickname) => {
+      atualizarNome(nickname, idAleatorio);
+      idAleatorio = nickname;
+      io.emit('nomeAleatorio', usersLogados);
     });
     
     socket.on('message', ({ chatMessage, nickname }) => {
@@ -66,7 +79,6 @@ module.exports = (io) =>
     io.emit('html', getAlls);
     
     socket.on('disconnect', () => {
-      console.log('disconnect :', socket.id);
       disconnect(idAleatorio);
       io.emit('nomeAleatorio', usersLogados);
     });

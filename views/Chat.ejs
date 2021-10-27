@@ -100,7 +100,7 @@
     salvar.addEventListener('click', () => {
       const name = document.getElementById('name').value;
       nickname = name;
-      socket.emit('salveUserr', name);
+      socket.emit('salveUser', name);
     });
     enviar.addEventListener('click', () => {
       const chatMessage = document.getElementById('message').value;
