@@ -28,7 +28,9 @@ io.on('connection', (socket) => {
     });
     socket.on('message', (ChatMsgAndNickName) => {
       const { chatMessage, nickname } = ChatMsgAndNickName;
-      const data = moment().format('MMMM Do YYYY, h:mm:ss a');
+
+      // DD-MM-yyyy HH:mm:ss ${nickname} ${chatMessage}
+      const data = moment().format('DD-MM-YYYY h:mm:ss a');
       const sendMensage = `$ ${data} - ${nickname} -  ${chatMessage}`;
     io.emit('message', sendMensage);
     });

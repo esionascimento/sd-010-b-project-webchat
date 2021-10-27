@@ -56,7 +56,6 @@
         // Quando o socket é on ele está aguardando mensagem!
         // quando é emit ele está emitindo mensagem mas para quem? neste caso aqui do front para o back!
         socket.on('message', (message) => {
-            console.log(message);
             createMessage(message)
         })
         socket.on('newConnection', ({
