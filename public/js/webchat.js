@@ -12,11 +12,11 @@ function geraStringAleatoria(tamanho) {
 
 let nickname = geraStringAleatoria(16);
 
-const createMessage = (message) => {
-  const messagesUl = document.querySelector('#messages');
+const fillUl = (message, id, dataTest) => {
+  const messagesUl = document.querySelector(`#${id}`);
   const li = document.createElement('li');
   li.innerText = message;
-  li.setAttribute('data-testid', 'message');
+  li.setAttribute('data-testid', dataTest);
   messagesUl.appendChild(li);
 };
 
@@ -31,8 +31,8 @@ formMessage.addEventListener('submit', (e) => {
   return false;
 });
 
-const storeNickName = document.querySelector('#online-user');
-storeNickName.innerText = nickname;
+// const storeNickName = document.querySelector('#online-user');
+// storeNickName.innerText = nickname;
 
 const formNick = document.querySelector('#formNick');
 const inputNick = document.querySelector('#inputNick');
@@ -40,16 +40,35 @@ const inputNick = document.querySelector('#inputNick');
 formNick.addEventListener('submit', (e) => {
   e.preventDefault();
   const newNickName = inputNick.value;
+  const oldNick = nickname;
   nickname = newNickName;
-  storeNickName.innerText = nickname;
+  socket.emit('updateUserList', { oldNick, nickname });
   inputNick.value = '';
   return false;
 });
 
-socket.on('message', (chatMessage) => createMessage(chatMessage));
+socket.on('message', (chatMessage) => fillUl(chatMessage, 'messages', 'message'));
 
 socket.on('LoadOldMessages', ({ oldMessages }) => {
   oldMessages.forEach((chatMessage) => {
-    createMessage(chatMessage);
+    fillUl(chatMessage, 'messages', 'message');
   });
 });
+
+socket.on('loadUserList', (onlineUsers) => {
+  document.querySelector('#listOnlineUsers').innerHTML = '';
+  onlineUsers.forEach((user) => {
+    fillUl(user, 'listOnlineUsers', 'online-user');
+  });
+});
+
+socket.on('updateUserList', (onlineUsers) => {
+  document.querySelector('#listOnlineUsers').innerHTML = '';
+  onlineUsers.splice(onlineUsers.indexOf(nickname), 1);
+  onlineUsers.unshift(nickname);
+  onlineUsers.forEach((user) => {
+    fillUl(user, 'listOnlineUsers', 'online-user');
+  });
+});
+
+socket.emit('addUserList', { nickname });

@@ -19,34 +19,41 @@ const buildFullMessage = (timestamp, nickname, message) => `${timestamp} - ${nic
 const processdbMessagens = (oldMessages) => oldMessages
   .map(({ timestamp, nickname, message }) => buildFullMessage(timestamp, nickname, message));
 
-let count = 0;
-// moment
+const Room = 'public';
+const onlineUsers = [];
+
+const updateUserList = (io, oldNick, nickname) => {
+  const indexToReplace = onlineUsers.indexOf(oldNick);
+  onlineUsers[indexToReplace] = nickname;
+  io.to(Room).emit('updateUserList', onlineUsers);
+};
+
+const disconnect = (io, nickname) => {
+  onlineUsers.splice(onlineUsers.indexOf(nickname), 1);
+  io.to(Room).emit('updateUserList', onlineUsers);
+};
 
 module.exports = (io) => io.on('connection', async (socket) => {
-  count += 1;
-  const nicknames = `User ${count}`;
-  const Room = 'public';
-
-  console.log(`${nicknames} se conectou a sala !`);
+  let controlNickName = '';
+  console.log(`${socket.id} se conectou a sala !`);
   socket.join(Room);
+  
+  socket.on('addUserList', ({ nickname }) => {
+    controlNickName = nickname;
+    onlineUsers.push(nickname);
+    io.to(Room).emit('updateUserList', onlineUsers);
+  });
+
+  socket.on('updateUserList', ({ oldNick, nickname }) => updateUserList(io, oldNick, nickname));
 
   socket.on('message', async ({ chatMessage: message, room = Room, nickname }) => {
     const timestamp = getNow();
     await saveMessage({ message, nickname, timestamp });
     io.to(room).emit('message', buildFullMessage(timestamp, nickname, message));
   });
-
+  
   const { messages: oldMessages } = await getAll();
-  // console.log(oldMessages);
   socket.emit('LoadOldMessages', { oldMessages: processdbMessagens(oldMessages) });
-
-  // socket.emit('wellCome', `Bem vindo ${nickname}`);
-
-  // socket.broadcast.to(Room)
-  //   .emit('entryRoom', `${nickname} acabou de entrar na sala`);
-
-  socket.on('disconnect', () => {
-    socket.broadcast.to(Room)
-      .emit('outRoom', `${nicknames} acabou de sair na sala`);
-  });
+  
+  socket.on('disconnect', () => disconnect(io, controlNickName));
 });
