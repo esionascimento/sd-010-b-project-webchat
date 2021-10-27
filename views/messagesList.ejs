@@ -1,0 +1,43 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <p> se ejs fosse bom, n pareceria php.</p>
+    </div> 
+
+      <form action="/update"class="create-nick-form" method="PUT">
+        <input placeholder="Insira seu nickname" type="text"/>
+        <button type="submit">Salvar</button>
+      </form>
+
+    <section class="sec-nick-list">
+      <h1>Usuários online</h1>
+      <ul>
+        <li id="userName"> </li>>
+        <% data.forEach(({nickname}) => { %>
+          <li><%= nickname %></li>
+        <% }) %>
+      </ul>
+    </section>
+    <section class="sec-messages-list">
+      <h1>Mensagens</h1>
+
+      <ul>
+        <% data.forEach(({nickname, timestamp, message}) => { %>
+          <li><%= timestamp %> - <%= nickname %>: <%= message %></li>
+        <% }) %>
+      </ul>
+    </section>
+
+      <form action="/create" class="create-message-form" method="POST" id="message-form">
+        <input placeholder="Digite uma nova mensagem aqui" type="text"/>
+        <button type="submit" id="msg-submit">Enviar</button>
+    </form>
+    <script src="../utils/utils.js"></script>
+
+
+  </body>
+</html>
