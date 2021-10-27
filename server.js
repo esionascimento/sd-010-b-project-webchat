@@ -4,21 +4,23 @@ const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
 
+const PORT = process.env.PORT || 3000;
+
 const io = require('socket.io')(http, {
   cors: {
-    origin: `http://localhost:${process.env.PORT}`, // url aceita pelo cors
+    origin: `http://localhost:${PORT}`, // url aceita pelo cors
     methods: ['GET', 'POST'], // Métodos aceitos pela url
   },
 });
 
-app.use(express.static(`/${__dirname}/public`)); 
+app.use(express.static(`/${__dirname}/public/`)); 
 // da acesso aos arquivos de /public
 
 require('./sockets/chat')(io);
+// traz as configs dos sockets
 
-app.get('/', async (req, res) => {
-  // io.emit('salve', 'testando 123');
+app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/public/webchat.html`);
 });
 
-http.listen(process.env.PORT, () => { console.log('Servidor ouvindo na porta 3000'); });
+http.listen(PORT, () => { console.log(`Servidor on na porta ${PORT}`); });
