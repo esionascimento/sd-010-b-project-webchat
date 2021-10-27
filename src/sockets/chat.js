@@ -4,4 +4,4 @@ module.exports = (io) => io.on('connection', (socket) => {
   socket.on('message', ({ nickname, chatMessage }) => {
     io.emit('message', `${dateNow} - ${nickname}: ${chatMessage}`);
   });
-}); 
+});
