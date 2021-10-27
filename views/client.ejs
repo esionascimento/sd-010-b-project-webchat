@@ -75,10 +75,11 @@
         const inputMessage = document.querySelector('#messageInput');
         const formNickname = document.querySelector('#form_nickname');
         const inputNick = document.querySelector('#nicknameInput');
+        const nickStorage = sessionStorage.getItem('nickname');
 
         form.addEventListener('submit', (e) => {
           e.preventDefault();
-          socket.emit('message', { chatMessage: inputMessage.value, nickname: inputNick.value });
+          socket.emit('message', { chatMessage: inputMessage.value, nickname: nickStorage /* inputNick.value */ });
           inputMessage.value = '';
           return false;
         });
