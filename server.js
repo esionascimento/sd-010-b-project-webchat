@@ -14,6 +14,10 @@ const io = require('socket.io')(http, {
  // função executada quando um cliente se conecta
 io.on('connection', (socket) => {
   console.log(`${socket.id} conectado`);
+  socket.on('message', (message) => {
+    console.log(message, 'consoleMessage');
+    io.emit('message', message);
+  });
 });
 
 app.get('/', (req, res) => {
