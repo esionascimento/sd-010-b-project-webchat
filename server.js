@@ -22,13 +22,13 @@ require('./sockets/chat')(io);
 //   res.status(200).render('chat');
 // });
 
-app.get('/chat', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/views/chat.html`);
  });
 
-app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/views/login.html`);
-});
+// app.get('/', (req, res) => {
+//   res.sendFile(`${__dirname}/views/login.html`);
+// });
 
 http.listen(3000, () => {
   console.log('Servidor ouvindo a porta 3000');
