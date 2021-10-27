@@ -27,8 +27,8 @@ app.get('/', (req, res) => {
   res.status(200).render('client');
 });
 
-const allcustomerMessages = [];
-const UsersOn = [];
+// const allcustomerMessages = [];
+// const UsersOn = [];
 
 io.on('connection', (socket) => {
   console.log(`${socket.id} usuario conectado`);
@@ -42,11 +42,11 @@ io.on('connection', (socket) => {
     });
     
     socket.on('message', ({ chatMessage, nickname }) => {
-    // persistência de usuário 
-    UsersOn.push({ nickname, idSocket: socket.id });
+    // // persistência de usuário 
+    // UsersOn.push({ nickname, idSocket: socket.id });
 
-    // persistência de mensagem
-    allcustomerMessages.push({ idSocket: socket.id, nickname, chatMessage });
+    // // persistência de mensagem
+    // allcustomerMessages.push({ idSocket: socket.id, nickname, chatMessage });
     
     const date = getTheCurrentDate();
     const fullMessage = formatMessage(date, chatMessage, nickname);
