@@ -67,6 +67,7 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('disconnect', (reason) => {
+    console.log(reason);
     if (reason === 'transport_error') console.log('Transport error');
     removeUser(socket);
     io.emit('changeNickname', users);
