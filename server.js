@@ -6,6 +6,7 @@ const app = express();
 const http = require('http').createServer(app);
 
 const PORT = 3000;
+// const messages = [];
 
 const io = require('socket.io')(http, {
     cors: {
