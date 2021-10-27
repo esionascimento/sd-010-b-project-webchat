@@ -1,29 +1,38 @@
 const socket = window.io();
 
-const inputNickmame = document.querySelector('#nickname');
-const sendNickname = document.querySelector('#send_nickname');
-const inputMsg = document.querySelector('#messages__item');
-const sendMsg = document.querySelector('#send_message');
+const inputNickmame = document.querySelector('.nickname');
+const sendNickname = document.querySelector('.send_nickname');
+const inputMsg = document.querySelector('.messages__item');
+const sendMsg = document.querySelector('.send_message');
 
-function createMsg(msg) {
-  const msgUl = document.querySelector('.messages');
+function createMsg(element, msg, elementTest) {
+  const ul = document.querySelector(element);
   const li = document.createElement('li');
+  
+  li.setAttribute('data-testid', elementTest);
   li.innerText = msg;
-
-  msgUl.appendChild(li);
+  ul.appendChild(li);
 }
 
 const newUser = Math.random().toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
 
 window.onload = () => {
-  createMsg(newUser);
+  createMsg('.nicknames', newUser, 'online-user');
+  sessionStorage.setItem('user', newUser);
+};
+
+window.onbeforeunload = () => {
+  socket.disconnect();
 };
 
 sendNickname.addEventListener('click', (e) => {
   e.preventDefault();
 
-  createMsg(inputNickmame.value);
-  
+  const nickname = inputNickmame.value;
+  sessionStorage.setItem('user', nickname);
+
+  createMsg('.nicknames', nickname, 'online-user');
+
   inputNickmame.value = '';
 
   return false;
@@ -32,11 +41,12 @@ sendNickname.addEventListener('click', (e) => {
 sendMsg.addEventListener('click', (e) => {
   e.preventDefault();
   
-  socket.emit('message', { nickname: newUser, chatMessage: inputMsg.value });
+  const nickname = sessionStorage.getItem('user');
+  socket.emit('message', { nickname, chatMessage: inputMsg.value });
 
   inputMsg.value = '';
 
   return false;
 });
 
-socket.on('message', (msg) => createMsg(msg));
+socket.on('message', (msg) => createMsg('.messages', msg, 'message'));
