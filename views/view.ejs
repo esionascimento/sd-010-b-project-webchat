@@ -30,15 +30,20 @@
 <script>
   const socket = io('http://localhost:4000');
 
+  // SOURCE: https://gist.github.com/6174/6062387
+  const nickname = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
   const form = document.getElementById('form');
   const input = document.getElementById('input');
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     if (input.value) {
-      socket.emit('input message', input.value);
+      const data = { nickname, chatMessage: input.value }
+      socket.emit('input message', data);
       input.value = '';
     }
   });
+
 </script>
 </html>

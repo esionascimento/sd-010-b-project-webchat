@@ -33,7 +33,12 @@ io.on('connection', (socket) => {
     console.log('Disconnected user');
   });
   socket.on('input message', (msg) => {
-    console.log(`Message: ${msg}`);
+    const date = new Date();
+    const [year, day, month] = [date.getFullYear(), date.getDate(), date.getMonth()];
+    const [hour, minute, second] = [date.getHours(), date.getMinutes(), date.getSeconds()];
+    // DD-MM-yyyy HH:mm:ss
+    const messageTime = `${day}-${month + 1}-${year} ${hour}:${minute}:${second}`;
+    console.log(`${messageTime} ${msg.nickname} ${msg.chatMessage}`);
   });
 });
 
