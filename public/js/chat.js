@@ -10,7 +10,7 @@ formMessage.addEventListener('submit', (event) => {
   
   socket.emit('message', { chatMessage: newMessage, nickname: userName });
 
-  target.target.querySelector('#message-box').value = '';
+  target.querySelector('#message-box').value = '';
 });
 
 const formUser = document.querySelector('.form-user');
@@ -37,6 +37,10 @@ socket.on('message', (message) => {
 
 socket.on('connected', (user) => {
   // colocar condição que testa se usuário existe no localstorge
-
-  document.querySelector(ID).innerHTML = user;
+  const userSeted = localStorage.getItem('userSeted');
+  if (!userSeted) {
+    document.querySelector(ID).innerHTML = user;
+  } else {
+    document.querySelector(ID).innerHTML = userSeted;
+  }
 });
