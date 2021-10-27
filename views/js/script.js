@@ -32,7 +32,7 @@ btnChangeNick.addEventListener('click', (event) => {
 });
 
 const onlineUser = document.querySelector('#ul-online-user');
-socket.io('updateList', (array) => {
+socket.on('updateList', (array) => {
   onlineUser.innerHTML = '';
   array.forEach((user) => {
     const liUser = document.createElement('li');
