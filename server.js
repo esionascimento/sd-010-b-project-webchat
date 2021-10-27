@@ -19,11 +19,16 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
-});
 
-io.on('connection', (socket) => {
-  socket.on('chat message', (msg) => {
-    console.log(`message: ${msg}`);
+  socket.on('message', (message) => {
+    const { nickname, chatMessage } = message;
+    // date & time source: https://phoenixnap.com/kb/how-to-get-the-current-date-and-time-javascript
+    const today = new Date();
+    const date = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+    const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+    const messageData = `${date} ${time} - ${nickname}: ${chatMessage}`;
+
+    io.emit('message', messageData);
   });
 });
 
