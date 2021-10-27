@@ -1,5 +1,7 @@
 const socket = window.io();
 
+let nickname = Math.random().toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
+
 socket.on('message', (string) => {
   const li = document.createElement('li');
   li.setAttribute('data-testid', 'message');
