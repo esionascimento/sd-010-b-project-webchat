@@ -40,9 +40,9 @@ const newDataHora = dataHora();
 io.on('connection', (socket) => {
     console.log(`Usuário conectado. ID: ${socket.id} `);
     socket.on('message', (data) => {
-      allMessage.push(data);
+      allMessage.push({ data, newDataHora });
       console.log(data);
-      io.emit('message', `${newDataHora} - ${data.nickname}: ${data.chatMessage}`);
+      io.emit('message', { data, newDataHora });
     });
 
     socket.emit('mensagem', 

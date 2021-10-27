@@ -62,7 +62,7 @@
 </head>
 <body>
     <ul id="mensagens"></ul>
-    <aside id="#nickname"></aside>
+    <div id="nickname"></div>
     <form id="form_nickname" action="">
       <input data-testid="nickname-box" type="text" autocomplete="off" id="nicknameInput"><button data-testid="nickname-button">Salvar</button>
     </form>
@@ -75,10 +75,10 @@
         const inputMessage = document.querySelector('#messageInput');
         const formNickname = document.querySelector('#form_nickname');
         const inputNick = document.querySelector('#nicknameInput');
-        
+     
         formNickname.addEventListener('submit', (e) => {
           e.preventDefault();
-          const saveNick = sessionStorage.setItem('nickname', inputNick.value);
+          const saveNick = sessionStorage.setItem('nickname', inputNick.value);         
           inputNick.value = '';
           return false;
         });
@@ -97,9 +97,13 @@
         ///
 
         form.addEventListener('submit', (e) => {
+          e.preventDefault();
           const renderNick = generateNickName(16);
           const nickStorage = sessionStorage.getItem('nickname');
-          e.preventDefault();
+          /* const spanNick = document.createElement('span'); */
+          /* spanNick.setAttribute("") */
+          /* asideNick.appendChild(spanNick); */
+          /* spanNick.innerText = nickStorage; */
           const nickName = (!nickStorage) ? renderNick : nickStorage;
           socket.emit('message', { chatMessage: inputMessage.value, nickname: nickName});
           inputMessage.value = '';
@@ -107,15 +111,26 @@
         });
 
         const createMessage = (msg) => {
-          console.log(msg.newDataHora);
           const messageUl = document.querySelector('#mensagens');
           const li = document.createElement('li');
+          const span = document.createElement('span');
+          span.innerText = `${msg.newDataHora} - ${msg.data.nickname}: ${msg.data.chatMessage}`
+          li.appendChild(span);
           li.setAttribute("data-testid", "message");
-          li.innerText = msg;
           messageUl.appendChild(li);
         }
 
         socket.on('message', (message) => createMessage(message));
+
+        socket.on('message', (msg) => {
+          console.log(msg.data.nickname);
+          const divNick = document.querySelector('#nickname');
+          const spanNick = document.createElement('span');
+          spanNick.setAttribute("data-testid", "online-user"); 
+          spanNick.innerText = `${msg.data.nickname}`;
+          divNick.appendChild(spanNick); 
+        });
+
     </script>
 </body>
 </html>
