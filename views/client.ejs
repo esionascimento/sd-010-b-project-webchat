@@ -108,7 +108,7 @@
 
         const createMessage = (msg) => {
             const messageUl = document.querySelector('#mensagens');
-            const li = document.createElement('li')/* .setAttribute("data-testid", "message"); */
+            const li = document.createElement('li');
             li.setAttribute("data-testid", "message")
             li.innerText = msg;
             messageUl.appendChild(li);
