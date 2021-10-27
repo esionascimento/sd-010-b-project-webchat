@@ -45,6 +45,11 @@ body {
   width: 90%;
 }
 
+.user-container {
+  margin-bottom: 20px;
+}
+
+
 .container-messages {
   background-color: yellow;
   height: 95%;
