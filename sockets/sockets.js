@@ -4,21 +4,18 @@ const midlewares = require('../midlewares/midlewares');
 
 const disconect = (socket, io) => {
     socket.on('disconnect', () => {
-        guestControler.excludeGuest(socket);
-        io.emit('guests', guestControler.getGuests());
+        io.emit('guests', guestControler.excludeGuest(socket));
     });
 };
 const addUser = (socket, io) => {
     socket.on('adduser', (random) => {
-        guestControler.addGuest(random, socket);
-      io.emit('guests', guestControler.getGuests());
+      io.emit('guests', guestControler.addGuest(random, socket));
     });
 };
 
 const addNickname = (socket, io) => {
     socket.on('nickname', (nickname) => {
-        guestControler.editGuest(nickname, socket);
-        io.emit('guests', guestControler.getGuests());
+        io.emit('guests', guestControler.editGuest(nickname, socket));
     });
 };
 
