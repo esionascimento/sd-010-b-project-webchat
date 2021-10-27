@@ -18,6 +18,9 @@ const io = require('socket.io')(http, {
   
 const { getAllMessages } = require('./controllers/webchatController');
 
+// https://stackoverflow.com/questions/18629327/adding-css-file-to-ejs
+app.use(express.static(`${__dirname}/public`));
+
 app.use(cors());
 
 app.set('view engine', 'ejs');

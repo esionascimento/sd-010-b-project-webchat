@@ -1,27 +1,27 @@
-let onlineUsers = [];
+let users = [];
 
 const addUser = (data) => {
-    onlineUsers.push(data);
-    return onlineUsers;
+    users.push(data);
+    return users;
 };
 
 const removeUser = (nicknameId) => {
-    onlineUsers = onlineUsers.filter((user) => user.nicknameId !== nicknameId).slice();
-    return onlineUsers;
+    users = users.filter((user) => user.nicknameId !== nicknameId).slice();
+    return users;
 };
 
 const changeNickname = (data) => {
-    onlineUsers = onlineUsers.map((user) => {
+    users = users.map((user) => {
         if (user.nicknameId === data.nicknameId) {
             return { nicknameId: data.nicknameId, databaseNickname: data.databaseNickname };
         }
         return user;
     }).slice();
-    return onlineUsers;
+    return users;
 };
 
 module.exports = {
-    onlineUsers,
+    users,
     addUser,
     removeUser,
     changeNickname,

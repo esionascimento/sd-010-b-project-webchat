@@ -6,7 +6,6 @@ const createNickname = (io, socket) => {
     const databaseNickname = nicknameId;
     socket.emit('nicknameId', nicknameId);
      console.log(`${nicknameId} conectado!`);
-     // socket.emit('currentNickname', currentNickname);
   
      const updatedOnlineUsers = addUser({ nicknameId, databaseNickname });
      socket.emit('databaseNickname', databaseNickname);
@@ -33,7 +32,6 @@ const createNickname = (io, socket) => {
       await createMessages({ chatMessage, nickname, finalDate });
 
       const formattedMessage = `${finalDate} - ${nickname}: ${chatMessage}`;
-      console.log(formattedMessage);
 
       io.emit('message', formattedMessage);
     });

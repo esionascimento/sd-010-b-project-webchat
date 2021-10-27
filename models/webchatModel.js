@@ -10,8 +10,8 @@ const getMessages = async () => {
 
 const createMessage = async (data) => {
   const db = await connection();
-    const { chatMessage, nickname, formattedDate } = data;
-    const newMessage = { message: chatMessage, nickname, timestamp: formattedDate };
+    const { chatMessage, nickname, finalDate } = data;
+    const newMessage = { message: chatMessage, nickname, timestamp: finalDate };
     return db.collection('messages').insertOne(newMessage);
 };
 
