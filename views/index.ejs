@@ -4,9 +4,362 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fundão's WebChat</title>
+    <title>RocketChat</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+
+        font-family: Zen Kurenaido, sans-serif;
+      }
+
+      .header {
+        height: 8vh;
+        width: 100vw;
+
+        background: rgb(17, 17, 17);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .logo {
+        height: 60%;
+      }
+
+      .brand-title {
+        font-family: Russo One;
+        color: rgb(172, 23, 23);
+
+        margin-right: 15px;
+        margin-block-start: 0;
+        margin-block-end: 0;
+      }
+
+      .main {
+        width: 100vw;
+        height: 86vh;
+
+        background: rgb(51, 51, 51);
+
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .users {
+        height: 90%;
+        width: 30%;
+
+        background: rgb(59, 59, 59);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .user {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .logged-user {
+        width: 100%;
+
+        margin: 20px 0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .neonText {
+        width: 10px;
+        height: 10px;
+
+        margin-right: 10px;
+
+        border-radius: 50%;
+        background: rgb(0, 255, 170);
+
+        box-shadow: 0px 0px 10px 5px rgb(2, 214, 143);
+      }
+
+      .nickname-form {
+        width: 100%;
+        height: 60px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .nickname-input {
+        width: 65%;
+        height: 50%;
+
+        padding: 5px 15px;
+
+        font-family: Zen Kurenaido, sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+
+        border-radius: 8px;
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2),
+          0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      .nickname-input:focus {
+        outline: none;
+      }
+
+      .nickname-button {
+        height: 60%;
+        width: 15%;
+
+        font-family: Zen Kurenaido, sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+
+        border: none;
+        border-radius: 8px;
+
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2),
+          0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+        background: rgb(172, 23, 23);
+        color: white;
+
+        margin-left: 5%;
+
+        cursor: pointer;
+
+        transition: 0.5s;
+      }
+
+      .nickname-button:hover {
+        box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.411),
+          0 17px 50px 0 rgba(0, 0, 0, 0.281);
+      }
+
+      .user-nickname {
+        color: #fff;
+        font-size: 24px;
+      }
+
+      .messages {
+        height: 90%;
+        width: 65%;
+
+        background: rgb(59, 59, 59);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .all-messages {
+        height: 78%;
+        width: 90%;
+
+        background: rgb(173, 173, 173) url(./assets/bg.jpg);
+
+        border-radius: 5px;
+
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: flex-start;
+        align-items: center;
+
+        overflow: auto;
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2),
+          0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      .all-messages div {
+        font-size: 20px;
+        font-weight: bold;
+
+        margin: 5px;
+        padding: 10px;
+        border-radius: 8px;
+
+        background: rgb(172, 23, 23);
+        color: white;
+
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2),
+          0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      ::-webkit-scrollbar {
+        width: 10px;
+        overflow: overlay;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: rgba(122, 12, 12, 0.418);
+        overflow: overlay;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: rgb(122, 12, 12);
+        overflow: overlay;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgb(87, 5, 5);
+        overflow: overlay;
+      }
+
+      .new-message {
+        height: 15%;
+        width: 90%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .new-message form {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .new-message-input {
+        width: 65%;
+        height: 50%;
+
+        padding: 5px 15px;
+
+        font-family: Zen Kurenaido, sans-serif;
+        font-size: 24px;
+        font-weight: bold;
+
+        border-radius: 8px;
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2),
+          0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      .new-message-input:focus {
+        outline: none;
+      }
+
+      .send-message-button {
+        height: 60%;
+        width: 20%;
+
+        font-family: Zen Kurenaido, sans-serif;
+        font-size: 24px;
+        font-weight: bold;
+        text-transform: uppercase;
+
+        border: none;
+        border-radius: 8px;
+
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2),
+          0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+        background: rgb(172, 23, 23);
+        color: white;
+
+        margin-left: 5%;
+
+        cursor: pointer;
+
+        transition: 0.5s;
+      }
+
+      .send-message-button:hover {
+        box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.411),
+          0 17px 50px 0 rgba(0, 0, 0, 0.281);
+      }
+
+      .footer {
+        height: 6vh;
+        width: 100vw;
+
+        font-family: Russo One;
+        color: rgb(172, 23, 23);
+
+        background: rgb(17, 17, 17);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
   </head>
   <body>
-    <script></script>
+    <div class="header">
+      <h1 class="brand-title">RocketChat</h1>
+      <img class="logo" src="./assets/logo.png" alt="Logo" />
+    </div>
+    <div class="main">
+      <div class="users">
+        <div class="user">
+          <form action="post" class="nickname-form">
+            <input
+              data-testid="nickname-box"
+              type="text"
+              name="new-nickname"
+              class="nickname-input"
+              placeholder="change your nickname here.."
+              autocomplete="off"
+            />
+            <button data-testid="nickname-button" class="nickname-button">
+              <span>change</span>
+            </button>
+          </form>
+        </div>
+        <div class="logged-user"></div>
+      </div>
+      <div class="messages">
+        <div class="all-messages"></div>
+        <div class="new-message">
+          <form action="post">
+            <input
+              data-testid="message-box"
+              type="text"
+              name="new-message"
+              class="new-message-input"
+              placeholder="Type your message here.."
+              autocomplete="off"
+            />
+            <button data-testid="send-button" class="send-message-button">
+              <span>Send</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      RocketChat© is another marvelous creation by the one and only João
+      Vanelli!
+    </div>
+
+    <script src="socket.io/socket.io.js"></script>
+    <script src="./js/script.js"></script>
   </body>
 </html>

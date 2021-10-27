@@ -20,6 +20,8 @@ const io = require('socket.io')(httpServer, {
   },
 });
 
+app.use(express.static(`${__dirname}/views`));
+
 app.get('/', (_req, res) => {
   res.render(`${__dirname}/views/index.ejs`);
 });
