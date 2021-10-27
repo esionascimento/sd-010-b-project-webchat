@@ -2,47 +2,46 @@
 <html>
   <head>
     <title>ChatWeb</title>
-    <script src="/socket.io/socket.io.js"></script>
-    <link rel="stylesheet" type="text/css" href="public/style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="public/style.css"> -->
     <style>
+      #chat {
+        align-items: stretch;
+        display: flex;
+        flex-direction: column-reverse;
+        flex-grow: 1;
+        height: 100vh;
+        width: 70%; 
+      }
+
       body {
         background-color: bisque;
       }
 
       #users {
+        border: 1px;
         display: flex;
         width: 30%;
-        border: 1px;
-      }
-
-      #chat {
-        height: 100vh;
-        width: 70%; 
-        display: flex;
-        flex-direction: column-reverse;
-        align-items: stretch;
-        flex-grow: 1;
       }
 
       #users {
-        height: 100vh;
         display: flex;
         flex-direction: column;
+        height: 100vh;
         width: 30%;
       }
 
       #div-principal {
-        width: 100%; 
         display: flex;
         flex-direction: row-reverse;
         flex-grow: 1;
+        width: 100%; 
       }
 
       input {
-        padding: 0 1rem;
-        flex-grow: 1;
         border-radius: 2rem;
+        flex-grow: 1;
         margin: 0.25rem;
+        padding: 0 1rem;
         width: 80%;
       }
     </style>
@@ -64,6 +63,7 @@
       </form>
     </div>
   </div>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
 
