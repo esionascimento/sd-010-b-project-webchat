@@ -1,11 +1,22 @@
 const socket = window.io();
 
+function makeid(length) {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i += 1) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
 const formMessage = document.querySelector('#formsMessage');
 const formNickName = document.querySelector('#formsNickName');
 const inputMessage = document.querySelector('#messageInput');
 const inputNickName = document.querySelector('#nickInput');
 const nick = document.querySelector('#nickName');
-// inputNickName.innerText = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 16);
+
+window.onload = () => { nick.innerText = makeid(16); };
 
 formMessage.addEventListener('submit', (e) => {
   e.preventDefault();

@@ -5,8 +5,8 @@
     <link rel="stylesheet" href="./css/chat.css">
   </head>
   <body>
-    <ul data-testid="message-box" id="messages"></ul>
-    <p id="nickName" data-testid="online-user"><%= /^[\w'-]{16}$/ %></p>
+    <ul type="chatMessage" data-testid="message-box" id="messages"></ul>
+    <p id="nickName" data-testid="online-user"></p>
     <div>
       <form id="formsMessage" action="">
         <input id="messageInput" autocomplete="off" />
