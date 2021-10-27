@@ -1,11 +1,11 @@
 const { create, getAll } = require('./controllers/chatController');
 
-const user = {
-};
+/* const user = {
+}; */
 const usersLogados = [];
 
 const filterUserLogados = (nameAleatorio) => {
-  usersLogados.push(nameAleatorio);
+  usersLogados.unshift(nameAleatorio);
   console.log('nameAleatorio :', usersLogados);
   
   /* const result = usersLogados.map((curr) => {
