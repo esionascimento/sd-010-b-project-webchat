@@ -2,34 +2,59 @@
 <html>
   <head>
     <title>Socket.IO - Trybe</title>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js ."></script> -->
     <script src="/socket.io/socket.io.js"></script>
     
   </head>
   <body>
 
-    <ul id="mensagens"></ul>
+    <div>
+      <ul id="chat"></ul>
 
-    <form action="">
-      <input id="mensagemInput" autocomplete="off"><button>Send</button>
-    </form>
+      <form action="">
+        <input id="elementImput" data-testid="message-box" autocomplete="off"><button id="button-send-message" data-testid="send-button">Send</button>
+      </form>
+    </div>
+
+    <div id="users">
+      <p id="user-nick" data-testid="online-user"></p>
+      <input id="inputEditNick" data-testid="nickname-box" autocomplete="off"><button id="editar-nome" data-testid="nickname-button">Editar Nome</button>
+    </div>
 
     <script>
       const socket = io();
-      const form = document.querySelector('form')
-      const inputMessage = document.querySelector('#mensagemInput')
-      form.addEventListener('submit', (e) => {
+
+      let nickname = Math.random()
+        .toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
+      
+      // const button = document.querySelector('#button-send-message')
+      const formDoChat = document.querySelector('form');
+      const elementImput = document.querySelector('#elementImput')
+      const nick = document.getElementById("user-nick")
+      const editarNome = document.getElementById("editar-nome");
+
+      nick.innerText = nickname;
+
+      formDoChat.addEventListener('submit', (e) => {
         e.preventDefault();
-        socket.emit('mensagem', inputMessage.value)
-        inputMessage.value = ''
-        return false;
+        const chatMessage = elementImput.value;
+        socket.emit('message', { chatMessage, nickname })
+        elementImput.value = ''
+      })
+
+      editarNome.addEventListener('click', (e) => {
+        e.preventDefault();
+        nickname = inputEditNick.value;
+        nick.innerText = nickname;
+        // nick.innerText = nickname;
+        inputEditNick.value = ''
       })
 
       const createMessage = (message) => {
-        const messagesUl = document.querySelector('#mensagens');
+        const ul = document.querySelector('#chat');
         const li = document.createElement('li');
+        li.setAttribute("data-testid", "message")
         li.innerText = message;
-        messagesUl.appendChild(li);
+        ul.appendChild(li);
       }
 
       socket.on('message', (message) => {

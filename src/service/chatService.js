@@ -1,10 +1,10 @@
-const chatModel = require('../models/chatModel');
+const chatModel = require('../../models/chatModel');
 
 const chatUpdate = async (req, res) => {
-  const { nickname, chatMessage } = req.body;
+  const { dateNow, nickname, chatMessage } = req.body;
 
   const user = await chatModel
-    .chatUpdate({ nickname, chatMessage });
+    .chatUpdate({ dateNow, nickname, chatMessage });
 
   if (user === 'emailExist') {
     return res.status(409).json({ message: 'Email already registered' });

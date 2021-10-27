@@ -14,8 +14,8 @@ const io = require('socket.io')(http, {
 io.on('connection', (socket) => {
   socket.on('message', (message) => {
     const { chatMessage, nickname } = message;
-    const now = new Date().toLocaleString().replace(/\//g, '-');
-    io.emit('message', `${now} - ${nickname} ${chatMessage}`);
+    const dateNow = new Date().toLocaleString().replace(/\//g, '-');
+    io.emit('message', `${dateNow} - ${nickname} ${chatMessage}`);
   });
 });
 
