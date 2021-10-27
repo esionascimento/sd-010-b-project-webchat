@@ -10,10 +10,10 @@ const io = require('socket.io')(http, {
     methods: ['GET', 'POST'], 
   } });
 
-  io.on('connection', (socket) => {
-    console.log(`Usuário conectado. ID: ${socket.id} `);
-    io.emit('conn', socket.id);
-  });
+  // io.on('connection', (socket) => {
+  //   console.log(`Usuário conectado. ID: ${socket.id} `);
+  //   io.emit('conn', socket.id);
+  // });
 
   // app.use(express.static(path.join(__dirname, '/public')));
 
