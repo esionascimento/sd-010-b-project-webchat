@@ -1,7 +1,10 @@
 const getDateFormated = require('../helpers/getDateFormated');
 
 module.exports = (io) => io.on('connection', (socket) => {
-  console.log(`userId: ${socket.id} conectado.`);
+  const id = socket.id.slice(0, 11);
+  socket.emit('connected', `user-${id}`);
+
+  io.emit('newUserConnected', '');
 
   socket.on('message', ({ nickname, chatMessage }) => {
     const timestamp = getDateFormated();
