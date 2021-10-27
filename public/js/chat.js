@@ -35,6 +35,7 @@ const createMessage = (message) => {
   const li = document.createElement('li');
   console.log(message);
   li.innerText = message;
+  li.setAttribute('data-testid', 'message');
   messagesUl.appendChild(li);
 };
 
