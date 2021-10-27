@@ -3,8 +3,78 @@
 
 <%- include('partials/head') %>
 
-<body>
+  <body>
+    <div class="App">
+      <div class="header"></div>
+      <div class="main">
+        <div class="users">
+          <div class="online-users">
+            <ul class="list-users"></ul>
+          </div>
+          <div class="input-nickname">
+            <input type="text" name="nickname-box" id="nickname-box" data-testid="nickname-box"
+              placeholder="Insira seu nickname">
+            <button type="submit" id="save-nickname" data-testid="nickname-button" class="btn-submit">Salvar</button>
+          </div>
+        </div>
+        <div class="messages"></div>
+      </div>
+      <div class="entry">
+        <input type="text" data-testid="message-box" name="message-box" id="message-box"
+          placeholder="Digite uma nova mensagem aqui">
+        <button type="submit" id="send-message" class="btn-submit" class="btn-submit"
+          data-testid="send-button">Enviar</button>
+      </div>
+    </div>
+    <script src="../socket.io/socket.io.js"></script>
+    <script>
+      let nickname = '';
+      const socket = window.io();
+      const btnSendMessage = document.getElementById('send-message');
+      const btnSaveNickname = document.getElementById('save-nickname');
 
-</body>
+      socket.on('connect', () => {
+        const list = document.querySelector('.list-users');
+        nickname = socket.id.slice(0, 16);
+        const li = document.createElement('li');
+        li.classList.add('user');
+        li.setAttribute('data-testid', 'online-user');
+        li.innerText = nickname;
+        list.appendChild(li);
+      });
+
+      btnSendMessage.addEventListener('click', () => {
+        const messageBox = document.getElementById('message-box');
+        const chatMessage = messageBox.value;
+        socket.emit('message', { chatMessage, nickname });
+        messageBox.value = '';
+        return false;
+      });
+
+      btnSaveNickname.addEventListener('click', () => {
+        const nicknameBox = document.getElementById('nickname-box');
+        const onlineUsers = document.querySelectorAll('.user');
+        onlineUsers.forEach((element) => {
+          if (element.innerText === nickname) {
+            nickname = nicknameBox.value;
+            element.innerText = nickname;
+            nicknameBox.value = '';
+          }
+        })
+        return false;
+      });
+
+      const createMessage = (message) => {
+        const messagesContainer = document.querySelector('.messages');
+        const messageBox = document.createElement('div');
+        messageBox.classList.add('message');
+        messageBox.innerText = message;
+        messageBox.setAttribute('data-testid', 'message');
+        messagesContainer.appendChild(messageBox);
+      }
+
+      socket.on('message', (message) => createMessage(message));
+    </script>
+  </body>
 
 </html>
