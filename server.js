@@ -12,10 +12,12 @@ const io = new Server(server);
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
+app.use('/views', express.static('views'));
+
 app.get('/', ChatController.chat);
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  console.log('a user connected', socket.id);
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
