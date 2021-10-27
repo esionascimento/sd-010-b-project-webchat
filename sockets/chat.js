@@ -13,6 +13,16 @@ const editUser = (socket, io) => {
     console.log(user);
     const userIndex = onlineList.findIndex((item) => item.id === socket.id);
     onlineList[userIndex].nickname = user;
+    console.log(onlineList);
+    io.emit('online', onlineList);
+  });
+};
+
+const offlineUser = (socket, io) => {
+  socket.on('disconnect', () => {
+    console.log(`um usuário desconectou em ${socket.id}`); 
+    const userIndex = onlineList.findIndex((item) => item.id === socket.id);
+    onlineList.splice(userIndex, 1);
     io.emit('online', onlineList);
   });
 };
@@ -22,9 +32,7 @@ const chat = (io) => {
     newUser(socket, io);
     editUser(socket, io);
     console.log(`Um usuário conectou em ${socket.id}`); // baseado na documentação
-    socket.on('disconnect', () => {
-      console.log(`um usuário desconectou em ${socket.id}`);  
-    });
+    offlineUser(socket, io);
     socket.on('message', (message) => {
       const messageDate = new Date();
       const messageTime = messageDate.toLocaleTimeString();
