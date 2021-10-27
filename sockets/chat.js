@@ -8,9 +8,19 @@ const newUser = (socket, io) => {
   });
 };
 
+const editUser = (socket, io) => {
+  socket.on('edit-user', (user) => {
+    console.log(user);
+    const userIndex = onlineList.findIndex((item) => item.id === socket.id);
+    onlineList[userIndex].nickname = user;
+    io.emit('online', onlineList);
+  });
+};
+
 const chat = (io) => {
   io.on('connection', (socket) => {
     newUser(socket, io);
+    editUser(socket, io);
     console.log(`Um usuário conectou em ${socket.id}`); // baseado na documentação
     socket.on('disconnect', () => {
       console.log(`um usuário desconectou em ${socket.id}`);  

@@ -10,35 +10,48 @@
   <h1>WEBCHAT</h1>
   <div>
     <h3>Usuários Online</h3>
-    <ul id="online-list">
-    </ul>
+    <ul id="online-list" data-testid="online-user"></ul>
   </div>
-  <ul id="messages"data-testid="message-box"></ul>
-  <input id="nickname" autocomplete="on" data-testid="nickname-box"/><button data-testid="nickname-button">Send</button>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" /><button data-testid="send-button">Send</button>
+  <ul id="messages" data-testid="message-box"></ul>
+  <form id="nickname-container">
+    <input id="nickname" autocomplete="on" data-testid="nickname-box"/>
+    <button data-testid="nickname-button">Send</button>
+  </form>  
+    <form id="message-container" action="">
+      <input id="input" autocomplete="off" />
+      <button data-testid="send-button">Send</button>
     </form>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
-
+    let user = '';
     window.onload = () => {
-    const user = (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)).substring(0, 16);
+    user = (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)).substring(0, 16);
     // https://gist.github.com/6174/6062387
     document.getElementById('nickname').value = user;
     socket.emit('new-user', user); 
     //envia novo usuário para o servidor
     }
     
-    const form = document.getElementById('form');
+    const messageContainer = document.getElementById('message-container');
     const input = document.getElementById('input');
     const nickname = document.getElementById('nickname');
+    const nickButton = document.getElementById('nickname-button');
+    const nickContainer = document.getElementById('nickname-container');
 
-    form.addEventListener('submit', (e) => {
+    nickContainer.addEventListener('submit', (e) => {
       e.preventDefault();
-      if (input.value && nickname.value) {
+      user = nickname.value;
+      socket.emit('edit-user', user);
+    });
+
+
+
+    messageContainer.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value && user) {
         // como pedido no requisito 1
-        socket.emit('message', {chatMessage: input.value, nickname: nickname.value}); 
+        socket.emit('message', {chatMessage: input.value, nickname: user}); 
         input.value = '';
       }
     });
