@@ -7,9 +7,11 @@
   <title>WebChat</title>
 </head>
 <body>
-  <div id="nickname" action="">
-    <input id="nickname" autocomplete="off" placeholder="Insira seu nickname"/><button>Salvar</button>
-  </div>
+  <form>
+    <input id="nickname" autocomplete="off" data-testid="nickname-box"
+      placeholder="Insira seu nickname"/>
+      <button data-testid="nickname-button" id="nickname-button">Salvar</button>
+  </form>
   <div>
     <ul id="users-online"></ul>
   </div>
@@ -17,7 +19,9 @@
     <h4>Mensagens</h4>
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" autocomplete="off" placeholder="Digite aqui sua mensagem"/><button>Send</button>
+      <input id="input" autocomplete="off" data-testid="message-box" 
+        placeholder="Digite aqui sua mensagem"/>
+        <button data-testid="send-button">Send</button>
     </form>
   </div>
   <script src="/socket.io/socket.io.js"></script>
@@ -25,19 +29,47 @@
     const socket = io();
     const form = document.getElementById('form');
     const input = document.getElementById('input');
+
+    // Vanelli
+    let nickname = Math.random()
+    .toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
     
+    const nickButton = document.getElementById('nickname-button');
+    const nickBox = document.getElementById('nickname');
+    nickButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      if (nickBox.value) {
+        const apelido = document.getElementById('online-user');
+        nickname = nickBox.value;
+        apelido.innerHTML = nickname;        
+        nickBox.value = '';
+      }
+    })
+
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-      if (input.value) {        
-        socket.emit('message', {chatMessage: input.value, nickname: socket.id});
+      if (input.value) {    
+        socket.emit('message', {chatMessage: input.value, nickname});
         input.value = '';
       }
     });
+
+    window.onload = function() {
+      socket.emit('nickname', {nickname: nickname});
+      const usuario = document.getElementById('users-online');
+      const apelido = document.createElement('li');
+      apelido.innerHTML = nickname;
+      apelido.setAttribute("data-testid", "online-user");
+      apelido.setAttribute("id", "online-user");
+      usuario.appendChild(apelido);
+    };
 
     socket.on('message', function(param) {
       const messages = document.getElementById('messages');
       const li = document.createElement('li');
       li.innerHTML = param;
+      li.setAttribute("data-testid", "message");
       messages.appendChild(li);
     });
   </script>
