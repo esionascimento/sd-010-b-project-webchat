@@ -1,8 +1,12 @@
 const express = require('express');
+
 const app = express();
 const http = require('http');
+
 const server = http.createServer(app);
-const { Server } = require("socket.io");
+
+const { Server } = require('socket.io');
+
 const io = new Server(server);
 
 const date = () => {
@@ -15,16 +19,15 @@ const date = () => {
 
 const hors = () => {
   const data = new Date();
-  const hora = data.getHours()
-  const minutos = data.getMinutes()
-  const segundos = data.getSeconds()
+  const hora = data.getHours();
+  const minutos = data.getMinutes();
+  const segundos = data.getSeconds();
   return `${hora}:${minutos}:${segundos}`;
 };
 
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/index.html`);
-  
-});
+  });
 io.on('connection', (socket) => {
   socket.on('message', (mensageUser) => {
     console.log(mensageUser.nickname);
