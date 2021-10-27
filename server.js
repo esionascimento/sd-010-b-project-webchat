@@ -19,8 +19,6 @@ app.set('views', './view');
 // MOMENT
 
 io.on('connection', (socket) => {
-
-
   let nick = '';
   const onlineUsers = [];
 
