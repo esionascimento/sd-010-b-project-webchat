@@ -10,7 +10,8 @@ const io = require('socket.io')(http, {
   },
 });
 
-// const { getUsers, insertUser, deleteUser } = require('./models/usersModel');
+const { getMessages,
+  insertMessage } = require('./models/usersModel');
 
 app.use(cors());
 app.set('view engine', 'ejs');
@@ -20,9 +21,10 @@ app.set('views', './view');
 
 let newUsers = [];
 
-const mensagem = (message) => {
+const mensagem = async (message) => {
   const { chatMessage, nickname } = message;
   const date = new Date().toLocaleString().replace(/\//g, '-');
+  await insertMessage(chatMessage, nickname, date);
   io.emit('message', `${date} - ${nickname}: ${chatMessage}`);
 };
 
@@ -69,6 +71,11 @@ io.on('connection', (socket) => {
 
 app.get('/', (_req, res) => {
   res.status(200).render('index');
+});
+
+app.get('/messages', async (_req, res) => {
+  const messagesDb = await getMessages();
+  res.status(200).json(messagesDb);
 });
 
 http.listen(3000, () => console.log('Sever on 3000'));

@@ -67,12 +67,6 @@
         ulOnlineUsers.appendChild(li);
       });
     };
-
-    // socket.on('Reload', () => {
-    //   window.location.reload(true);
-    //   window.location.reload(false);
-    // });
-
     
     socket.on('message', (message) => createMessage(message));
     socket.on('onlineUsers', (users) => {
@@ -80,7 +74,25 @@
       order.unshift(randomNick);
       createOnlineUsers(order);
     }); 
-    window.onload = () => socket.emit('logedNick', randomNick);
+
+    const oldMessages = () => {
+      fetch('http://localhost:3000/messages')
+        .then((response) => response.json())
+        .then((messages) => {
+          messages.forEach(({ message, nickname, timestamp }) => {
+            const messageUl = document.querySelector('#mensagens');
+            const li = document.createElement('li');
+            li.setAttribute('data-testid','message');
+            li.innerText = `${timestamp} - ${nickname}: ${message}`;
+            messageUl.appendChild(li);
+          })
+        });
+    }
+
+    window.onload = () => {
+      socket.emit('logedNick', randomNick);
+      oldMessages();
+    };
   </script>
 
 </body>

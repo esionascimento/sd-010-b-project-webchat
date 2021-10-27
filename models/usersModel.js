@@ -1,27 +1,18 @@
 const connection = require('./connection');
 
-const getUsers = async () => {
-  const result = await connection().then((db) => {
-    db.collection('onlineUsers').find({}).toArray();
-  });
+const getMessages = async () => {
+  const result = await connection()
+    .then((db) => db.collection('messages').find().toArray());
   return result;
 };
 
-const insertUser = async (user) => {
-  const { _id } = await connection().then((db) => {
-    db.collection('onlineUsers').insertOne({ people: user });
+const insertMessage = async (message, nickname, timestamp) => {
+    await connection().then((db) => {
+    db.collection('messages').insertOne({ message, nickname, timestamp });
   });
-  const id = _id;
-  return id;
-};
-
-const deleteUser = async (user) => {
-  const db = await connection();
-  await db.collection('recipes').deleteOne({ people: user });
 };
 
 module.exports = {
-  getUsers,
-  insertUser,
-  deleteUser,
+  getMessages,
+  insertMessage,
 };
