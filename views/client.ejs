@@ -108,11 +108,11 @@
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const nicknameSaved = sessionStorage.getItem('nickname')
+      const nickNameSaved = sessionStorage.getItem('nickname')
 
       socket.emit('message', {
         chatMessage: chatMessage.value,
-        nickname: nickname.value
+        nickname: nickNameSaved
       });
 
       chatMessage.value = '';
