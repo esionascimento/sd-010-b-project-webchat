@@ -27,8 +27,6 @@
     const formMessage = document.querySelector('#formMessage');
     const inputMessage = document.querySelector('#mensagemInput');
     let randomNick = Math.random().toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
-
-    socket.emit('logedNick', randomNick);
     
     formMessage.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -42,30 +40,47 @@
     formNick.addEventListener('submit', (event) => {
       event.preventDefault();
       randomNick = inputNick.value;
+      socket.emit('nickEdtion', randomNick);
       return false;
     });
 
     const createMessage = (message) => {
       const messageUl = document.querySelector('#mensagens');
       const li = document.createElement('li');
-      li.setAttribute('data-testid','message')
+      li.setAttribute('data-testid','message');
       li.innerText = message;
       messageUl.appendChild(li);
     };
   
     const createOnlineUsers = (users) => {
+      const order = users.filter((users) => users !== randomNick);
+      console.log(order)
+      order.unshift(randomNick);
+      // coloca o item como primeiro do array
       const ulOnlineUsers = document.querySelector('#ulOnlineUsers');
-      const li = document.createElement('li');
-      users.forEach((user) => {
+      while( ulOnlineUsers.firstChild ) ulOnlineUsers.removeChild( ulOnlineUsers.firstChild );
+
+      order.forEach((user) => {
+        const li = document.createElement('li');
         li.setAttribute('data-testid','online-user');
         li.innerText = user;
         ulOnlineUsers.appendChild(li);
       });
-    }
+    };
 
-    socket.on('loggedUsers', (users) => createOnlineUsers(users));
+    // socket.on('Reload', () => {
+    //   window.location.reload(true);
+    //   window.location.reload(false);
+    // });
+
+    
     socket.on('message', (message) => createMessage(message));
-
+    socket.on('onlineUsers', (users) => {
+      const order = users.filter((users) => users !== randomNick);
+      order.unshift(randomNick);
+      createOnlineUsers(order);
+    }); 
+    window.onload = () => socket.emit('logedNick', randomNick);
   </script>
 
 </body>
