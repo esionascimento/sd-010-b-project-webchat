@@ -25,6 +25,11 @@ app.get('/', (req, res) => {
   res.status(200).render('index');
 });
 
+// https://www.codegrepper.com/profile/frantic-finch-jof2l4f54hya
+app.get('/style.css', (req, res) => {
+  res.sendFile(`${__dirname}/css/style.css`);
+});
+
 io.on('connection', (socket) => {
   socket.on('message', (message) => {
     const { chatMessage, nickname } = message;
