@@ -63,21 +63,31 @@
 <body>
     <ul id="mensagens"></ul>
     <aside id="#nickname"></aside>
+    <form id="form_nickname" action="">
+      <input type="text" autocomplete="off" id="nicknameInput"><button>Salvar</button>
+    </form>
     <form id="form" action="">
-        <input type="text" autocomplete="off" id="nicknameInput"><button>Salvar</button>
-        <input type="text" autocomplete="off" id="messageInput"><button>Enviar</button>
+      <input type="text" autocomplete="off" id="messageInput"><button>Enviar</button>
     </form>
     <script>
         const socket = io();
-        const form = document.querySelector('form');
+        const form = document.querySelector('#form');
         const inputMessage = document.querySelector('#messageInput');
+        const formNickname = document.querySelector('#form_nickname');
         const inputNick = document.querySelector('#nicknameInput');
+
         form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            socket.emit('message', { chatMessage: inputMessage.value, nickname: inputNick.value });
-            inputMessage.value = '';
-            inputNick.value = '';
-            return false;
+          e.preventDefault();
+          socket.emit('message', { chatMessage: inputMessage.value, nickname: inputNick.value });
+          inputMessage.value = '';
+          return false;
+        });
+
+        formNickname.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const saveNick = sessionStorage.setItem('nickname', inputNick.value);
+          inputNick.value = '';
+          return false;
         });
 
         const createMessage = (msg) => {
