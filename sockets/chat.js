@@ -1,12 +1,11 @@
 module.exports = (io) => io.on('connection', (socket) => {
-    console.log(`${socket.id} se conectou`);
+  console.log(`${socket.id} se conectou`);
 
-    socket.on('message', (message) => {
-        console.log(message);
-        socket.emit('message', message);
-    });
+  socket.on('message', (message) => {
+    io.emit('message', message);
+  });
 
-    socket.on('disconnect', () => {
-        console.log('alguém saiu');
-    });
+  socket.on('disconnect', () => {
+    console.log('alguém saiu');
+  });
 });

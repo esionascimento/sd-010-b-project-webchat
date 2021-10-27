@@ -4,30 +4,49 @@
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-  <ul id="messages"></ul>
-  <form action="">
-    <input id="messageInput" autocomplete="off" />
-    <button id="submit">Send</button>
-  </form>
+  <div>
+    <ul id="messages"></ul>
+  </div>
+  <div>
+    <ul id="users"></ul>
+  </div>
+
+  <div>
+    <input placeholder="Nickname" id="nicknameInput" autocomplete="off" />
+    <button id="nicknameBtn">Salvar</button>
+  </div>
+  <div>
+    <input placeholder="Escreva algo" id="messageInput" autocomplete="off" />
+    <button id="messageBtn">Send</button>
+  </div>
+
+
   <script>
     const socket = io();
-    socket.on('message', ({ chatMessage, nickname }) => {
+    socket.on('message', (message) => {
       const li = document.createElement('li');
       const date = new Date();
       /*SOURCE https://stackoverflow.com/questions/42862729/convert-date-object-in-dd-mm-yyyy-hhmmss-format*/
       const liText = document.createTextNode(
-        `${date.toLocaleString()} - ${nickname}: ${chatMessage}`
+        `${date.toLocaleString()} - ${message.nickname}: ${message.chatMessage}`
       )
       li.append(liText);
       document.getElementById('messages').appendChild(li);
     });
 
-    const form = document.querySelector('form');
+    const nicknameBtn = document.querySelector('#nicknameBtn');
+    const messageBtn = document.querySelector('#messageBtn');
     const inputMessage = document.querySelector('#messageInput');
+    const nicknameInput = document.querySelector('#nicknameInput');
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      socket.emit('message', inputMessage.value);
+    nicknameBtn.addEventListener('click', (event) => {
+      /*Source https://qastack.com.br/programming/6193574/save-javascript-objects-in-sessionstorage*/
+      sessionStorage.setItem('nickname', nicknameInput.value);
+      nicknameInput.value = '';
+    });
+
+    messageBtn.addEventListener('click', (e) => {
+      socket.emit('message', { chatMessage: inputMessage.value, nickname: sessionStorage.getItem('nickname') });
       inputMessage.value = '';
       return false;
     });
