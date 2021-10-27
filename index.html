@@ -13,7 +13,7 @@
 
   </ul>
   <form action="">
-    <input id="mensagemInput" autocomplete="off" /><button>Send</button>
+    <input id="mensagemInput" autocomplete="off" data-testid="message-box" /><button data-testid="send-button">Send</button>
   </form>
 
   <script>
@@ -31,6 +31,7 @@
       const messageUl = document.querySelector('#mensagens');
       const li = document.createElement('li');
       li.innerText = message;
+      li.
       messageUl.appendChild(li);
     };
 

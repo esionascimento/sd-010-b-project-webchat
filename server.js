@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 
 const app = express();
 const cors = require('cors');
@@ -11,27 +10,37 @@ const io = require('socket.io')(http, {
   },
 });
 
+// const { getUsers, insertUser, deleteUser } = require('./models/usersModel');
+
 app.use(cors());
+app.set('view engine', 'ejs');
+app.set('views', './view');
+
+// MOMENT
 
 io.on('connection', (socket) => {
-  // console.log('Alguém conectou');
 
-  // socket.on('disconnect', () => console.log('Fulano saiu'));
 
-  socket.on('message', (message) => { 
+  let nick = '';
+  const onlineUsers = [];
+
+  console.log('alguem entrou');
+  console.log(onlineUsers);
+  socket.on('message', async ({ message }) => { 
     const { chatMessage, nickname } = message;
     const date = new Date().toLocaleString().replace(/\//g, '-');
-    // agradecido pela ajuda do Lucas Martins no date
     io.emit('message', `${date} - ${nickname}: ${chatMessage}`);
   });
 
-  // socket.emit('message', ('Olá, seja bem vindo(a) ao chat!'));
-
-  // socket.broadcast.emit('severMessage', { message: 'Novo fulano entrou' });
+  socket.on('logedNick', (n) => { 
+    nick = n;
+    onlineUsers.push(nick);
+    io.emit('loggedUsers', onlineUsers);
+  });
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/index.html'));
+app.get('/', (_req, res) => {
+  res.status(200).render('index', { message: 'oi daniel' });
 });
 
 http.listen(3000, () => console.log('Sever on 3000'));

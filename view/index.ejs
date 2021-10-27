@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+
+  <title>Document</title>
+</head>
+<body>
+  <ul id="ulOnlineUsers">
+
+  </ul>
+
+  <ul id="mensagens">
+
+  </ul>
+  <form action="" id="formNick">
+    <input data-testid="nickname-box" id="nickInput"><button data-testid="nickname-button">Salvar Nick</button>
+  </form>
+  <form action="" id="formMessage">
+    <input id="mensagemInput" autocomplete="off" data-testid="message-box" /><button data-testid="send-button">Send</button>
+  </form>
+  <script>
+    const socket = io();
+    const formMessage = document.querySelector('#formMessage');
+    const inputMessage = document.querySelector('#mensagemInput');
+    let randomNick = Math.random().toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
+
+    socket.emit('logedNick', randomNick);
+    
+    formMessage.addEventListener('submit', (event) => {
+      event.preventDefault();
+      socket.emit('message', { message: { chatMessage: inputMessage.value, nickname: randomNick } });
+      inputMessage.value = '';
+      return false;
+    });
+
+    const formNick = document.querySelector('#formNick');
+    const inputNick = document.querySelector('#nickInput');
+    formNick.addEventListener('submit', (event) => {
+      event.preventDefault();
+      randomNick = inputNick.value;
+      return false;
+    });
+
+    const createMessage = (message) => {
+      const messageUl = document.querySelector('#mensagens');
+      const li = document.createElement('li');
+      li.setAttribute('data-testid','message')
+      li.innerText = message;
+      messageUl.appendChild(li);
+    };
+  
+    const createOnlineUsers = (users) => {
+      const ulOnlineUsers = document.querySelector('#ulOnlineUsers');
+      const li = document.createElement('li');
+      users.forEach((user) => {
+        li.setAttribute('data-testid','online-user');
+        li.innerText = user;
+        ulOnlineUsers.appendChild(li);
+      });
+    }
+
+    socket.on('loggedUsers', (users) => createOnlineUsers(users));
+    socket.on('message', (message) => createMessage(message));
+  </script>
+
+</body>
+</html>
