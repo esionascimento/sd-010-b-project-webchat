@@ -40,3 +40,7 @@ const createMessage = (message) => {
 };
 
 socket.on('message', (message) => createMessage(message));
+socket.on('messagesList', (messagesList) => {
+  console.log(messagesList);
+  messagesList.forEach((message) => createMessage(message));
+});
