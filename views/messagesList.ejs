@@ -4,10 +4,6 @@
     <title>Document</title>
   </head>
   <body>
-    <div>
-      <p> se ejs fosse bom, n pareceria php.</p>
-    </div> 
-
       <form class="create-nick-form" id="nick-form" >
         <input placeholder="Insira seu nickname" id="nick" type="text"/>
         <button type="submit">Salvar</button>
@@ -15,29 +11,25 @@
 
     <section class="sec-nick-list">
       <h1>Usuários online</h1>
-      <ul>
+      <ul id="username-list">
         <li id="userName"> </li>
-        <% data.forEach(({nickname}) => { %>
-          <li ><%= nickname %></li>
-        <% }) %>
+
       </ul>
     </section>
     <section class="sec-messages-list">
       <h1>Mensagens</h1>
 
       <ul>
-        <% data.forEach(({nickname, timestamp, message}) => { %>
-          <li><%= timestamp %> - <%= nickname %>: <%= message %></li>
-        <% }) %>
+
       </ul>
     </section>
 
-      <form  class="create-message-form"  id="message-form">
+      <form  class="create-message-form" id="message-form">
         <input placeholder="Digite uma nova mensagem aqui" type="text" id="message" />
         <button type="submit" id="msg-submit">Enviar</button>
     </form>
-    <script src="../utils/utils.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../utils//utils.js"></script>
 
 </body>
 </html>

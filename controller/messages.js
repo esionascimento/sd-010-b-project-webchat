@@ -1,11 +1,11 @@
 const modelMessages = require('../models/messages');
-const { io } = require('../server');
+// const { io } = require('../server');
 
 const getAll = async (req, res) => {
   try { 
   const messages = await modelMessages.getAllModel();
   // return res.status(200).json({ data: messages });
-  return res.render('messagesList', { data: messages });
+  return res.render('messagesList');
   } catch (err) {
     console.log(err.message);
   }

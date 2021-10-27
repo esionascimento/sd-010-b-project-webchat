@@ -1,37 +1,20 @@
+const socket = window.io();
+
 const username = document.querySelector('#userName');
 const message = document.querySelector('#message');
-const socket = window.io();
+
+const ramdomName = () => 'batata';
+  document.querySelector('#userName').innerHTML = ramdomName();
 
 document.querySelector('#msg-submit').addEventListener('click', (event) => {
   console.log('funfou');
   event.preventDefault();
   const date = new Date();
   const currentDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-  // const data = { nickname: username.innerHTML, message: message.value, timestamp: currentDate };
+  const data = { nickname: username.innerHTML, message: message.value, timestamp: currentDate };
   console.log(data);
   socket.emit('sendmessage', { nickname: username.innerHTML, message: message.value, timestamp: currentDate });
-
-// fetch('http://localhost:3000/create', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-//   body: JSON.stringify(data),
-// })
-//   .then((response) => response.json())
-//   .catch((error) => {
-//     console.error('Error:', error);
-//   });
 });
-
-// document.querySelector;
-const ramdomName = () => 'batata';
-const changeName = (newName) => {
-  const name = newName || ramdomName();
-  return name;
-};
-
-document.querySelector('#userName').innerHTML = ramdomName();
 
 document.querySelector('#nick-form').addEventListener('submit', (event) => {
   event.preventDefault();
@@ -40,3 +23,11 @@ document.querySelector('#nick-form').addEventListener('submit', (event) => {
   
   username.innerHTML = nick.value;
 });
+
+socket.on('refreshMessages', ((data) => {
+  data.map(({ nickname }) => {
+    const li = document.createElement('li');
+    li.innerHTML = nickname;
+    return document.querySelector('#username-list').append(li);
+  });
+}));

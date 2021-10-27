@@ -1,5 +1,6 @@
 module.exports = (io) => io.on('connection', (socket) => {
 console.log(socket);
+console.log('a user connected');
 
   // socket.on('likePost', () => {
   //   currentLikes += 1;
