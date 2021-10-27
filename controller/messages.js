@@ -1,4 +1,5 @@
 const modelMessages = require('../models/messages');
+const { io } = require('../server');
 
 const getAll = async (req, res) => {
   try { 
@@ -15,6 +16,7 @@ const createMessage = async (req, res) => {
   try {
     const messages = await modelMessages.createMessageModel(message, nickname, timestamp);
     console.log(messages);
+    console.log('entrei');
     return res.status(201).json({ message: 'mensagem criada, com sucesso' });
   } catch (err) {
     console.log(err.message);
@@ -26,7 +28,10 @@ const updateMessage = async (req, res) => {
   try {
     const messages = await modelMessages.updateMessage(nickname, oldNick);
     console.log(messages);
-    return res.status(201).json({ message: 'mensagem criada, com sucesso' });
+    const allMessages = await modelMessages.getAllModel();
+  return res.render('messagesList', { data: allMessages });
+
+    // return res.status(201).json({ message: 'mensagem criada, com sucesso' });
   } catch (err) {
     console.log(err.message);
   }
