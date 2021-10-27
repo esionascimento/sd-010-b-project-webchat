@@ -3,25 +3,67 @@
   <head>
     <title>ChatWeb</title>
     <script src="/socket.io/socket.io.js"></script>
-    
+    <link rel="stylesheet" type="text/css" href="public/style.css">
+    <style>
+      body {
+        background-color: bisque;
+      }
+
+      #users {
+        display: flex;
+        width: 30%;
+        border: 1px;
+      }
+
+      #chat {
+        height: 100vh;
+        width: 70%; 
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: stretch;
+        flex-grow: 1;
+      }
+
+      #users {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        width: 30%;
+      }
+
+      #div-principal {
+        width: 100%; 
+        display: flex;
+        flex-direction: row-reverse;
+        flex-grow: 1;
+      }
+
+      input {
+        padding: 0 1rem;
+        flex-grow: 1;
+        border-radius: 2rem;
+        margin: 0.25rem;
+        width: 80%;
+      }
+    </style>
   </head>
   <body>
+    <div id="div-principal">
+      <div id="chat">
+        <ul></ul>
+        <form action="">
+          <input id="elementImput" data-testid="message-box" autocomplete="off"><button id="button-send-message" data-testid="send-button">Send</button>
+        </form>
+      </div>
 
-    <div>
-      <ul id="chat"></ul>
-
-      <form action="">
-        <input id="elementImput" data-testid="message-box" autocomplete="off"><button id="button-send-message" data-testid="send-button">Send</button>
+      <div id="users">
+        <form action="">
+          <!-- <p id="user-nick" ></p> -->
+          <input id="inputEditNick" data-testid="nickname-box" autocomplete="off"><button id="editar-nome" data-testid="nickname-button">Editar Nome</button>
+          <ul id="ulUsers"></ul>
       </form>
     </div>
-
-    <div id="users">
-      <form action="">
-        <p id="user-nick" data-testid="online-user"></p>
-        <input id="inputEditNick" data-testid="nickname-box" autocomplete="off"><button id="editar-nome" data-testid="nickname-button">Editar Nome</button>
-    </form>
-    </div>
-
+  </div>
     <script>
       const socket = io();
 
@@ -30,10 +72,11 @@
       
       const buttonChat = document.getElementById('button-send-message');
       const elementImput = document.querySelector('#elementImput')
-      const nick = document.getElementById("user-nick")
+      // const nick = document.getElementById("user-nick")
       const editarNome = document.getElementById("editar-nome");
+      // const divUsers = document.getElementById("users");
 
-      nick.innerText = nickname;
+      // nick.innerText = nickname;
 
       buttonChat.addEventListener('click', (e) => {
         e.preventDefault();
@@ -45,7 +88,9 @@
       editarNome.addEventListener('click', (e) => {
         e.preventDefault();
         nickname = inputEditNick.value;
-        nick.innerText = nickname;
+        // nick.innerText = nickname;
+        console.log(nickname);
+        socket.emit('usersConnected', { nickname });
         inputEditNick.value = ''
       })
 
@@ -57,9 +102,32 @@
         ul.appendChild(li);
       }
 
+      const createUsersOnline = (liUser) => {
+        const ulUsers = document.getElementById("ulUsers");
+        ulUsers.innerHTML = "";
+        liUser.forEach(user => {
+          const li = document.createElement('li');
+          li.setAttribute("data-testid", "online-user")
+          li.innerText = user.nickname;
+          if (socket.id === user.id) {
+            ulUsers.prepend(li);
+          } else {
+            ulUsers.appendChild(li);
+          }
+        });
+      }
+
       socket.on('message', (message) => {
         createMessage(message);
       })
+
+      socket.on('usersConnected', (usersConnected) => {
+        console.log(usersConnected);
+        createUsersOnline(usersConnected)
+      })
+
+      socket.emit('usersConnected', { nickname })
+
     </script>
   </body>
 </html>
