@@ -42,6 +42,13 @@ const renderMessage = (msg) => {
   insertElement(el);
 };
 
+const renderMessages = (msgs) => {
+  msgs.forEach(({ message, nickname, timestamp }) => {
+    const msg = `${timestamp} - ${nickname}: ${message}`;
+    renderMessage(msg);
+  });
+};
+
 const sendMessage = (e) => {
   e.preventDefault();
   const payload = {
@@ -64,3 +71,4 @@ changeNicknameButton.addEventListener('click', changeNickname);
 socket.on('newConnection', (users, user) => renderUsers(users, user));
 socket.on('message', (msg) => renderMessage(msg));
 socket.on('updateNickname', (users, user) => renderUsers(users, user));
+socket.on('renderMessages', (messages) => renderMessages(messages));
