@@ -23,6 +23,6 @@ app.get('/', (_req, res) => {
   res.sendFile(`${__dirname}/src/views/chat.html`);
 });
 
-http.listen(PORT, () => {
-  console.log(`Server on: port ${PORT}`);
+http.listen(3000, () => {
+  console.log('Server on: port 3000');
 });
