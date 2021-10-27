@@ -23,21 +23,8 @@ app.use(cors());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-io.on('connection', (socket) => {
-  console.log('Teste conexao');
-
-  socket.on('disconnect', () => {
-    console.log('saida');
-  });
-
-  socket.on('newMessage', (msg) => {
-    console.log(msg);
-    io.emit('serverMessage', { message: msg });
-  });
-  socket.broadcast.emit('serverMessage', { message: 'conection done' });
-});
-
 app.get('/', getAllMessages);
+require('./sockets/chat')(io);
 
 http.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
