@@ -12,21 +12,33 @@
   </div>
 
   <div>
-    <input placeholder="Nickname" id="nicknameInput" autocomplete="off" />
-    <button id="nicknameBtn">Salvar</button>
+    <input placeholder="Nickname" data-testid="nickname-box" id="nicknameInput" autocomplete="off" />
+    <button data-testid="nickname-button" id="nicknameBtn">Salvar</button>
   </div>
   <div>
-    <input placeholder="Escreva algo" id="messageInput" autocomplete="off" />
-    <button id="messageBtn">Send</button>
+    <input placeholder="Escreva algo" data-testid="message-box" id="messageInput" autocomplete="off" />
+    <button data-testid="send-button" id="messageBtn">Send</button>
   </div>
-
 
   <script>
     const socket = io();
+
+    socket.on('generateNickname', (randomNickname) => {
+      sessionStorage.setItem('nickname', randomNickname);
+      const li = document.createElement('li');
+      const liUser = document.createTextNode(randomNickname);
+      li.append(liUser);
+      /*SOURCE https://developer.mozilla.org/pt-BR/docs/Web/API/Element/setAttribute*/
+      li.setAttribute("data-testid", "online-user");
+      document.getElementById('users').appendChild(li);
+    })
+
     socket.on('message', (message) => {
       const li = document.createElement('li');
       const liText = document.createTextNode(message)
       li.append(liText);
+      /*SOURCE https://developer.mozilla.org/pt-BR/docs/Web/API/Element/setAttribute*/
+      li.setAttribute("data-testid", "message");
       document.getElementById('messages').appendChild(li);
     });
 
