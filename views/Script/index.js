@@ -19,7 +19,8 @@ nickUser.innerText = nickName;
 sendButton.addEventListener('click', (e) => {
   e.preventDefault();
   const chatMessage = inputMessage.value;
-  const payload = { nickName, chatMessage };
+  const nickname = nickName;
+  const payload = { nickname, chatMessage };
   socket.emit('message', payload);
   inputMessage.value = '';
 });
