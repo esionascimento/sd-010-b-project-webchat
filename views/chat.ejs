@@ -8,14 +8,14 @@
 </head>
 <body>
   <ul id="messages"></ul>
-  <ul id="userNames"><li><%= nickname %></li></ul>
+  <ul id="userNames"></ul>
   <form id="formNickname" action="">
-    <input id="nickname" type="text" placeholder="Insira seu nickname" name="nickname"/>
-    <button id="saveButton">Salvar</button>
+    <input id="inputNickname" type="text" placeholder="Insira seu nickname" data-testid="nickname-box"/>
+    <button id="saveButton" data-testid="nickname-button">Salvar</button>
   </form>
   <form id="formChat" action="">
-    <input id="messageInput" autocomplete="off"/>
-    <button id="sendButton">Enviar</button>
+    <input id="messageInput" autocomplete="off" data-testid="message-box"/>
+    <button id="sendButton" data-testid="send-button">Enviar</button>
   </form>
 </body>
 <script src="/socket.io/socket.io.js"></script>

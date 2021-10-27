@@ -1,6 +1,5 @@
-const chat = (req, res) => {
-  const { nickname } = req.query;
-  res.render('chat', { nickname });
+const chat = (_req, res) => {
+  res.render('chat');
 };
 
 module.exports = {

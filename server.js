@@ -1,10 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -22,6 +24,7 @@ const chatController = require('./controllers/chatController');
 
 app.use(express.static(__dirname));
 
+require('./sockets/users')(io);
 require('./sockets/chat')(io);
 
 app.get('/', chatController.chat);

@@ -1,10 +1,15 @@
-module.exports = (io) => io.on('connection', (socket) => {
-  const dateNow = new Date().toLocaleString().replaceAll('/', '-');
-  socket.on('message', ({ nickname, chatMessage }) => {
-    io.emit('message', `${dateNow} ${nickname}: ${chatMessage}`);
-  });
+const messages = [];
 
-  // socket.on('nickName', (nick) => {
-  //   io.emit('userName', nick);
-  // });
-});
+module.exports = (io) => {
+  io.on('connection', (socket) => {
+    const dateNow = new Date().toLocaleString().replaceAll('/', '-');
+  
+    socket.emit('getMessages', messages);
+
+    socket.on('message', ({ nickname, chatMessage }) => {
+      const message = `${dateNow} ${nickname}: ${chatMessage}`;
+      messages.push(message);
+      io.emit('message', message);
+    });
+  });
+}; 
