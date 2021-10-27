@@ -1,3 +1,4 @@
+// acesse em: https://newbedev.com/javascript-javascript-get-current-date-format-dd-mm-yyyy-hh-mm-ss-code-example
 function dateNow() {
   const dateObg = new Date();
 
