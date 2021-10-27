@@ -11,6 +11,8 @@ const io = require('socket.io')(http, {
   },
  });
 
+ const everyMessage = [];
+
  // função executada quando um cliente se conecta
 io.on('connection', (socket) => {
   console.log(`${socket.id} conectado`);
@@ -18,6 +20,8 @@ io.on('connection', (socket) => {
     console.log(message, 'consoleMessage');
     io.emit('message', message);
   });
+  socket.emit('mensagem',
+  console.log(everyMessage, `send by ${socket.id}`));
 });
 
 app.get('/', (req, res) => {
