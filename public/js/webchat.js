@@ -10,7 +10,7 @@ function geraStringAleatoria(tamanho) {
   return stringAleatoria;
 }
 
-let NICKNAME = geraStringAleatoria(16);
+let nickname = geraStringAleatoria(16);
 
 const createMessage = (message) => {
   const messagesUl = document.querySelector('#messages');
@@ -26,13 +26,13 @@ const inputMessage = document.querySelector('#messageInput');
 formMessage.addEventListener('submit', (e) => {
   e.preventDefault();
   const chatMessage = inputMessage.value;
-  socket.emit('message', { chatMessage, nickname: NICKNAME });
+  socket.emit('message', { chatMessage, nickname });
   inputMessage.value = '';
   return false;
 });
 
-const nickName = document.querySelector('#online-user');
-nickName.innerText = NICKNAME;
+const storeNickName = document.querySelector('#online-user');
+storeNickName.innerText = nickname;
 
 const formNick = document.querySelector('#formNick');
 const inputNick = document.querySelector('#inputNick');
@@ -40,10 +40,16 @@ const inputNick = document.querySelector('#inputNick');
 formNick.addEventListener('submit', (e) => {
   e.preventDefault();
   const newNickName = inputNick.value;
-  NICKNAME = newNickName;
-  nickName.innerText = NICKNAME;
+  nickname = newNickName;
+  storeNickName.innerText = nickname;
   inputNick.value = '';
   return false;
 });
 
 socket.on('message', (chatMessage) => createMessage(chatMessage));
+
+socket.on('LoadOldMessages', ({ oldMessages }) => {
+  oldMessages.forEach((chatMessage) => {
+    createMessage(chatMessage);
+  });
+});
