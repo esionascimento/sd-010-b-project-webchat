@@ -100,6 +100,10 @@
           e.preventDefault();
           const renderNick = generateNickName(16);
           const nickStorage = sessionStorage.getItem('nickname');
+          /* const spanNick = document.createElement('span'); */
+          /* spanNick.setAttribute("") */
+          /* asideNick.appendChild(spanNick); */
+          /* spanNick.innerText = nickStorage; */
           const nickName = (!nickStorage) ? renderNick : nickStorage;
           socket.emit('message', { chatMessage: inputMessage.value, nickname: nickName});
           inputMessage.value = '';
@@ -119,11 +123,21 @@
         socket.on('message', (message) => createMessage(message));
 
         socket.on('message', (msg) => {
-          console.log(msg.data.nickname);
+         /*  console.log(generateNickName(16), 'aleatorio aqui'); */
+          const divNick = document.querySelector('#nickname');
+          const spanNick = document.createElement('span');
+          /* spanNick.setAttribute("data-testid", "online-user");  */
+          spanNick.innerText = `${msg.data.nickname}`;
+          divNick.appendChild(spanNick); 
+        });
+
+        socket.emit('initialNick', generateNickName(16));
+
+        socket.on('initialNick', (msg) => {
           const divNick = document.querySelector('#nickname');
           const spanNick = document.createElement('span');
           spanNick.setAttribute("data-testid", "online-user"); 
-          spanNick.innerText = `${msg.data.nickname}`;
+          spanNick.innerText = `${msg}`;
           divNick.appendChild(spanNick); 
         });
 

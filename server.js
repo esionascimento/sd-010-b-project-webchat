@@ -41,12 +41,14 @@ io.on('connection', (socket) => {
     console.log(`Usuário conectado. ID: ${socket.id} `);
     socket.on('message', (data) => {
       allMessage.push({ data, newDataHora });
-      console.log(data);
+      console.log(allMessage);
       io.emit('message', { data, newDataHora });
     });
 
-    socket.emit('mensagem', 
-      console.log(allMessage, `dados enviados do servidor ${socket.id}`));
+    socket.on('initialNick', (nickRender) => {
+      console.log(nickRender);
+      io.emit('initialNick', nickRender); 
+    });
 });
 
 app.get('/', renderChat);
