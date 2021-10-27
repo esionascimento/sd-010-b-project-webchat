@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 
-const { PORT } = process.env;
+const { PORT } = process.env || '3000';
 
 const app = express();
 app.use(express.static(`${__dirname}/src`));
