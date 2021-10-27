@@ -7,10 +7,19 @@
   <title>WebChat</title>
 </head>
 <body>
-  <ul id="messages"></ul>
+  <div id="nickname" action="">
+    <input id="nickname" autocomplete="off" placeholder="Insira seu nickname"/><button>Salvar</button>
+  </div>
+  <div>
+    <ul id="users-online"></ul>
+  </div>
+  <div> 
+    <h4>Mensagens</h4>
+    <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
+      <input id="input" autocomplete="off" placeholder="Digite aqui sua mensagem"/><button>Send</button>
     </form>
+  </div>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
@@ -19,19 +28,18 @@
     
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-      if (input.value) {
-        socket.emit('message', input.value);
+      if (input.value) {        
+        socket.emit('message', {chatMessage: input.value, nickname: socket.id});
         input.value = '';
       }
     });
 
-    socket.on('message', (message) => {
-      const ul = document.getElementById('messages');
-      li.setAttribute("data-testid","message");
-      li.textContent = message;
-      ul.appendChild(li);
-    })
-
+    socket.on('message', function(param) {
+      const messages = document.getElementById('messages');
+      const li = document.createElement('li');
+      li.innerHTML = param;
+      messages.appendChild(li);
+    });
   </script>
 </body>
 </html>

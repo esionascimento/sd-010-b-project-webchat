@@ -1,37 +1,30 @@
 // Faça seu código aqui
-require('dotenv').config();
 const express = require('express');
+require('dotenv').config();
 
 const app = express();
 app.use(express.json());
-
-const port = process.env.PORT || 3000;
-
 const http = require('http').createServer(app);
 
-const io = require('socket.io')(http, { 
-  cors: { 
-    origin: 'http://localhost:3000', 
-    methods: ['GET,POST'],
+const PORT = process.env.PORT || 3000;
+
+const io = require('socket.io')(http, {
+  cors: {
+    origin: 'http://localhost:3000/',
+    methods: ['GET', 'POST'],
   },
 });
 
-const chatController = require('./controllers/chatController');
+const chat = require('./sockets/chat');
 
-io.on('connection', (socket) => {
-  console.log('user connected', socket.id);
+chat(io); // chama a função de chat
 
-  socket.on('disconnect', () => {
-      console.log('user disconnect', socket.id);
-  });
-  socket.on('message', (message) => {
-    io.emit('message', message);
-  });
-});
+const chatController = require('./controllers/chatController.js');
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
-
 app.get('/', chatController.getChat);
 
-app.listen(port, () => console.log(`Listening on ${port}!`));
+http.listen(PORT, () => {
+  console.log(`Listening on PORT ${PORT}`);
+});
