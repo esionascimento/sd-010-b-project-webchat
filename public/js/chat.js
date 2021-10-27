@@ -1,7 +1,9 @@
 const socket = window.io();
 
-const form = document.querySelector('form');
+const messageForm = document.getElementById('message-form');
 const inputMessage = document.querySelector('#message-input');
+const nicknameForm = document.getElementById('nickname-form');
+const nicknameInput = document.getElementById('nickname-input');
 
 const generateNickName = () => {
   const nickNameLenght = 16;
@@ -23,9 +25,19 @@ window.onload = function setNickname() {
   nickNameP.innerText = newNickName;
 };
 
-form.addEventListener('submit', (e) => {
+nicknameForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  socket.emit('message', { chatMessage: inputMessage.value, nickname: socket.id });
+  const nickNameP = document.getElementById('nickname');
+  sessionStorage.setItem('nickname', nicknameInput.value);
+  nickNameP.innerText = nicknameInput.value;
+  nicknameInput.value = '';
+  return false;
+});
+
+messageForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const nickname = sessionStorage.getItem('nickname');
+  socket.emit('message', { chatMessage: inputMessage.value, nickname });
   inputMessage.value = '';
   return false;
 });
@@ -33,7 +45,6 @@ form.addEventListener('submit', (e) => {
 const createMessage = (message) => {
   const messagesUl = document.querySelector('#messages');
   const li = document.createElement('li');
-  console.log(message);
   li.innerText = message;
   li.setAttribute('data-testid', 'message');
   messagesUl.appendChild(li);
@@ -41,6 +52,5 @@ const createMessage = (message) => {
 
 socket.on('message', (message) => createMessage(message));
 socket.on('messagesList', (messagesList) => {
-  console.log(messagesList);
   messagesList.forEach((message) => createMessage(message));
 });
