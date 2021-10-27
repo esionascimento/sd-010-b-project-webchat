@@ -100,10 +100,6 @@
           e.preventDefault();
           const renderNick = generateNickName(16);
           const nickStorage = sessionStorage.getItem('nickname');
-          /* const spanNick = document.createElement('span'); */
-          /* spanNick.setAttribute("") */
-          /* asideNick.appendChild(spanNick); */
-          /* spanNick.innerText = nickStorage; */
           const nickName = (!nickStorage) ? renderNick : nickStorage;
           socket.emit('message', { chatMessage: inputMessage.value, nickname: nickName});
           inputMessage.value = '';
