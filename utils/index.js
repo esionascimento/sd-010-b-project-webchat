@@ -1,5 +1,3 @@
-const crypto = require('crypto');
-
 // gera a data no momento atual
 const getDate = () => {
   const date = new Date();
@@ -12,7 +10,9 @@ const getDate = () => {
   return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
 };
 
-// criação do nickname aleatório
-const randomNickName = () => crypto.randomBytes(8).toString('hex');
+// const crypto = require('crypto');
 
-module.exports = { getDate, randomNickName };
+// criação do nickname aleatório
+// const randomNickName = () => crypto.randomBytes(8).toString('hex');
+
+module.exports = { getDate };

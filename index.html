@@ -4,7 +4,7 @@
 <head>
  <title> Socket IO </title>
 
- <style>
+<style>
   body {
     margin: 0;
     padding-bottom: 3rem;
@@ -69,24 +69,36 @@
  </ul>
 
  <form id="form" action="">
-   <input type="text" id="nickname" placeholder="Qual seu nick">
+   <input type="text" id="nickname" data-testid="online-user" placeholder="Qual seu nick">
    <button>Salvar</button>
-   <input type="text" id="input" placeholder="Digite sua mensagem">
-   <button>Enviar</button>
+   <input type="text" id="input" data-testid="message-box placeholder="Digite sua mensagem">
+   <button data-testid="send-button">Enviar</button>
  </form>
 
  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
-
  <script>
-   const socket = io();
-   const form = document.querySelector('#form');
-   const input = document.querySelector('#input');
-   const messages = document.querySelector('#messages');
-   const nickName = document.querySelector('#nickname')   
+    // função para gerar nickName randomizado
+    // FONTE: https://www.ti-enxame.com/pt/javascript/gere-stringcaracteres-aleatorios-em-javascript/967048592/
+    ///
+    const dec2hex = (dec) => {
+      return ('0' + dec.toString(16)).substr(-2)
+    }
+    const generateNickName = (len) => {
+      var arr = new Uint8Array((len || 40) / 2)
+      window.crypto.getRandomValues(arr)
+    return Array.from(arr, dec2hex).join('')
+    }
+    ///
+
+    const socket = io();
+    const form = document.querySelector('#form');
+    const input = document.querySelector('#input');
+    const messages = document.querySelector('#messages');
+    const nickName = document.querySelector('#nickname')  
 
    form.addEventListener('submit', (e) => {
      e.preventDefault();
-     socket.emit('message', {chatMessage: input.value, nickname: nickName.value});
+     socket.emit('message', {chatMessage: input.value, nickname: generateNickName(16)});
      input.value = '';
    });
 
