@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Project WebChat</title>
+</head>
+
+<body>
+  <div>
+    <span data-testid="online-user" id="user"></span>
+  </div>
+  <div>
+      <input id="nameInput" data-testid="nickname-box" />
+      <button  id="saveName" data-testid="nickname-button">Save</button>
+  </div>  
+
+  <ul id="messages"></ul>
+  <form>
+    <input id="messageInput" data-testid="message-box" />
+    <button data-testid="send-button">Send</button>
+  </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    let nickname = '';
+    const socket = window.io();
+
+    const nameUser = document.querySelector('#user');
+    
+    socket.on('conn', (socketId) => {      
+      nickname = socketId.slice(0, 16);
+      nameUser.innerText = nickname;
+    });
+
+    const form = document.querySelector('form');
+    const inputMessage = document.querySelector('#messageInput');
+    const btnSaveName = document.querySelector('#saveName')
+
+    btnSaveName.addEventListener('click', (e) => {
+      const inputName = document.querySelector('#nameInput');
+      nickname = inputName.value;
+      nameUser.innerText = nickname;
+    })
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const chatMessage = inputMessage.value;
+      socket.emit('message', { chatMessage, nickname });
+      inputMessage.value = '';
+      return false;
+    });
+
+    const createMessage = (message) => {
+      const messagesUl = document.querySelector('#messages');
+      const li = document.createElement('li');
+      li.innerText = message;
+      li.setAttribute('data-testid', 'message');
+      messagesUl.appendChild(li);
+    };
+
+    socket.on('message', (message) => createMessage(message));
+  </script>
+</body>
+
+</html>
