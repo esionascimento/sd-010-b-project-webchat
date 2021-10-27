@@ -25,11 +25,7 @@
     const socket = io();
     socket.on('message', (message) => {
       const li = document.createElement('li');
-      const date = new Date();
-      /*SOURCE https://stackoverflow.com/questions/42862729/convert-date-object-in-dd-mm-yyyy-hhmmss-format*/
-      const liText = document.createTextNode(
-        `${date.toLocaleString()} - ${message.nickname}: ${message.chatMessage}`
-      )
+      const liText = document.createTextNode(message)
       li.append(liText);
       document.getElementById('messages').appendChild(li);
     });
@@ -39,7 +35,7 @@
     const inputMessage = document.querySelector('#messageInput');
     const nicknameInput = document.querySelector('#nicknameInput');
 
-    nicknameBtn.addEventListener('click', (event) => {
+    nicknameBtn.addEventListener('click', (e) => {
       /*Source https://qastack.com.br/programming/6193574/save-javascript-objects-in-sessionstorage*/
       sessionStorage.setItem('nickname', nicknameInput.value);
       nicknameInput.value = '';
