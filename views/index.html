@@ -68,13 +68,13 @@
  <ul id="messages">
  </ul>
 
- <form id="form" action="">
-   <input type="text" id="nickname" data-testid="online-user" placeholder="Qual seu nick">
+ <form id="nickname_form" action="">
+   <input type="text" id="nickname_input" data-testid="online-user" placeholder="Qual seu nick">
    <button>Salvar</button>
 </form>
 
-<form>
-  <input type="text" id="input" data-testid="message-box placeholder="Digite sua mensagem">
+<form id="message_form">
+  <input type="text" id="message_input" data-testid="message-box placeholder="Digite sua mensagem">
   <button data-testid="send-button">Enviar</button>
 </form>
   
@@ -94,28 +94,39 @@
     ///
 
     const socket = io();
-    const form = document.querySelector('#form');
-    const input = document.querySelector('#input');
+    const messageForm = document.querySelector('#message_form');
+    const nickNameForm = document.querySelector('#nickname_form');
+    const messageInput = document.querySelector('#message_input');
+    const nickNameInput = document.querySelector('#nickname_input');
     const messages = document.querySelector('#messages');
-    const nickName = document.querySelector('#nickname');
 
-  nickName.addEventListener('submit', (e) => {
+  nickname_form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const storageNickName = sessionStorage.setItem('nickname', nickName.value)
-    nickName.value = '';
+    const storageNickName = sessionStorage.setItem('nickname', nickNameInput.value)
+    nickNameInput.value = '';
+    return false;
   });
-
-  form.addEventListener('submit', (e) => {
+  
+  messageForm.addEventListener('submit', (e) => {
+    const catchNickName = sessionStorage.getItem('nickname');
     e.preventDefault();
-    const storageNickName = sessionStorage.setItem('nickname', nickName.value)
-    input.value = '';
+    const sendNickName = ((!catchNickName) ? generateNickName(16) : catchNickName)
+    console.log(sendNickName)
+    socket.emit('message', {
+      chatMessage: messageInput.value,
+      nickname: sendNickName
+    });
+    messageInput.value = '';
+    return false;
    });
 
    socket.on('message', (data) => {
-     const li = document.createElement('li');
-     li.innerHTML = data;
-     messages.appendChild(li);
+    const li = document.createElement('li');
+    li.innerHTML = data
+    messages.appendChild(li);
    });
+    
+   
 
  </script>
  
