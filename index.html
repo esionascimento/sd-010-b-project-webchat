@@ -23,10 +23,12 @@
    const socket = io();
    const form = document.querySelector('#form');
    const input = document.querySelector('#input');
+   const messages = document.querySelector('#messages');
+   const nickName = document.querySelector('#nickname')   
 
    form.addEventListener('submit', (e) => {
      e.preventDefault();
-     socket.emit('message', input.value);
+     socket.emit('message', {chatMessage: input.value, nickname: nickName.value});
      input.value = '';
    });
 
@@ -35,7 +37,7 @@
      li.innerHTML = data;
      messages.appendChild(li);
    });
-   
+
  </script>
  
 </body>
