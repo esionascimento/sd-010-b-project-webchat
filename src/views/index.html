@@ -17,12 +17,16 @@
   </head>
   <body>
     <h2>Welcome to the chat</h2>
-    <span id="nickname" data-testid="online-user"></span>
-
     <form id="nickname-form" action="">
       <input id="nickname-input" autocomplete="off" data-testid="nickname-box" />
       <button data-testid="nickname-button" id="save-nick-btn" type="button">Send</button>
     </form>
+
+    <div>
+      <ul id="online-users">
+        <h4>Online Users</h4>
+      </ul>
+    </div>
 
     <ul id="messages"></ul>
     <form id="form" action="">

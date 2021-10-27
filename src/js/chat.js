@@ -5,8 +5,7 @@ window.onload = () => {
   // creates a random nickname with 16 characteres
   sessionStorage.setItem('@user', JSON.stringify(newUser));
 
-  const user = document.querySelector('#nickname');
-  user.innerText = newUser;
+  socket.emit('userOnline', newUser);
 };
 
 const messageBtn = document.querySelector('#send-msg-btn');
@@ -16,10 +15,9 @@ const inputNickname = document.querySelector('#nickname-input');
 
 nicknameBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  const user = document.querySelector('#nickname');
-  user.innerText = inputNickname.value;
-
   sessionStorage.setItem('@user', JSON.stringify(inputNickname.value));
+
+  socket.emit('updateNickname', inputNickname.value);
 
   inputNickname.value = '';
 });
@@ -46,5 +44,23 @@ const createMessage = (message) => {
   li.setAttribute('data-testid', 'message');
   messagesUl.appendChild(li);
 };
+
+socket.on('userOnline', (users) => {
+  const onlineUsers = document.querySelector('#online-users');
+  onlineUsers.innerText = '';
+
+  users.forEach(([nickname, socketId]) => {
+    const li = document.createElement('li');
+
+    li.innerText = nickname;
+    li.setAttribute('data-testid', 'online-user');
+    
+    if (socketId === socket.id) {
+      onlineUsers.prepend(li);
+    } else {
+      onlineUsers.appendChild(li);
+    }
+  });
+});
 
 socket.on('message', (message) => createMessage(message));

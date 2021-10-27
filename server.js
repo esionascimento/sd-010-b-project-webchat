@@ -17,12 +17,36 @@ const io = require('socket.io')(server, {
 
 app.use(express.static(`${__dirname}/src`));
 
+let onlineUsers = [];
+
 io.on('connection', (socket) => {
   socket.on('message', (message) => {
     const { chatMessage, nickname } = message;
     const now = new Date().toLocaleString().replace(/\//g, '-');
     // thanks for the tip, Lucas Martins. https://github.com/tryber/sd-010-b-project-webchat/pull/14
     io.emit('message', `${now} - ${nickname}: ${chatMessage}`);
+  });
+
+  socket.on('userOnline', (nickname) => {
+    onlineUsers.push([nickname, socket.id]);
+
+    io.emit('userOnline', onlineUsers);
+  });
+  socket.on('disconnect', () => {
+    onlineUsers = onlineUsers.filter(([, id]) => id !== socket.id);
+
+    io.emit('userOnline', onlineUsers);
+  });
+});
+
+io.on('connection', (socket) => {
+  socket.on('updateNickname', (nickname) => {
+    onlineUsers = onlineUsers.map((el) => {
+      if (el[1] === socket.id) return [nickname, socket.id];
+      return el;
+    });
+
+    io.emit('userOnline', onlineUsers);
   });
 });
 
