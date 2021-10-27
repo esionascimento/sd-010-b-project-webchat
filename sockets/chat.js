@@ -27,7 +27,7 @@ const createNickname = (io, socket) => {
 
       const date = new Date();
       const brDate = date.toLocaleDateString().split('/');
-      const formattedBrazilianDate = `${brDate[0]}-${brDate[1]}-${brDate[2]}`;
+      const formattedBrazilianDate = `${brDate[1]}-${brDate[0]}-${brDate[2]}`;
       const timeHMS = ` ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
       const formattedDate = `${formattedBrazilianDate} ${timeHMS}`;
       await createMessages({ chatMessage, nickname, formattedDate });

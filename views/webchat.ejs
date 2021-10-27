@@ -186,7 +186,7 @@
         messagesUl.appendChild(li);
       };
 
-      socket.on('message', ({ message }) => {
+      socket.on('message', (message) => {
         getMessage(message);
       });
 
@@ -207,14 +207,14 @@
         );
         sortedOnlineUsers.unshift(userData);
 
-        const ul = document.querySelector('#users-online');
+        const ul = document.querySelector('.nicknames');
         while (ul.firstElementChild) {
           ul.removeChild(ul.firstElementChild);
         }
         sortedOnlineUsers.forEach((user) => {
           const li = document.createElement('li');
           li.innerText = user.databaseNickname;
-          li.setAttribute(testid, 'online-user');
+          li.setAttribute('data-testid', 'online-user');
           ul.appendChild(li);
         });
       });
