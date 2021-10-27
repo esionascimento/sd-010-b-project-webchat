@@ -64,10 +64,10 @@
     <ul id="mensagens"></ul>
     <aside id="#nickname"></aside>
     <form id="form_nickname" action="">
-      <input type="text" autocomplete="off" id="nicknameInput"><button>Salvar</button>
+      <input data-testid="nickname-box" type="text" autocomplete="off" id="nicknameInput"><button data-testid="nickname-button">Salvar</button>
     </form>
     <form id="form" action="">
-      <input type="text" autocomplete="off" id="messageInput"><button>Enviar</button>
+      <input data-testid="message-box" type="text" autocomplete="off" id="messageInput"><button data-testid="send-button">Enviar</button>
     </form>
     <script>
         const socket = io();
@@ -108,7 +108,8 @@
 
         const createMessage = (msg) => {
             const messageUl = document.querySelector('#mensagens');
-            const li = document.createElement('li');
+            const li = document.createElement('li')/* .setAttribute("data-testid", "message"); */
+            li.setAttribute("data-testid", "message")
             li.innerText = msg;
             messageUl.appendChild(li);
         }
