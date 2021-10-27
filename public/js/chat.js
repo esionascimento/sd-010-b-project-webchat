@@ -1,4 +1,4 @@
-const socket = window.io();
+const socket = window.io('http://localhost:3000');
 
 const formMessage = document.querySelector('.form-message');
 formMessage.addEventListener('submit', (event) => {
