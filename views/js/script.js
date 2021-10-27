@@ -1,7 +1,5 @@
 const socket = window.io();
 
-let nickname = Math.random().toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
-
 const logo = document.querySelector('.logo');
 const allMessages = document.querySelector('.all-messages');
 const userArea = document.querySelector('.logged-user');
@@ -11,21 +9,30 @@ const newMessageInput = document.querySelector('.new-message-input');
 const newMessageButton = document.querySelector('.send-message-button');
 
 // creates the nickname div
-const showNickname = () => {
+const printNickname = (nickname, boolean) => {
+  const div = document.createElement('div');
+  div.setAttribute('class', 'userDiv');
   const online = document.createElement('div');
   online.setAttribute('class', 'neonText');
   const userNickname = document.createElement('h1');
   userNickname.setAttribute('class', 'user-nickname');
   userNickname.setAttribute('data-testid', 'online-user');
   userNickname.innerText = nickname;
-  userArea.prepend(userNickname);
-  userArea.prepend(online);
+  div.prepend(userNickname);
+  div.prepend(online);
+  if (boolean) {
+    div.setAttribute('class', 'userDiv mainUser');
+    userArea.prepend(div);
+  } else {
+    userArea.appendChild(div);
+  }
   return false;
 };
 
 // send the message and nickname to the server
 newMessageButton.addEventListener('click', (e) => {
   e.preventDefault();
+  const nickname = document.querySelector('.mainUser').innerText;
   const chatMessage = newMessageInput.value;
   socket.emit('message', {
     chatMessage,
@@ -39,12 +46,12 @@ newMessageButton.addEventListener('click', (e) => {
 logo.addEventListener('click', (_e) => {
   socket.emit('message', {
     chatMessage: 'Você achou o EasterEgg!!!',
-    nickname: 'RocketChat',
+    nickname: 'Purple',
   });
   return false;
 });
 
-// receives the message from the server and prints on the board
+// receives the message from the server and prints on the Message Board
 socket.on('message', (string) => {
   const messageDiv = document.createElement('div');
   messageDiv.innerText = string;
@@ -59,14 +66,27 @@ socket.on('message', (string) => {
 // send the new nickname to the server
 newNicknameButton.addEventListener('click', (e) => {
   e.preventDefault();
-  nickname = newNicknameInput.value;
-  newNicknameInput.value = '';
+  const nickname = newNicknameInput.value;
+  socket.emit('newNickname', nickname);
   return false;
 });
 
-window.onload(
-  showNickname(),
-  // showNickname(),
-  // showNickname(),
-  // showNickname(),
-);
+// receives the users Array and prints on the Online Users Board
+socket.on('userList', (arr) => {
+  userArea.innerHTML = '';
+
+  arr.forEach(({
+    nickname,
+    id,
+  }) => {
+    const boolean = id === socket.id;
+    printNickname(nickname, boolean);
+  });
+});
+
+window.onload = () => {
+  const nickname = Math.random()
+    .toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
+
+  socket.emit('newLogin', nickname);
+};

@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const http = require('http');
-const moment = require('moment');
 
 const PORT = process.env.PORT || 3000;
 
@@ -26,15 +25,45 @@ app.get('/', (_req, res) => {
   res.render(`${__dirname}/views/index.ejs`);
 });
 
+let onlineUsers = [];
+
 io.on('connection', (socket) => {
   socket.on('message', ({
     chatMessage,
     nickname,
   }) => {
     const today = new Date().toLocaleString().replace(/\//g, '-');
-    const test = moment().format();
-    console.log(test);
     io.emit('message', `${today} - ${nickname}: ${chatMessage}`);
+  });
+
+  socket.on('newLogin', (nickname) => {
+    onlineUsers.push({
+      nickname,
+      id: socket.id,
+    });
+    io.emit('userList', onlineUsers);
+  });
+});
+
+io.on('connection', (socket) => {
+  socket.on('newNickname', (nickname) => {
+    onlineUsers = onlineUsers.map((user) => {
+      if (user.id === socket.id) {
+        return {
+          nickname,
+          id: socket.id,
+        };
+      }
+      return user;
+    });
+
+    io.emit('userList', onlineUsers);
+  });
+
+  socket.on('disconnect', () => {
+    onlineUsers = onlineUsers.filter((user) => user.id !== socket.id);
+
+    io.emit('userList', onlineUsers);
   });
 });
 

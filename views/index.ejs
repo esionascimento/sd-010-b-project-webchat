@@ -41,7 +41,7 @@
 
       .brand-title {
         font-family: Russo One;
-        color: rgb(172, 23, 23);
+        color: rgb(172, 23, 160);
 
         margin-right: 15px;
         margin-block-start: 0;
@@ -67,7 +67,7 @@
 
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
       }
 
@@ -80,13 +80,24 @@
       }
 
       .logged-user {
-        width: 100%;
+        width: 80%;
 
         margin: 20px 0;
 
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+      }
+
+      .userDiv {
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      .mainUser {
+        margin-bottom: 50px;
       }
 
       .neonText {
@@ -144,7 +155,7 @@
         box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2),
           0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
-        background: rgb(172, 23, 23);
+        background: rgb(172, 23, 160);
         color: white;
 
         margin-left: 5%;
@@ -162,6 +173,9 @@
       .user-nickname {
         color: #fff;
         font-size: 24px;
+        margin-bottom: 20px;
+        margin-block-start: 0;
+        margin-block-end: 0;
       }
 
       .messages {
@@ -202,7 +216,7 @@
         padding: 10px;
         border-radius: 8px;
 
-        background: rgb(172, 23, 23);
+        background: rgb(172, 23, 160);
         color: white;
 
         box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2),
@@ -215,17 +229,17 @@
       }
 
       ::-webkit-scrollbar-track {
-        background: rgba(122, 12, 12, 0.418);
+        background: rgba(172, 23, 160, 0.383);
         overflow: overlay;
       }
 
       ::-webkit-scrollbar-thumb {
-        background: rgb(122, 12, 12);
+        background: rgb(172, 23, 160);
         overflow: overlay;
       }
 
       ::-webkit-scrollbar-thumb:hover {
-        background: rgb(87, 5, 5);
+        background: rgb(134, 11, 124);
         overflow: overlay;
       }
 
@@ -281,7 +295,7 @@
         box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2),
           0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
-        background: rgb(172, 23, 23);
+        background: rgb(172, 23, 160);
         color: white;
 
         margin-left: 5%;
@@ -301,7 +315,7 @@
         width: 100vw;
 
         font-family: Russo One;
-        color: rgb(172, 23, 23);
+        color: rgb(172, 23, 160);
 
         background: rgb(17, 17, 17);
 
@@ -313,7 +327,7 @@
   </head>
   <body>
     <div class="header">
-      <h1 class="brand-title">RocketChat</h1>
+      <h1 class="brand-title">PurpleChat</h1>
       <img class="logo" src="./assets/logo.png" alt="Logo" />
     </div>
     <div class="main">
@@ -333,7 +347,7 @@
             </button>
           </form>
         </div>
-        <div class="logged-user"></div>
+        <ul class="logged-user"></ul>
       </div>
       <div class="messages">
         <div class="all-messages"></div>
@@ -355,7 +369,7 @@
       </div>
     </div>
     <div class="footer">
-      RocketChat© is another marvelous creation by the one and only João
+      PurpleChat© is another marvelous creation by the one and only João
       Vanelli!
     </div>
 
