@@ -16,7 +16,7 @@ const io = require('socket.io')(http, {
   
 const { renderChat } = require('./controllers/clientController');
 
-  app.use(cors());
+app.use(cors());
 app.use(express.json());
 
 const allMessage = [];
@@ -49,9 +49,7 @@ io.on('connection', (socket) => {
       console.log(allMessage, `dados enviados do servidor ${socket.id}`));
 });
 
-app.get('/', renderChat); /* async (req, res) => {
-  res.status(200).render('client');
-}); */
+app.get('/', renderChat);
 
 http.listen(3000, () => {
   console.log('Servidor ouvindo na porta 3000');
