@@ -21,9 +21,10 @@ module.exports = (io) =>
       const data = d.toISOString().substr(0, 10).split('-').reverse()
       .join('-');
       const horas = d.toLocaleTimeString();
-      user.name = nickname;
+      user.nickname = nickname;
       user.data = `${data} ${horas}`;
-      user.message = chatMessage;
-      io.emit('message', user);
+      user.chatMessage = chatMessage;
+      /* io.emit('message', user); */
+      io.emit('message', `${user.data} - ${nickname} : ${chatMessage}`);
     });
   });

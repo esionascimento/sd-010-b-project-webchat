@@ -41,11 +41,13 @@
     function renderMessage(user) {
       const ul = document.getElementById("ul");
       const li = document.createElement("li");
-      const data = user.data;
+      console.log('user', user);
+      /* const data = user.data;
       const name = user.name;
       const message = user.message;
-      const text = `${data} - ${name}: ${message}`;
-      li.appendChild(document.createTextNode(text));
+      const text = `${data} - ${nickname}: ${chatMessage}`; */
+      /* li.appendChild(document.createTextNode(user)); */
+      li.innerText = user;
       li.setAttribute('data-testid', 'message');
       ul.appendChild(li);
     }
