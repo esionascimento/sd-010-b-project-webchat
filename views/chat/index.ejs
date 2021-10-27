@@ -5,11 +5,11 @@
     <link rel="stylesheet" href="./css/chat.css">
   </head>
   <body>
-    <ul type="chatMessage" data-testid="message-box" id="messages"></ul>
+    <ul id="messages"></ul>
     <p id="nickName" data-testid="online-user"></p>
     <div>
       <form id="formsMessage" action="">
-        <input id="messageInput" autocomplete="off" />
+        <input type="chatMessage" data-testid="message-box" id="messageInput" autocomplete="off" />
         <button data-testid="send-button">Send</button>
       </form>
       <form id="formsNickName" action="">
