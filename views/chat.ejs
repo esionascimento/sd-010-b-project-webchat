@@ -9,8 +9,11 @@
 <body>
   <h1>WEBCHAT</h1>
   <div>
+    <h2>Bem vindo <span id="main-user" data-testid="online-user"></span></h2>
     <h3>Usuários Online</h3>
-    <ul id="online-list" data-testid="online-user"></ul>
+    <ul id="online-list">
+    </ul>
+
   </div>
   <div>
     <h3>Mensagens</h3>
@@ -33,6 +36,8 @@
     user = (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)).substring(0, 16);
     // https://gist.github.com/6174/6062387
     document.getElementById('nickname').value = user;
+    document.getElementById('main-user').innerText = '';
+    document.getElementById('main-user').innerText = user;
     socket.emit('new-user', user); 
     //envia novo usuário para o servidor
     }
@@ -46,6 +51,8 @@
     nickContainer.addEventListener('submit', (e) => {
       e.preventDefault();
       user = nickname.value;
+      document.getElementById('main-user').innerText = '';
+      document.getElementById('main-user').innerText = user;
       console.log(user);
       socket.emit('edit-user', user);
     });
@@ -71,7 +78,11 @@
 
     socket.on('online', (onlineList) => {
       const ul = document.getElementById('online-list');
-      ul.innerHTML = '';
+      while (ul.childNodes.length > 1) {
+        ul.removeChild(ul.lastChild);
+      }
+      const userIndex = onlineList.findIndex((item) => item.nickname === user);
+      onlineList.splice(userIndex, 1);
       onlineList.forEach((user) => {
         const li = document.createElement('li');
         li.setAttribute('data-testid', 'online-user');
