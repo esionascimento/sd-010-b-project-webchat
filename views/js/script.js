@@ -2,6 +2,8 @@ const socket = window.io();
 
 let nickname = Math.random().toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
 
+socket.emit('userConnected', nickname);
+
 socket.on('message', (string) => {
   const li = document.createElement('li');
   li.setAttribute('data-testid', 'message');
@@ -13,8 +15,9 @@ const btnSendMessage = document.getElementById('send-message');
 const inputValue = document.getElementById('input-message');
 btnSendMessage.addEventListener('click', (event) => {
   event.preventDefault();
-  const chatMsg = inputValue.value;
-  socket.emit('message', { nickname, chatMsg });
+  const chatMessage = inputValue.value;
+  console.log(chatMessage);
+  socket.emit('message', { nickname, chatMessage });
   inputValue.value = '';
 });
 

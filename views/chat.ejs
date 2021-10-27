@@ -7,20 +7,22 @@
   <title>Chat</title>
 </head>
 <body>
-  <ul data-testid="ul-online-user"></ul>
+  <h4>Usuários Online</h4>
+  <ul id="ul-online-user"></ul>
   <form>
-    <input type="text" name="username" data-testid="nickname-box" placeholder="Digite seu nome" id="input-nick"/>
-    <button type="submit" data-testid="nickname-button" id="add-new-nick">Entrar</button>
+    <input type="text" name="username" data-testid="nickname-box" placeholder="Digite seu nickname" id="input-nick"/>
+    <button type="submit" data-testid="nickname-button" id="add-new-nick">Salvar</button>
   </form>
 
   <div>
-    <ul id="ul-msg">TESTE</ul>
+    <ul id="ul-msg">CHAT</ul>
+
     <form>
-      <input data-testid="message-box" id="input-message"/>
-      <button data-testid="send-button" id="send-message"></button>
+      <input data-testid="message-box" id="input-message" type="text" placeholder="Digite uma nova mensagem aqui"/>
+      <button data-testid="send-button" id="send-message">Enviar</button>
     </form>
   </div>
-    <script src="/socket.io/socket.io.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script src="./js/script.js"></script>
 </body>
 </html>
