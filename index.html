@@ -97,12 +97,18 @@
     const form = document.querySelector('#form');
     const input = document.querySelector('#input');
     const messages = document.querySelector('#messages');
-    const nickName = document.querySelector('#nickname')  
+    const nickName = document.querySelector('#nickname');
 
-   form.addEventListener('submit', (e) => {
-     e.preventDefault();
-     const storageNickName = sessionStorage.setItem('nickname', nickName.value)
-     input.value = '';
+  nickName.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const storageNickName = sessionStorage.setItem('nickname', nickName.value)
+    nickName.value = '';
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const storageNickName = sessionStorage.setItem('nickname', nickName.value)
+    input.value = '';
    });
 
    socket.on('message', (data) => {
