@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-const messages = [];
+// const messages = [];
 const users = [];
 const socketsUsers = {};
 
@@ -27,6 +27,7 @@ const io = require('socket.io')(http, {
 });
 
 const { getDateTime } = require('./utils/dateTime');
+const { getAll, insertOne } = require('./models/messages');
 
 const removeUser = (socket) => {
   const nickname = socketsUsers[socket.id];
@@ -41,15 +42,23 @@ const changeNickname = (socket, originalNickname, nickname) => {
   if (index < 0) users.push(originalNickname);
 };
 
-io.on('connection', (socket) => {
+const mapMessages = async () => {
+  const objectMessages = await getAll();
+  const messages = objectMessages.map((object) => `${object.nickname
+    } - ${object.timestamp}: ${object.message}`);
+  return messages;
+};
+
+io.on('connection', async (socket) => {
+  const messages = await mapMessages();
   socket.emit('messageHistory', messages);
   socket.emit('userHistory', users);
 
-  socket.on('message', ({ chatMessage, nickname }) => {
-    const dateTime = getDateTime();
+  socket.on('message', async ({ chatMessage, nickname }) => {
+    const timestamp = getDateTime();
 
-    messages.push(`${dateTime} - ${nickname}: ${chatMessage}`);
-    io.emit('message', `${dateTime} - ${nickname}: ${chatMessage}`);
+    await insertOne(chatMessage, timestamp, nickname);
+    io.emit('message', `${timestamp} - ${nickname}: ${chatMessage}`);
   });
 
   socket.on('changeNickname', ({ originalNickname, nickname }) => {
