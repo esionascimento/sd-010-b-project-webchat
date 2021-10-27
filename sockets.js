@@ -5,13 +5,16 @@ const user = {
 const usersLogados = [];
 
 const filterUserLogados = (nameAleatorio) => {
-  console.log('usersLogados :', usersLogados);
+  usersLogados.push(nameAleatorio);
+  console.log('usersLogados', usersLogados);
   console.log('nameAleatorio :', nameAleatorio);
+  
   const result = usersLogados.map((curr) => {
-    console.log('curr :', curr);
     if (curr === nameAleatorio) {
+      console.log('curr1 :', curr);
       return nameAleatorio;
     }
+    console.log('nameAleatorio2 :', nameAleatorio);
     return null;
   });
   return result;
@@ -34,10 +37,19 @@ const getAllMessages = async () => {
   return result;
 };
 
+const disconnect = (id) => {
+  const result = usersLogados.map((curr) => {
+    if (curr === id) {
+      usersLogados.pop(id);
+    }
+    return curr;
+  });
+  return result;
+};
+
 module.exports = (io) => 
 io.on('connection', async (socket) => {
   const nameAleatorio = socket.id.slice(0, 16);
-  usersLogados.push(nameAleatorio);
   filterUserLogados(nameAleatorio);
   
   io.emit('nomeAleatorio', usersLogados);
@@ -49,12 +61,13 @@ io.on('connection', async (socket) => {
   socket.on('message', ({ chatMessage, nickname }) => {
     salveMessage(chatMessage, nickname, io);
   });
-  const aux = await getAllMessages();
-  console.log('aux :', aux);
+  const getAlls = await getAllMessages();
 
-  io.emit('html', aux);
+  io.emit('html', getAlls);
   
   socket.on('disconnect', () => {
-    console.log('disconnect', socket.id);
+    console.log('disconnect :', nameAleatorio);
+    disconnect(nameAleatorio);
+    io.emit('nomeAleatorio', usersLogados);
   });
 });
