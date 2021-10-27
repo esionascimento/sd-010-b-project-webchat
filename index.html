@@ -30,6 +30,12 @@
      input.value = '';
    });
 
+   socket.on('message', (data) => {
+     const li = document.createElement('li');
+     li.innerHTML = data;
+     messages.appendChild(li);
+   });
+   
  </script>
  
 </body>
