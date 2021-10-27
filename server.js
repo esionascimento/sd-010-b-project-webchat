@@ -14,7 +14,6 @@ const http = require('http').createServer(app);
 const { PORT } = process.env;
 
 let message = '';
-const messagesArray = [];
 
 // Função de hora atual
 const horaCerta = () => {
