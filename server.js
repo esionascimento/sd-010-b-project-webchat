@@ -28,10 +28,10 @@ let conectedUsers = [];
 io.on('connection', (socket) => {
   io.emit('idConnect', socket.id);
   socket.on('message', (payload) => {
-    const { chatMessage, nickName } = payload;
+    const { chatMessage, nickname } = payload;
 
     const dateAndHour = new Date().toLocaleString().replace(/\//g, '-');
-    const sendMensage = `${dateAndHour} - ${nickName} ${chatMessage}`;
+    const sendMensage = `${dateAndHour} - ${nickname} ${chatMessage}`;
     io.emit('message', sendMensage);
   });
 

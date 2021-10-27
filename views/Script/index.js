@@ -1,7 +1,7 @@
 const socket = window.io();
 
-const randonNumbers = Math.random()
-.toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
+const randonNumbers = Math.random().toString(16).substr(2, 8) + Math
+  .random().toString(16).substr(2, 8);
 let nickName = randonNumbers;
 let oldNick = '';
 let conectUsers = [];
