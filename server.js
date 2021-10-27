@@ -27,21 +27,26 @@ app.get('/', (req, res) => {
   res.status(200).render('client');
 });
 
+const allcustomerMessages = [];
+const UsersOn = [];
+
 io.on('connection', (socket) => {
   console.log(`${socket.id} usuario conectado`);
-  // const allcustomerMessages = [];
-  // const UsersOn = [];
   
   // socket.on('disconnect', () => {
     //   console.log('user disconnected');
     // });
+    socket.on('newUser', (user) => {
+      console.log(user);
+      io.emit('newUser', user);
+    });
     
     socket.on('message', ({ chatMessage, nickname }) => {
     // persistência de usuário 
-    // UsersOn.push({ nickname, idSocket: socket.id });
+    UsersOn.push({ nickname, idSocket: socket.id });
 
     // persistência de mensagem
-    // allcustomerMessages.push({ idSocket: socket.id, nickname, chatMessage });
+    allcustomerMessages.push({ idSocket: socket.id, nickname, chatMessage });
     
     const date = getTheCurrentDate();
     const fullMessage = formatMessage(date, chatMessage, nickname);

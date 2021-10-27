@@ -23,7 +23,7 @@
       backdrop-filter: blur(10px);
     }
 
-    #input {
+    #input-message {
       border: none;
       padding: 0 1rem;
       flex-grow: 1;
@@ -62,40 +62,98 @@
 
 
   <script src="/socket.io/socket.io.js"></script>
+  <!-- <script src="/util/createMessageLi.js"></script> -->
 </head>
 
 <body>
-  <ul id="messages"></ul>
-  <form id="form" action="">
-    <input type='text' placeholder='Insira seu apelido' name='name' id='name' />
-    <input type='submit' value='Entrar' />
+  <aside>
+    <!-- form correspondente ao nickname -->
+    <form id="form-aside" action="">
+      <input type='text' placeholder='Insira seu apelido' name='name' id='name' data-testid="nickname-box" />
+      <button type='text' id="nickname-button" data-testid="nickname-button">Entrar</button>
+    </form>
 
-    <input id="input" autocomplete="off" /><button>Enviar</button>
+    <ul id="users-online"></ul>
+  </aside>
+
+  <ul id="messages"></ul>
+  <!-- form correspondente as mensagens  -->
+  <form id="form" action="">
+    <input id="input-message" autocomplete="off" data-testid="message-box" /><button
+      data-testid="send-button">Enviar</button>
   </form>
 
+
   <script>
-    import {
-      createMessageLi
-    } from './util/createMessageLi.js'
     const socket = io();
     const form = document.querySelector('#form');
-    const chatMessage = document.querySelector('#input');
+    const chatMessage = document.querySelector('#input-message');
     const nickname = document.querySelector('#name');
+    const formNickname = document.querySelector('#form-aside');
 
+    const createUser = () => {
+      const randomNickName = generateNickName(16)
+      const formatNickname = nickname.value ? nickname.value : randomNickName;
+      sessionStorage.setItem('nickname', formatNickname);
+      return formatNickname;
+    }
+
+    const renderUser = (user) => {
+      const ul = document.querySelector('#users-online');
+      const li = document.createElement('li');
+      li.innerText = user
+      li.setAttribute('data-testid', 'online-user')
+      ul.appendChild(li);
+    }
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      const nicknameSaved = sessionStorage.getItem('nickname')
+
       socket.emit('message', {
         chatMessage: chatMessage.value,
         nickname: nickname.value
       });
-      chatMessage.value = '';
-      // nickname.value = '';
 
+      chatMessage.value = '';
       return false;
     });
 
-    socket.on('message', (fullMessage) => createMessageLi(fullMessage))
+    formNickname.addEventListener('submit', (e) => {
+      e.preventDefault();
+      createUser()
+      socket.emit('newUser', createUser());
+      nickname.value = '';
+    });
+
+    /*
+    Função para gerar nickName randomizado
+    FONTE: https://www.ti-enxame.com/pt/javascript/gere-stringcaracteres-aleatorios-em-javascript/967048592/
+    */
+    const dec2hex = (dec) => {
+      return ('0' + dec.toString(16)).substr(-2)
+    }
+    const generateNickName = (len) => {
+      var arr = new Uint8Array((len || 40) / 2)
+      window.crypto.getRandomValues(arr)
+      return Array.from(arr, dec2hex).join('')
+    }
+
+
+
+    const renderMessageLi = (fullMessage) => {
+      const ul = document.querySelector('#messages');
+      const li = document.createElement('li');
+      li.setAttribute('data-testid', 'message')
+      li.innerText = fullMessage;
+      ul.appendChild(li);
+    };
+
+
+    socket.emit('newUser', createUser());
+
+    socket.on('newUser', (user) => renderUser(user));
+    socket.on('message', (fullMessage) => renderMessageLi(fullMessage))
   </script>
 
 </body>
