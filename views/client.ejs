@@ -105,18 +105,11 @@
           inputMessage.value = '';
           return false;
         });
-        /* `${newDataHora} - ${data.nickname}: ${data.chatMessage}` */
+
         const createMessage = (msg) => {
           console.log(msg.newDataHora);
           const messageUl = document.querySelector('#mensagens');
           const li = document.createElement('li');
-      /*     const spanDate = document.createElement('span');
-          const spanNick = document.createElement('span');
-          const spanMessage = document.createElement('span'); */
-          /* spanNick.setAttribute("data-testid", "online-user"); */
-          /*       spanMessage.innerText = `${msg.data.chatMessage}`; */
-          /*  li.appendChild(spanNick);
-           li.appendChild(spanMessage); */
           li.setAttribute("data-testid", "message");
           li.innerText = msg;
           messageUl.appendChild(li);
