@@ -1,4 +1,5 @@
 const express = require('express');
+
 require('dotenv').config();
 
 const app = express();
@@ -16,15 +17,23 @@ const io = require('socket.io')(http, {
     methods: ['GET', 'POST'],
   } });
 
+const msgController = require('./controllers/messages');
+
 app.get('/', (req, res) => {
   res.render(`${__dirname}/views/index.ejs`);
 });
 
+app.get('/messages', async (req, res) => {
+  const allMsgs = await msgController.getAllMsg();
+  res.status(200).json(allMsgs);
+});
+
 app.use(express.static(`${__dirname}/views`));
+const dateNow = new Date().toLocaleString().replace(/\//g, '-');
 
 io.on('connection', (socket) => { // agradecimentos Lucas Martins da Silva PR: https://github.com/tryber/sd-010-b-project-webchat/pull/14
-  socket.on('message', ({ chatMessage, nickname }) => {
-    const dateNow = new Date().toLocaleString().replace(/\//g, '-');
+  socket.on('message', async ({ chatMessage, nickname }) => {
+    await msgController.createMsg(chatMessage, nickname, dateNow);
     io.emit('message', `${dateNow} - ${nickname} ${chatMessage}`);
   });
 
@@ -34,8 +43,8 @@ io.on('connection', (socket) => { // agradecimentos Lucas Martins da Silva PR: h
   });
 
   socket.on('nickUpdate', ({ nickname, oldNick }) => {
-    const oldNickIndex = userList.findIndex((e) => e.nickname === oldNick);
-    userList.splice(oldNickIndex, 1, { nickname, id: socket.id });
+    const index = userList.findIndex((i) => i.nickname === oldNick);
+    userList.splice(index, 1, { nickname, id: socket.id });
     io.emit('updateUserList', userList);
   });
 

@@ -20,6 +20,13 @@ const socket = window.io();
     //   arrayOnlineUsers = userList;
     // });
 
+    const inserirMsg = (string) => {
+      const liMsg = document.createElement('li');
+      liMsg.setAttribute('data-testid', 'message');
+      liMsg.innerText = string;
+      ulMsg.appendChild(liMsg);
+    };
+
     btnEnviarMsg.addEventListener('click', (event) => {
       event.preventDefault();
       const chatMessage = chatInput.value;
@@ -38,10 +45,11 @@ const socket = window.io();
     });
 
     socket.on('message', (string) => {
-      const liMsg = document.createElement('li');
-      liMsg.setAttribute('data-testid', 'message');
-      liMsg.innerText = string;
-      ulMsg.appendChild(liMsg);
+      inserirMsg(string);
+    //   const liMsg = document.createElement('li');
+    //   liMsg.setAttribute('data-testid', 'message');
+    //   liMsg.innerText = string;
+    //   ulMsg.appendChild(liMsg);
     });
 
     socket.on('updateUserList', (array) => {
@@ -70,6 +78,11 @@ const socket = window.io();
       
     // socket.on('newArrayNick', (array) => {});
 
-    // window.onload = () => {
-    //   userConnected();
-    // };
+    window.onload = async () => {
+      const req = await fetch('http://localhost:3000/messages');
+      const reqJson = await req.json();
+      reqJson.forEach(({ message, nickname: nick, timestamp }) => {
+        const string = `${timestamp} - ${nick} ${message}`;
+        inserirMsg(string); // agradecimentos Daniel Roberto
+      });
+    };
