@@ -20,6 +20,12 @@ const io = require('socket.io')(http, {
 app.use(express.static(`${__dirname}/views`));
 
 io.on('connection', (socket) => {
+  socket.on('message', (payload) => {
+    const { chatMessage, nickname } = payload;
+    const dateAndHour = new Date().toLocaleString().replace(/\//g, '-');
+    const sendMensage = `$ ${dateAndHour} - ${nickname} -  ${chatMessage}`;
+  io.emit('message', sendMensage);
+  });
   console.log(`Usuário conectado ${socket.id}`);
 });
 
