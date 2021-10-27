@@ -9,12 +9,14 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 const io = require('socket.io')(http, {
-    cors: {
-      origin: 'http://localhost:3000', // url aceita pelo cors
-      methods: ['GET', 'POST'], // Métodos aceitos pela url
-    } });
+  cors: {
+    origin: 'http://localhost:3000', // url aceita pelo cors
+    methods: ['GET', 'POST'], // Métodos aceitos pela url
+  } });
   
-app.use(cors());
+const { renderChat } = require('./controllers/clientController');
+
+  app.use(cors());
 app.use(express.json());
 
 const allMessage = [];
@@ -47,9 +49,9 @@ io.on('connection', (socket) => {
       console.log(allMessage, `dados enviados do servidor ${socket.id}`));
 });
 
-app.get('/', async (req, res) => {
+app.get('/', renderChat); /* async (req, res) => {
   res.status(200).render('client');
-});
+}); */
 
 http.listen(3000, () => {
   console.log('Servidor ouvindo na porta 3000');
