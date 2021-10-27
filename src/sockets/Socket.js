@@ -1,4 +1,4 @@
-const connection = require('../../models/connection');
+const connection = require('../util/database/Mongo');
 const Nickname = require('../helper');
 const { Message } = require('../models');
 const User = require('./models/User');
