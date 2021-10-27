@@ -10,19 +10,20 @@ module.exports = (io) =>
     usersLogados.push(nameAleatorio);
 
     io.emit('nomeAleatorio', usersLogados);
-    socket.on('salveUser', (name) => {
+    socket.on('salveUserr', (name) => {
       user.name = name;
     });
-    socket.on('salveMessage', (message) => {
+
+    socket.on('message', ({ chatMessage, nickname }) => {
       /* https://stackoverflow.com/questions/18229022/how-to-show-current-time-in-javascript-in-the-format-hhmmss
       https://pt.stackoverflow.com/questions/6526/como-formatar-data-no-javascript */
       const d = new Date();
       const data = d.toISOString().substr(0, 10).split('-').reverse()
       .join('-');
       const horas = d.toLocaleTimeString();
-  
+      user.name = nickname;
       user.data = `${data} ${horas}`;
-      user.message = message;
-      io.emit('receivedMessage', user);
+      user.message = chatMessage;
+      io.emit('message', user);
     });
   });

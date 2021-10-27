@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
   <title>Document</title>
 </head>
 <body>
@@ -32,10 +31,12 @@
     </div>
   </div>
 
+  <script src="/socket.io/socket.io.js"></script>
   <script>
-    const socket = window.io('http://localhost:3000/');
+    const socket = io('http://localhost:3000/');
     const salvar = document.getElementById('salvar');
     const enviar = document.getElementById('enviar');
+    let nickname;
 
     function renderMessage(user) {
       const ul = document.getElementById("ul");
@@ -62,17 +63,19 @@
       renderNamesLogados(randomAll);
     });
 
-    socket.on('receivedMessage', (user) => {
+    socket.on('message', (user) => {
       renderMessage(user);
     });
+
     salvar.addEventListener('click', () => {
       const name = document.getElementById('name').value;
-      socket.emit('salveUser', name);
+      nickname = name;
+      socket.emit('salveUserr', name);
     });
     enviar.addEventListener('click', () => {
-      const message = document.getElementById('message').value;
-
-      socket.emit('salveMessage', message);
+      const chatMessage = document.getElementById('message').value;
+      console.log(chatMessage);
+      socket.emit('message', {chatMessage,  nickname});
     });
   </script>
 </body>
