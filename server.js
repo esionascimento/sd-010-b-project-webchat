@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'public/views')); 
 const htttp = require('http').createServer(app);
 
 const io = require('socket.io')(htttp, {
@@ -11,10 +13,12 @@ const io = require('socket.io')(htttp, {
   },
 });
 
+app.use(express.static(path.join(__dirname, '/public')));
+
 require('./sockets/chat')(io);
 
 app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, '/index.html'));
+  res.status(200).render('chat');
 });
 
 htttp.listen(3000, () => {
