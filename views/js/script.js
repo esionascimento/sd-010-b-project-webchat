@@ -14,6 +14,31 @@ const inputValue = document.getElementById('input-message');
 btnSendMessage.addEventListener('click', (event) => {
   event.preventDefault();
   const chatMsg = inputValue.value;
-  socket.emit('message', { nickname, chatMessage });
+  socket.emit('message', { nickname, chatMsg });
   inputValue.value = '';
+});
+
+const btnChangeNick = document.getElementById('add-new-nick');
+const inputNick = document.getElementById('input-nick');
+btnChangeNick.addEventListener('click', (event) => {
+  event.preventDefault();
+  const oldnick = nickname;
+  nickname = inputNick.value;
+  inputNick.value = '';
+  socket.emit('nickUpdate', { nickname, oldnick });
+});
+
+const onlineUser = document.querySelector('#ul-online-user');
+socket.io('updateList', (array) => {
+  onlineUser.innerHTML = '';
+  array.forEach((user) => {
+    const liUser = document.createElement('li');
+    liUser.setAttribute('data-testid', 'online-user');
+    liUser.innerText = user.nickname;
+      if (socket.id === user.id) {
+        onlineUser.prepend(liUser);
+      } else {
+        onlineUser.appendChild(liUser);
+      }
+  });
 });
