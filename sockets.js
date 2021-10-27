@@ -1,11 +1,10 @@
-const { create } = require('./controllers/chatController');
+/* const { create } = require('./controllers/chatController'); */
 
 const user = {
 };
 const usersLogados = [];
 
-module.exports = (io) => {
-  create();
+module.exports = (io) => 
   io.on('connection', (socket) => {
     const nameAleatorio = socket.id.slice(0, 16);
     usersLogados.push(nameAleatorio);
@@ -27,4 +26,3 @@ module.exports = (io) => {
       io.emit('receivedMessage', user);
     });
   });
-};
