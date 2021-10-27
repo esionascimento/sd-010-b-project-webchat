@@ -6,15 +6,17 @@
   </head>
   <body>
     <ul data-testid="message-box" id="messages"></ul>
-    <form id="formsMessage" action="">
-      <input id="messageInput" autocomplete="off" />
-      <p id="nickName" data-testid="online-user"></p>
-      <button data-testid="send-button">Send</button>
-    </form>
-    <form id="formsNickName" action="">
-      <input id="nickInput" data-testid="nickname-box" autocomplete="off" />
-      <button data-testid="nickname-button">Change</button>
-    </form>
+    <p id="nickName" data-testid="online-user"><%= Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 16) %></p>
+    <div>
+      <form id="formsMessage" action="">
+        <input id="messageInput" autocomplete="off" />
+        <button data-testid="send-button">Send</button>
+      </form>
+      <form id="formsNickName" action="">
+        <input id="nickInput" data-testid="nickname-box" autocomplete="off" />
+        <button data-testid="nickname-button">Change</button>
+      </form>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src='./js/chat.js'></script>
   </body>
