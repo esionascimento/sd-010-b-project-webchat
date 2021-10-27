@@ -7,22 +7,26 @@
   <title>Chat</title>
 </head>
 <body> 
+  
+  <!-- <p id="nick-tela"></p> -->
 
+  <p>USUÀRIOS ONLINE</p>
+  <ul id="ul-online-user"></ul>
+  
+  <form action="">
+    <input data-testid="nickname-box" type="text" id="input-nick">
+    <button data-testid="nickname-button" id="enviar-novo-nick">Trocar nick</button>
+  </form>
+  
   <div>
-    <ul id="ul-msg"></ul>
-
+    <ul id="ul-msg">CHAT</ul>
+    
     <form action="">
       <input data-testid="message-box" type="text" id="input-message"/>
       <button data-testid="send-button" id="enviar-msg">Enviar</button>
     </form> 
   </div>
 
-  <p id="nick-tela" data-testid="online-user"></p>
-
-  <form action="">
-    <input data-testid="nickname-box" type="text" id="input-nick">
-    <button data-testid="nickname-button" id="enviar-novo-nick">Trocar nick</button>
-  </form>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="./js/script.js"></script>
