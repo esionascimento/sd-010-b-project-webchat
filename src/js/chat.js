@@ -23,7 +23,10 @@ sendNickname.addEventListener('click', (e) => {
   e.preventDefault();
 
   createMsg(inputNickmame.value);
+  
   inputNickmame.value = '';
+
+  return false;
 });
 
 sendMsg.addEventListener('click', (e) => {
@@ -32,6 +35,7 @@ sendMsg.addEventListener('click', (e) => {
   socket.emit('message', { nickname: newUser, chatMessage: inputMsg.value });
 
   inputMsg.value = '';
+
   return false;
 });
 
