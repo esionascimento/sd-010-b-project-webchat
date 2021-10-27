@@ -1,7 +1,8 @@
 const socket = window.io();
 
-const randonNumbers = String(Math.random().toString(32).slice(2));
-let nickName = `User-${randonNumbers}`;
+const randonNumbers = Math.random()
+.toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
+let nickName = randonNumbers;
 let oldNick = '';
 let conectUsers = [];
 conectUsers.push(nickName);
@@ -19,7 +20,7 @@ sendButton.addEventListener('click', (e) => {
   e.preventDefault();
   const chatMessage = inputMessage.value;
   const payload = { nickName, chatMessage };
-  socket.emit('SendMessage', payload);
+  socket.emit('message', payload);
   inputMessage.value = '';
 });
 
@@ -38,9 +39,10 @@ changeNickButton.addEventListener('click', (e) => {
   inputNick.value = '';
 });
 
-socket.on('ReciveMessage', (msg) => {
+socket.on('message', (msg) => {
   const li = document.createElement('li');
   li.innerHTML = msg;
+  li.setAttribute('data-testid', 'message');
   ul.appendChild(li);
 });
 
@@ -51,6 +53,7 @@ socket.on('allUsers', (allUsers) => {
   [nickName, ...firstnick].filter((el) => el !== oldNick).forEach((element) => {
     const li = document.createElement('li');
     li.innerText = element;
+    li.setAttribute('data-testid', 'online-user');
     ulUserConect.appendChild(li);
     });
   socket.emit('deleteUser', nickName);

@@ -1,33 +1,38 @@
 const express = require('express');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
-
 const http = require('http').createServer(app);
+
+const PORT = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.json());
 
 const io = require('socket.io')(http, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: `http://localhost:${PORT}`,
     methods: ['GET', 'POST'],
   },
 });
 
+app.get('/', (req, res) => {
+  res.render(`${__dirname}/views/index.ejs`);
+});
+
 app.use(express.static(`${__dirname}/views`));
+
 let conectedUsers = [];
 
 io.on('connection', (socket) => {
   io.emit('idConnect', socket.id);
-  socket.on('SendMessage', (payload) => {
+  socket.on('message', (payload) => {
     const { chatMessage, nickName } = payload;
 
     const dateAndHour = new Date().toLocaleString().replace(/\//g, '-');
-    const sendMensage = `$ ${dateAndHour} - ${nickName} -  ${chatMessage}`;
-    io.emit('ReciveMessage', sendMensage);
+    const sendMensage = `${dateAndHour} - ${nickName} ${chatMessage}`;
+    io.emit('message', sendMensage);
   });
 
   socket.on('UserOnline', (conectUser) => {
@@ -40,10 +45,6 @@ io.on('connection', (socket) => {
     conectedUsers = conectedUsers.filter(([, id]) => id !== socket.id);
     io.emit('allUsers', conectedUsers);
   });
-});
-
-app.get('/', (req, res) => {
-   res.render(path.join(__dirname, 'views', 'index.ejs'));
 });
 
 http.listen(PORT, () => {

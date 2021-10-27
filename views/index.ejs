@@ -7,22 +7,23 @@
   <title>Trybe-Chat</title>
 </head>
 <body>
-<div>
-  <h5 id="nick-name" data-testid="online-user"></h5>
-<ul id="usersConect"></ul>
-  <form>
+  <div>
+    <h5 id="nick-name" ></h5>
+    <ul id="usersConect"></ul>
+  <form action="">
     <input data-testid="nickname-box" type="text" id="input-nick" placeholder="Chage your nick" required/>
     <button data-testid="nickname-button" id="button-nick">Chage Nick!</button>
   </form>
+  <p>Mensagens: </p>
+  <ul id="ul-message"></ul>
 
-  <form>
+
+  <form action="">
     <input data-testid="message-box" type="text" id="input-message" placeholder="message:"/>
     <button data-testid="send-button" id="button-message">Send</button>
   </form>
-
-  <ul id="ul-message"></ul>
 </div>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src ="./Script/index.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src ="./Script/index.js"></script>
 </body>
 </html>
