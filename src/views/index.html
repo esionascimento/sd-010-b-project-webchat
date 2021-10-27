@@ -23,7 +23,7 @@
           <li>user 2</li>
         </ul>
       </div>
-      <ul class="upper__right">
+      <ul id="messageList" class="upper__right">
         <li>message 1</li>
         <li>message 2</li>
         <li>message 3</li>
@@ -32,8 +32,8 @@
       </ul>
     </div>
     <div class="bottom">
-      <input data-testid="message-box" type="text" />
-      <button data-testid="send-button">enviar</button>
+      <input data-testid="message-box" id="sendText" type="text" />
+      <button data-testid="send-button" id="sendButton">enviar</button>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js "></script>
     <script type="module" src="/static/public/scripts/socket.js"></script>

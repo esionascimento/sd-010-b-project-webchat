@@ -1,21 +1,21 @@
 class UserList {
   constructor() {
-    this.userList = [];
+    this.list = [];
   }
 
   getUsers() {
-    return this.userList.map((user) => ({
+    return this.list.map((user) => ({
         userId: user.id,
         nickName: user.nickName,
       }));
   }
 
   add(user) {
-    this.userList.push(user);
+    this.list.push(user);
   }
 
   remove(id) {
-    this.userList = this.userList.filter((user) => user.id !== id);
+    this.list = this.list.filter((user) => user.id !== id);
   }
 }
 

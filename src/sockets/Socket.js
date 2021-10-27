@@ -1,6 +1,6 @@
 const Nickname = require('../helper');
-const User = require('../model/User');
-const UserList = require('../model/UserList');
+const User = require('./models/User');
+const UserList = require('./models/UserList');
 
 class Socket {
   constructor() {
@@ -11,10 +11,17 @@ class Socket {
     io.on('connection', (socket) => {
       const user = new User(Nickname.createRandomNickname(), socket.id);
       this.userList.add(user);
-      io.emit('username', this.userList.getUsers());
+      
+      io.emit('newConnection', this.userList.getUsers(), user);
       socket.on('disconnect', () => {
         this.userList.remove(socket.id);
-        socket.broadcast.emit('userDisconnected', socket.id);
+      });
+
+      socket.on('message', ({ nickname, chatMessage }) => {
+        if (chatMessage) {
+          const date = new Date().toLocaleString();
+          io.emit('message', `${date} - ${nickname}: ${chatMessage}`);
+        }
       });
     });
   }

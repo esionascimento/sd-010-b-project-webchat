@@ -1,7 +1,12 @@
 const socket = window.io();
 const userList = document.getElementById('userList');
+const messageList = document.getElementById('messageList');
+const sendMessageButton = document.getElementById('sendButton');
+const sendTextInput = document.getElementById('sendText');
 
-const insertElement = (el, type, content, id, cl) => {
+let currentUser;
+
+const insertElement = ({ el, type, content, id, cl }) => {
   const newElement = document.createElement(type);
   newElement.textContent = content;
   if (cl) { newElement.classList.add(cl); }
@@ -10,15 +15,41 @@ const insertElement = (el, type, content, id, cl) => {
   element.appendChild(newElement);
 };
 
-const renderUsers = (users) => {
+const renderUsers = (users, user) => {
+  currentUser = user;
   userList.innerHTML = '';
   users.forEach(({ userId, nickName }) => {
-  insertElement(userList, 'li', nickName, userId);
+    const el = {
+      el: userList,
+      type: 'li',
+      content: nickName,
+      id: userId,
+    };
+  insertElement(el);
   });
 };
 
-socket.on('username', (users) => renderUsers(users));
-// socket.on('userDisconnected', (r) => {
-//   console.log(r);
-//   removeUser(r);
-// });
+const renderMessage = (msg) => {
+  console.log(msg);
+  const el = {
+    el: messageList,
+    type: 'li',
+    content: msg, 
+  };
+  insertElement(el);
+};
+
+const sendMessage = (e) => {
+  e.preventDefault();
+  const payload = {
+    nickname: currentUser.nickName,
+    chatMessage: sendTextInput.value,
+  };
+  socket.emit('message', payload);
+  sendTextInput.value = '';
+};
+
+sendMessageButton.addEventListener('click', sendMessage);
+
+socket.on('newConnection', (users, user) => renderUsers(users, user));
+socket.on('message', (msg) => renderMessage(msg));
