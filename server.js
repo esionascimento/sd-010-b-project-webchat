@@ -33,6 +33,7 @@ const removeUser = (socket) => {
   const nickname = socketsUsers[socket.id];
   const index = users.indexOf(nickname);
   users.splice(index, 1);
+  return users;
 };
 
 const changeNickname = (socket, originalNickname, nickname) => {
@@ -54,21 +55,17 @@ io.on('connection', async (socket) => {
   socket.emit('messageHistory', messages);
   socket.emit('userHistory', users);
 
-  socket.on('message', async ({ chatMessage, nickname }) => {
-    const timestamp = getDateTime();
-
-    await insertOne(chatMessage, timestamp, nickname);
-    io.emit('message', `${timestamp} - ${nickname}: ${chatMessage}`);
+  socket.on('message', ({ chatMessage, nickname }) => {
+    insertOne(chatMessage, getDateTime(), nickname);
+    io.emit('message', `${getDateTime()} - ${nickname}: ${chatMessage}`);
   });
 
   socket.on('changeNickname', ({ originalNickname, nickname }) => {
-    // changeNickname(socket, originalNickname, nickname);
     io.emit('changeNickname', changeNickname(socket, originalNickname, nickname));
   });
 
   socket.on('disconnect', () => {
-    removeUser(socket);
-    io.emit('changeNickname', users);
+    io.emit('changeNickname', removeUser(socket));
   });
 });
 
