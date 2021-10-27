@@ -11,18 +11,22 @@
   <body>
     <section>
       <form class="form_nickname" action="">
-        <input id="nickname" type="text" placeholder="Insira seu nickname"/>
-        <button id="send_nickname" type="submit">Send</button>
+        <input class="nickname" data-testid="nickname-box" type="text" placeholder="Insira seu nickname"/>
+        <button class="send_nickname" data-testid="nickname-button" type="submit">Send</button>
+        <ul class="nicknames"></ul>
       </form>
     </section>
 
-    <ul class="messages">
+    <section>
       <form class="form" action="">
-        <input id="messages__item" />
-        <button id="send_message" type="submit">Send</button>
+        <ul class="messages"></ul>
+        <input class="messages__item" data-testid="message-box" />
+        <button class="send_message" data-testid="send-button" type="submit">Send</button>
       </form>
-    </ul>
-  </body>
+    </body>
+
+    </section>
+
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="../js/chat.js"></script>
