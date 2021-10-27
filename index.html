@@ -101,7 +101,7 @@
 
    form.addEventListener('submit', (e) => {
      e.preventDefault();
-     socket.emit('message', {chatMessage: input.value, nickname: generateNickName(16)});
+     const storageNickName = sessionStorage.setItem('nickname', nickName.value)
      input.value = '';
    });
 
