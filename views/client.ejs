@@ -67,26 +67,35 @@
 <body>
   <ul id="messages"></ul>
   <form id="form" action="">
+    <input type='text' placeholder='Insira seu apelido' name='name' id='name' />
+    <input type='submit' value='Entrar' />
+
     <input id="input" autocomplete="off" /><button>Enviar</button>
   </form>
 
   <script>
+    import {
+      createMessageLi
+    } from './util/createMessageLi.js'
     const socket = io();
     const form = document.querySelector('#form');
-    const inputMessage = document.querySelector('#input');
+    const chatMessage = document.querySelector('#input');
+    const nickname = document.querySelector('#name');
+
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      socket.emit('clientMessage', inputMessage.value);
-      inputMessage.value = '';
+      socket.emit('message', {
+        chatMessage: chatMessage.value,
+        nickname: nickname.value
+      });
+      chatMessage.value = '';
+      // nickname.value = '';
+
       return false;
     });
 
-    socket.on('clientMessage', (e) => {
-      const ul = document.querySelector('#messages');
-
-      ul.appendChild
-    })
+    socket.on('message', (fullMessage) => createMessageLi(fullMessage))
   </script>
 
 </body>
