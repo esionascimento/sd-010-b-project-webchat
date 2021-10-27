@@ -39,7 +39,8 @@
     nickButton.addEventListener('click', (e) => {
       e.preventDefault();      
       if (nickBox.value) {
-        socket.emit('update', (nickBox.value));
+        nickname = nickBox.value;
+        socket.emit('update', nickname);
 
         // Req.4
         // const apelido = document.getElementById('online-user');

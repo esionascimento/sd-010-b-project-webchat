@@ -11,12 +11,9 @@ const userDisconnect = (socket, io) => {
 
 const updateNickname = (socket, io) => {
   socket.on('update', (nickname) => {
-    users = users.map((user) => {
-      if (user.socketId === socket.id) {
-        return { ...user, nickname };
-      }
-      return user;
-    });
+    // AJUDA DO ZÓZIMO
+    const userIndex = users.findIndex((user) => user.socketId === socket.id);
+    users[userIndex].nickname = nickname;
     io.emit('users', users);
   });
 };
