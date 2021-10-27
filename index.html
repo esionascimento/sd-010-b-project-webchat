@@ -35,7 +35,6 @@
         const nickname = document.querySelector('#nickname')
         form.addEventListener('submit', (event) => {
             // pagina não deve ser atualizada com rpevent default
-            console.log()
             event.preventDefault()
             sessionStorage.setItem('nickname', JSON.stringify(nickname.value));
             socket.emit('message',
@@ -56,7 +55,10 @@
 
         // Quando o socket é on ele está aguardando mensagem!
         // quando é emit ele está emitindo mensagem mas para quem? neste caso aqui do front para o back!
-        socket.on('message', (message) => createMessage(message))
+        socket.on('message', (message) => {
+            console.log(message);
+            createMessage(message)
+        })
         socket.on('newConnection', ({
             message
         }) => createMessage(message))

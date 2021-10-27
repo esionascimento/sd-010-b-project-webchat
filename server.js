@@ -26,9 +26,11 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('Alguém se desconectou');
     });
-    socket.on('message', (msg) => {
-      // acertando o momento e verifico falta ir formando conforme o
-      io.emit('newConnection', { message: `${moment().format('DD-MM-yyyy, h:mm:ss a')} ${msg}` });
+    socket.on('message', (ChatMsgAndNickName) => {
+      const { chatMessage, nickname } = ChatMsgAndNickName;
+      const data = moment().format('MMMM Do YYYY, h:mm:ss a');
+      const sendMensage = `$ ${data} - ${nickname} -  ${chatMessage}`;
+    io.emit('message', sendMensage);
     });
 
     // Estava conflitando!!!
