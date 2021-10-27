@@ -11,7 +11,7 @@ class Socket {
     io.on('connection', (socket) => {
       const user = new User(Nickname.createRandomNickname(), socket.id);
       this.userList.add(user);
-      
+
       io.emit('newConnection', this.userList.getUsers(), user);
       socket.on('disconnect', () => {
         this.userList.remove(socket.id);
@@ -19,8 +19,9 @@ class Socket {
 
       socket.on('message', ({ nickname, chatMessage }) => {
         if (chatMessage) {
-          const date = new Date().toLocaleString();
-          io.emit('message', `${date} - ${nickname}: ${chatMessage}`);
+          const date = new Date().toLocaleString('en-GB');
+          const formattedDate = date.replace(/\//g, '-');
+          io.emit('message', `${formattedDate} - ${nickname}: ${chatMessage}`);
         }
       });
     });
