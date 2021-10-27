@@ -11,28 +11,29 @@
   <h1>Chat</h1>
   <div>
     <div>
-      <label htmlFor="name">
-        <input id="name" type="text" />
-      </label>
-      <button id="salvar">Salvar</button>
+        <input id="name" type="text"
+          placeholder="Insira seu nome"
+          data-testid="nickname-box"
+        />
+      <button id="salvar" data-testid="nickname-button">Ssalvar</button>
     </div>
     <div>
-      <section>
-        <ul id="ul">
-          
-        </ul>
+      <section id="esquerda">
+        <ul id="li-esquerda"></ul>
+      </section>
+      <section id="direita">
+        <ul id="ul"></ul>
       </section>
     </div>
     <div>
-      <label htmlFor="message">
-        <input id="message" type="text" />
-      </label>
-      <button id="enviar">Enviar</button>
+        <input id="message" type="text"
+        data-testid="message-box"/>
+      <button id="enviar" data-testid="send-button">Enviar</button>
     </div>
   </div>
 
   <script>
-    const socket = io('http://localhost:3000/');
+    const socket = window.io('http://localhost:3000/');
     const salvar = document.getElementById('salvar');
     const enviar = document.getElementById('enviar');
 
@@ -44,10 +45,24 @@
       const message = user.message;
       const text = `${data} - ${name}: ${message}`;
       li.appendChild(document.createTextNode(text));
+      li.setAttribute('data-testid', 'message');
       ul.appendChild(li);
     }
+    function renderNamesLogados(namesLogados) {
+      const ul = document.getElementById("li-esquerda");
+      namesLogados.forEach((names) => {
+        const li = document.createElement("li");
+        li.appendChild(document.createTextNode(names));
+        li.setAttribute('data-testid', 'online-user');
+        ul.appendChild(li);
+      })
+      
+    }
+    socket.on('nomeAleatorio', randomAll => {
+      renderNamesLogados(randomAll);
+    });
+
     socket.on('receivedMessage', (user) => {
-      console.log('recebido',user);
       renderMessage(user);
     });
     salvar.addEventListener('click', () => {

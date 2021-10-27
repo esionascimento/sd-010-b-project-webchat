@@ -6,8 +6,8 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const app = express();
 const user = {
-
 };
+const usersLogados = [];
 
 app.use(cors(
   {
@@ -25,7 +25,11 @@ const io = require('socket.io')(server, {
 });
 
 io.on('connection', (socket) => {
-  console.log('socket', socket.id);
+  const nameAleatorio = socket.id.slice(0, 16);
+  usersLogados.push(nameAleatorio);
+  console.log('usersLogados :', usersLogados);
+
+  io.emit('nomeAleatorio', usersLogados);
   socket.on('salveUser', (name) => {
     user.name = name;
   });
@@ -36,19 +40,17 @@ io.on('connection', (socket) => {
     const data = d.toISOString().substr(0, 10).split('-').reverse()
     .join('-');
     const horas = d.toLocaleTimeString();
-    console.log('dta', data);
-    console.log('horas :', horas);
+
     user.data = `${data} ${horas}`;
     user.message = message;
     console.log('message back :', user);
     io.emit('receivedMessage', user);
   });
-  /* socket.emit('messagesBody', user); */
 });
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.get('/chat', (_req, res) => res.render('Chat'));
+app.get('/', (_req, res) => res.render('Chat'));
 
 server.listen(PORT, () => console.log(`O pai tá on na porta ${PORT}`));
