@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 app.get('/', (_req, res) => {
-    res.sendFile(`${__dirname}/public/chat.html`);
+  res.status(200).render('chat/index');
 });
 // a porta precisa ser escutada constantemente para identificar uma requisição
 http.listen(3000, () => {

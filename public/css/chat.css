@@ -37,6 +37,10 @@ ul {
   padding: 0;
 }
 
+p {
+  color: aliceblue;
+}
+
 ul li {
   color: black;
   padding: 5px 10px;

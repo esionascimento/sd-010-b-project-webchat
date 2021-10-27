@@ -5,11 +5,11 @@
     <link rel="stylesheet" href="./css/chat.css">
   </head>
   <body>
-    <ul id="messages"></ul>
+    <ul data-testid="message-box" id="messages"></ul>
     <form action="">
       <input id="messageInput" autocomplete="off" />
-      <input id="nickName" />
-      <button>Send</button>
+      <p id="nickName" data-testid="online-user"></p>
+      <button data-testid="send-button">Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script src='./js/chat.js'></script>
