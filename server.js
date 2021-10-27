@@ -22,19 +22,15 @@ const hors = () => {
 };
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(`${__dirname}/index.html`);
+  
 });
 io.on('connection', (socket) => {
   socket.on('message', (mensageUser) => {
     console.log(mensageUser.nickname);
     const { chatMessage, nickname } = mensageUser;
-    const message = {
-      id: nickname,
-      message: chatMessage,
-      date: date(),
-      hora: hors(),
-    };
-    io.emit('message', message);
+    const messa = `${date()} ${hors()} - ${nickname}: ${chatMessage}`;
+    io.emit('message', messa);
   });
 });
 

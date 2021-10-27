@@ -40,8 +40,7 @@
       });
       socket.on('message', function(msg) {
         var item = document.createElement('li');
-        const { id, message, date, hora } = msg;
-        item.textContent = `${date} ${hora} - ${id}: ${message}`;
+        item.textContent = msg;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
