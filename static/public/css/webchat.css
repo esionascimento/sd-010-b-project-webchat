@@ -1,0 +1,55 @@
+.upper {
+  display: flex;
+  height: 90vh;
+  width: 100vw;
+}
+
+.upper__left {
+  width: 30vw;
+}
+
+.upper__left__nickname {
+  align-items: center;
+  border: 1px solid black;
+  border-bottom: none;
+  display: flex;
+  height: 40px;
+}
+
+.upper__left__input {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.upper__left ul {
+  border: 1px solid black;
+  height: calc(100% - 40px);
+  list-style: none;
+  width: 100%;
+}
+
+.upper__right li {
+  margin: 1% 0 0 5%;
+}
+
+.upper__left ul li {
+  margin: 3% 5% 0;
+}
+
+.upper__right {
+  border: 1px solid black;
+  list-style: none;
+  width: 70vw;
+}
+
+.bottom {
+  align-items: center;
+  border: 1px solid black;
+  display: flex;
+  height: 10vh;
+}
+
+.bottom input {
+  margin: 0 3%;
+  width: 80%;
+}

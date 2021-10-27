@@ -4,9 +4,38 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link rel="stylesheet" href="/static/public/css/reset.css" />
+    <link rel="stylesheet" href="/static/public/css/webchat.css" />
+    <title>Tell Me</title>
   </head>
   <body>
-    Hello My People
+    <div class="upper">
+      <div class="upper__left">
+        <div class="upper__left__nickname">
+          <div class="upper__left__input">
+            <label for="nickname">nickname</label>
+            <input id="nickname" type="text" />
+          </div>
+          <button>save</button>
+        </div>
+        <ul id="userList">
+          <li>user 1</li>
+          <li>user 2</li>
+        </ul>
+      </div>
+      <ul class="upper__right">
+        <li>message 1</li>
+        <li>message 2</li>
+        <li>message 3</li>
+        <li>message 4</li>
+        <li>message 5</li>
+      </ul>
+    </div>
+    <div class="bottom">
+      <input data-testid="message-box" type="text" />
+      <button data-testid="send-button">enviar</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js "></script>
+    <script type="module" src="/static/public/scripts/socket.js"></script>
   </body>
 </html>
