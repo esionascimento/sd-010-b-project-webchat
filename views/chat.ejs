@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebChat</title>
+</head>
+<body>
+  <ul id="messages"></ul>
+  <div id="nickname" action="">
+    <input id="nickname" autocomplete="off" placeholder="Insira seu nickname"/><button>Salvar</button>
+  </div>
+  <div>
+    <ul id="users-online"></ul>
+  </div>
+  <div> 
+    <h4>Mensagens</h4>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" placeholder="Digite aqui sua mensagem"/><button>Send</button>
+    </form>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (input.value) {        
+        socket.emit('message', {chatMessage: input.value, nickname: socket.id});
+        input.value = '';
+      }
+    });
+    socket.on('message', function(param) {
+      const messages = document.getElementById('messages');
+      const li = document.createElement('li');
+      li.innerHTML = param;
+      messages.appendChild(li);
+    });
+  </script>
+</body>
+</html>
