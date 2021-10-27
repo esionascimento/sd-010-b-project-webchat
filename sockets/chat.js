@@ -1,4 +1,5 @@
 const { removeUser, addUser, changeNickname } = require('../models/nicknameModel');
+const { createMessages } = require('../controllers/webchatController');
 
 const createNickname = (io, socket) => {
     const nicknameId = socket.id.slice(0, 16);
@@ -20,17 +21,31 @@ const createNickname = (io, socket) => {
      });
   };
 
+  const messageReturn = (io, socket) => {
+    socket.on('message', async (msg) => {
+      const { chatMessage, nickname } = msg;
+
+      const date = new Date();
+      const brDate = date.toLocaleDateString().split('/');
+      const formattedBrazilianDate = `${brDate[0]}-${brDate[1]}-${brDate[2]}`;
+      const timeHMS = ` ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+      const formattedDate = `${formattedBrazilianDate} ${timeHMS}`;
+      await createMessages({ chatMessage, nickname, formattedDate });
+
+      const formattedMessage = `${formattedDate} - ${nickname}: ${chatMessage}`;
+      console.log(formattedMessage);
+
+      io.emit('message', formattedMessage);
+    });
+  };
+
 module.exports = (io) => {
   io.on('connection', (socket) => {
   const nicknameId = createNickname(io, socket);
 
   nicknameChange(io, socket, nicknameId);
 
-  socket.on('message', (msg) => {
-    console.log(`${socket.id}: ${msg}`);
-    io.emit('message', { message: msg });
-  });
-  socket.broadcast.emit('message', { message: 'conection done' });
+  messageReturn(io, socket);
 
   socket.on('disconnect', () => {
     const updatedOnlineUsers = removeUser(nicknameId);

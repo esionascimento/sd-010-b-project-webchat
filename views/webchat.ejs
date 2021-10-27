@@ -158,19 +158,31 @@
     <script>
       const socket = io();
 
+      let nickname;
+      let nicknameId;
+
       const messageForm = document.querySelector('.message-form');
       const sendMessage = document.querySelector('#message');
       messageForm.addEventListener('submit', (event) => {
         event.preventDefault();
-        socket.emit('message', sendMessage.value);
+        const mensagem = {
+          chatMessage: sendMessage.value,
+          nickname,
+        };
+        socket.emit('message', mensagem);
         sendMessage.value = '';
-        return false;
+      });
+
+      socket.on('nicknameId', (initialName) => {
+        nicknameId = initialName;
+        nickname = initialName;
       });
 
       const getMessage = (message) => {
         const messagesUl = document.querySelector('.messages');
         const li = document.createElement('li');
         li.innerText = message;
+        li.setAttribute('data-testid', 'message');
         messagesUl.appendChild(li);
       };
 

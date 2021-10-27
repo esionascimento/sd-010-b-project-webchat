@@ -1,8 +1,16 @@
-const webchatModel = require('../models/webchatModel');
+const { getMessages, createMessage } = require('../models/webchatModel');
 
 const getAllMessages = async (req, res) => {
-  const messages = await webchatModel.getAllMessages();
+  const messages = await getMessages();
   res.render('webchat.ejs', { messages });
 };
 
-module.exports = { getAllMessages };
+const createMessages = async (message) => {
+    try {
+        await createMessage(message);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+module.exports = { getAllMessages, createMessages };
