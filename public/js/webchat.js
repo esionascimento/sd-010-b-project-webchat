@@ -72,3 +72,7 @@ socket.on('updateUserList', (onlineUsers) => {
 });
 
 socket.emit('addUserList', { nickname });
+
+window.onbeforeunload = (_e) => {
+  socket.disconnect();
+};
