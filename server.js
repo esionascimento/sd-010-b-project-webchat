@@ -2,10 +2,23 @@ require('dotenv').config();
 const app = require('express')();
 const http = require('http').createServer(app);
 
+const PORT = process.env.PORT || 3000;
+
+const io = require('socket.io')(http, {
+  cors: {
+    origin: `http://localhost:${PORT}`,
+    method: ['GET', 'POST'],
+  },
+ });
+
+io.on('connection', (socket) => {
+  console.log(`${socket.id} conectado`);
+});
+
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/index.html`);
  });
 
-http.listen(3000, () => {
- console.log('Server listening on port 3000');
+http.listen(PORT, () => {
+ console.log(`Server listening on port ${PORT}`);
 });
