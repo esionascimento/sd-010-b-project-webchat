@@ -29,7 +29,13 @@
 
     </div>
 
-    <div class="container-messages"></div>
+    <div class="container-messages">
+      <% messages.forEach(({ chatMessage, nickname, timestamp })=> { %>
+        <p data-testid="message">
+          <%= timestamp %> - <%= nickname %>: <%= chatMessage %>
+        </p>
+        <% }) %>
+    </div>
 
     <form action="" class="form-message">
       <input data-testid="message-box" id="message-box" />
