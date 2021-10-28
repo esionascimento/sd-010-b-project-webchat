@@ -41,7 +41,7 @@
     socket.on('message', (data) => {
       const li = document.createElement('li');
       li.innerText = data;
-      li.testid = "message";
+      li.setAttribute('data-testid', 'message')
       document.getElementById('messages').appendChild(li);
     });
 

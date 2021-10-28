@@ -1,3 +1,4 @@
+// source: https://usefulangle.com/post/187/nodejs-get-date-time
 const getDate = () => {
 const dateObj = new Date();
 
