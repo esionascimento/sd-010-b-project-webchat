@@ -20,6 +20,7 @@ const io = require('socket.io')(httpServer, {
 });
 
 const webChat = require('./sockets');
+const { getMessages } = require('./controllers');
 
 webChat(io);
 
@@ -29,6 +30,6 @@ webChat(io);
 
 // colocando o app para rodar no servidor criado, httpServer
 
-app.get('/', (req, res) => res.send('Hello World!'));
+app.get('/', getMessages);
 
 httpServer.listen(port, () => console.log(`Example app listening on port ${port}!`));
