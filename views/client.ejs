@@ -143,29 +143,13 @@
           const ulNick = document.querySelector('#nickname');
           const newLi = document.createElement('li');
           newLi.innerHTML = createInitialNick();
-
           newLi.setAttribute('data-testid', 'online-user')
           ulNick.replaceChild(newLi, oldLi);
-
           const removeEmpty = querySelectorAll('li[data-testid="online-user"]')
           removeEmpty.forEach((li) => {
             if (li.innerHTML === '') return ulNick.removeChild(li);
           })
         } 
-
-       /*  const notRepeatUser = ( id ) => {
-          const oldLi = document.querySelector('li[data-testid="online-user"]');
-          const newLi = document.createElement('li');
-          const ulNick = document.querySelector('#nickname');
-
-          newLi.setAttribute('id', `${id}`); 
-          newLi.setAttribute("data-testid", "online-user"); 
-
-          newLi.innerText = createInitialNick();
-          
-          ulNick.replaceChild(newLi, oldLi);
-
-        }   */
 
         socket.emit('initialNick', createInitialNick());
 
