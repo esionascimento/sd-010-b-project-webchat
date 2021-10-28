@@ -97,15 +97,13 @@ formMessage.addEventListener('submit', async (e) => {
 
 formNickName.addEventListener('submit', (e) => {
   e.preventDefault();
-  console.log(inputNickName.value);
   socket.emit('updateUserOn', inputNickName.value);
 });
 
 const createMessage = (message) => {
   const messagesUl = document.querySelector('#messages');
-  console.log(messagesUl);
   const li = document.createElement('li');
-  console.log(li);
+  // console.log(li);
   li.innerText = message;
   li.setAttribute('data-testid', 'message');
   messagesUl.appendChild(li);

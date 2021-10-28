@@ -25,8 +25,6 @@ app.set('views', './views');
 
 app.get('/', chatController.getMessages);
 
-app.post('/', chatController.saveMessage);
-
 // a porta precisa ser escutada constantemente para identificar uma requisição
 http.listen(3000, () => {
   console.log('Servidor ouvindo na porta 3000');
