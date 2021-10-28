@@ -78,7 +78,8 @@
      
         formNickname.addEventListener('submit', (e) => {
           e.preventDefault();
-          const saveNick = sessionStorage.setItem('nickname', inputNick.value);         
+          const saveNick = sessionStorage.setItem('nickname', inputNick.value);
+          socket.emit('initialNick', createInitialNick());         
           inputNick.value = '';
           return false;
         });
@@ -98,10 +99,10 @@
 
         form.addEventListener('submit', (e) => {
           e.preventDefault();
-          const renderNick = generateNickName(16);
+         /*  const renderNick = generateNickName(16); */
           const nickStorage = sessionStorage.getItem('nickname');
-          const nickName = (!nickStorage) ? renderNick : nickStorage;
-          socket.emit('message', { chatMessage: inputMessage.value, nickname: nickName});
+   /*        const nickName = (!nickStorage) ? renderNick : nickStorage; */
+          socket.emit('message', { chatMessage: inputMessage.value, nickname: nickStorage});
           inputMessage.value = '';
           return false;
         });
@@ -118,10 +119,11 @@
 
         socket.on('message', (message) => createMessage(message));
 
-        socket.on('message', (msg) => {
+        socket.on('initialNick', (msg) => {
           const nickStorage = sessionStorage.getItem('nickname');
           const ulNick = document.querySelector('#nickname');
           const liNick = document.createElement('li');
+          liNick.setAttribute("data-testid", "online-user"); 
           liNick.innerText = `${nickStorage}`;
           ulNick.appendChild(liNick); 
         });
@@ -135,13 +137,13 @@
 
         socket.emit('initialNick', createInitialNick());
 
-        socket.on('initialNick', (msg) => {
+      /*   socket.on('initialNick', (msg) => {
           const ulNick = document.querySelector('#nickname');
           const liNick = document.createElement('li');
           liNick.setAttribute("data-testid", "online-user"); 
           liNick.innerText = `${msg}`;
           ulNick.appendChild(liNick); 
-        });
+        }); */
 
     </script>
 </body>
