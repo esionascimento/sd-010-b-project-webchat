@@ -1,4 +1,5 @@
 const moment = require('moment');
+const modelFunction = require('../models/chatModel');
 
 let users = [];
 
@@ -20,8 +21,9 @@ const updateNickname = (socket, io) => {
 
 const chat = (io) => {
   io.on('connection', (socket) => {
-    socket.on('message', ({ chatMessage, nickname }) => {
+    socket.on('message', async ({ chatMessage, nickname }) => {
       const data = moment().format('DD-MM-YYYY HH:mm:ss');
+      await modelFunction.addMessage({ nickname, message: chatMessage, timestamp: data });
       io.emit('message', `${data} - ${nickname}: ${chatMessage}`);
     });
 
