@@ -1,5 +1,6 @@
 const socket = window.io('http://localhost:3000');
 const ID = '#user-name';
+let userLocal = '';
 
 const formMessage = document.querySelector('.form-message');
 formMessage.addEventListener('submit', (event) => {
@@ -18,8 +19,9 @@ formUser.addEventListener('submit', (event) => {
   event.preventDefault();
   const { target } = event;
   const newNick = target.querySelector('#nickname-box').value;
-  console.log(newNick);
 
+  userLocal = newNick;
+  socket.emit('renameUser', newNick);
   localStorage.setItem('userSeted', newNick);
   document.querySelector(ID).innerHTML = newNick;
   target.querySelector('#nickname-box').value = '';
@@ -35,12 +37,26 @@ socket.on('message', (message) => {
   containerMessages.appendChild(p);
 });
 
-socket.on('connected', (user) => {
-  // colocar condição que testa se usuário existe no localstorge
+socket.on('setName', (user) => {
   const userSeted = localStorage.getItem('userSeted');
+
   if (!userSeted) {
+    userLocal = user;
     document.querySelector(ID).innerHTML = user;
   } else {
+    userLocal = userSeted;
+    socket.emit('renameUser', userSeted);
     document.querySelector(ID).innerHTML = userSeted;
   }
+});
+
+socket.on('usersOnline', (usersOnline) => {
+  const othersUsers = document.querySelector('.others-users');
+  
+  const users = usersOnline
+    .filter((user) => user !== userLocal)
+    .map((user) => `<h3 data-testid="online-user">${user}</h3>`);
+
+  othersUsers.innerHTML = users.join('');
+  console.log(usersOnline);
 });

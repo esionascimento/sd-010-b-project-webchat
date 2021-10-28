@@ -1,14 +1,31 @@
-const getDateFormated = require('../helpers/getDateFormated');
+const usersOnline = [];
+
+const renameUser = (newName, defaultName, userRenamed) => {
+  const name = userRenamed || defaultName;
+
+  usersOnline.splice(usersOnline.indexOf(name), 1, newName);
+};
 
 module.exports = (io) => io.on('connection', (socket) => {
-  const id = socket.id.slice(0, 11);
-  socket.emit('connected', `user-${id}`);
+  const defaultName = `user-${socket.id.slice(0, 11)}`;
+  let userRenamed = null;
 
-  io.emit('newUserConnected', '');
+  usersOnline.push(defaultName);
 
-  socket.on('message', ({ nickname, chatMessage }) => {
-    const timestamp = getDateFormated();
+  socket.emit('setName', defaultName);
+  io.emit('usersOnline', usersOnline);
 
-    io.emit('message', `${timestamp} - ${nickname}: ${chatMessage}`);
+  socket.on('renameUser', (newName) => {
+    renameUser(newName, defaultName, userRenamed);
+    userRenamed = newName;
+    
+    io.emit('usersOnline', usersOnline);
+  });
+
+  socket.on('disconnect', () => {
+    const name = userRenamed || defaultName;
+    usersOnline.splice(usersOnline.indexOf(name), 1);
+    
+    io.emit('usersOnline', usersOnline);
   });
 });

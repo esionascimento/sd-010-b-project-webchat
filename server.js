@@ -12,6 +12,7 @@ const io = require('socket.io')(http, {
   } });
 
   require('./sockets/chat')(io);
+  require('./sockets/message')(io);
   
 // controllers
 const chatController = require('./controllers/chatController');
