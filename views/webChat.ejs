@@ -8,23 +8,25 @@
   </head>
   <body>
     <h1>Chat</h1>
+    <ul id="usersContainer"></ul>
     <ul id="messages"></ul>
     <form id="nickNameForm">
-      <input id="nickNameInput" autocomplete="off" placeholder="Nick name" />
-      <button>Save</button>
+      <input
+        id="nickNameInput"
+        autocomplete="off"
+        placeholder="Nick name"
+        data-testid="nickname-box"
+      />
+      <button data-testid="nickname-button">Save</button>
     </form>
     <form id="messageForm">
-      <input id="messageInput" autocomplete="off" />
-      <button>Send</button>
+      <input id="messageInput" autocomplete="off" data-testid="message-box" />
+      <button data-testid="send-button">Send</button>
     </form>
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
-    let nickName;
-
-    const nickNameForm = document.querySelector("#nickNameForm");
-    const nickNameInput = document.querySelector("#nickNameInput");
 
     const messageForm = document.querySelector("#messageForm");
     const messageInput = document.querySelector("#messageInput");
@@ -39,6 +41,19 @@
       return false;
     });
 
+    const createMessage = (message) => {
+      const messagesUl = document.querySelector("#messages");
+      const li = document.createElement("li");
+      li.innerText = message;
+      li.setAttribute("data-testid", "message");
+      messagesUl.appendChild(li);
+    };
+
+    let nickName;
+
+    const nickNameForm = document.querySelector("#nickNameForm");
+    const nickNameInput = document.querySelector("#nickNameInput");
+
     nickNameForm.addEventListener("submit", (e) => {
       e.preventDefault();
       nickName = nickNameInput.value;
@@ -46,14 +61,19 @@
       return false;
     });
 
-    const createMessage = (message) => {
-      const messagesUl = document.querySelector("#messages");
+    const addUser = (nickName) => {
+      const usersContainer = document.querySelector("#usersContainer");
       const li = document.createElement("li");
-      li.innerText = message;
-      messagesUl.appendChild(li);
+      li.innerText = nickName;
+      li.setAttribute("data-testid", "online-user");
+      usersContainer.appendChild(li);
     };
 
     socket.on("message", (message) => createMessage(message));
+    socket.on("setUser", (randomUser) => {
+      nickName = randomUser;
+      addUser(randomUser);
+    });
 
     window.onbeforeunload = () => {
       socket.disconnect();
