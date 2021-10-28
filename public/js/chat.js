@@ -26,11 +26,11 @@ const createLiUser = (name, userUl) => {
 
 const createUserOn = (users) => {
   const userUl = document.querySelector('#userson');
-  console.log(`aqui${users}`);
+  // console.log(`aqui${users}`);
   const listLi = [...document.querySelectorAll('#nickname')];
-  console.log(listLi);
+  // console.log(listLi);
   const textArray = listLi.map((element) => element.innerText);
-  console.log(textArray);
+  // console.log(textArray);
   const li = document.createElement('li');
   const name1 = users[users.length - 1];
   li.innerText = name1.nickname;
@@ -45,11 +45,11 @@ const createUserOn = (users) => {
 };
 
 const updateUserOn = (newName, pastName) => {
-  console.log(newName, pastName);
+  // console.log(newName, pastName);
   const list = document.querySelectorAll('#nickname');
  
   list.forEach((element) => {
-    console.log(element.innerText); 
+    // console.log(element.innerText); 
     const text = element.innerText;
     if (text.includes(pastName)) {
       const li = element;
@@ -61,9 +61,9 @@ const updateUserOn = (newName, pastName) => {
 const updateUserOff = (name) => {
   const listUl = document.querySelector('#userson');
   const list = document.querySelectorAll('#nickname');
-  console.log(list, name);
+  // console.log(list, name);
   list.forEach((element) => {
-    console.log(element.innerText); 
+    // console.log(element.innerText); 
     const text = element.innerText;
     if (text.includes(name)) {
       listUl.removeChild(list[1]);
