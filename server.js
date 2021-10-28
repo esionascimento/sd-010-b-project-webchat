@@ -24,12 +24,14 @@ const { getMessages } = require('./controllers');
 
 webChat(io);
 
+app.set('view engine', 'ejs');
+app.set('views', './views');
+
 // precisa do http server para fazer a conexão com o socket io, 
 // o express vai rodar o io, e para o io rodar ele precisa de um listner.
 // o socketIo não roda independente igual o app faz.
 
 // colocando o app para rodar no servidor criado, httpServer
-
 app.get('/', getMessages);
 
 httpServer.listen(port, () => console.log(`Example app listening on port ${port}!`));

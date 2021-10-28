@@ -1,7 +1,7 @@
 const connection = require('./connection');
 
 const getAllMessages = async () => {
-  const db = connection();
+  const db = await connection();
   const messages = await db.collection('messages').find().toArray();
   return messages;
 };
