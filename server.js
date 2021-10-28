@@ -12,7 +12,7 @@ const io = require('socket.io')(http, {
   },
  });
 
- const { getDate } = require('./utils');
+ const { getDate, format } = require('./utils');
 
  const date = getDate();
 
@@ -23,13 +23,15 @@ const io = require('socket.io')(http, {
  // função executada quando um cliente se conecta
  io.on('connection', (socket) => {
   console.log(`${socket.id} conectado`);
-  socket.on('message', (message) => {
-    console.log(message);
-    everyMessage.push({ date, message });
-    io.emit('message', { date, message });
+
+  socket.on('message', ({ chatMessage, nickname }) => {
+    const formatMessage = format(chatMessage, nickname, date);
+    everyMessage.push({ chatMessage, nickname }, date);
+    io.emit('message', formatMessage);
   });
   
   socket.on('new-user', (user) => {
+    console.log(user);
     io.emit('new-user', user);
   });
 

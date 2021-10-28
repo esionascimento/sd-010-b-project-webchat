@@ -106,18 +106,25 @@
     const messages = document.querySelector('#messages');
     const users = document.querySelector('#users');
 
-    socket.emit('new-user', generateNickName(16));
+    const loadNickName = () => {      
+      const nickname = nickNameInput.value ? nickNameInput.value : generateNickName(16); 
+      sessionStorage.setItem('nickname', nickname); 
+      return nickname;
+    }
+    
+    socket.emit('new-user', loadNickName());
     
     socket.on('new-user', (user) => {
       const li = document.createElement('li');
-      li.innerHTML = `${user}`
+      li.innerHTML = user
       li.setAttribute('data-testid', 'online-user')
       users.appendChild(li);
     })
     
-    socket.on('message', (data) => {
+    socket.on('message', () => {
+      const catchNickName = sessionStorage.getItem('nickname');
       const li = document.createElement('li');
-      li.innerHTML = `${data.message.nickname} entrou`;      
+      li.innerHTML = `${catchNickName} entrou`;      
       users.appendChild(li);
     });
 
@@ -142,7 +149,7 @@
 
    socket.on('message', (data) => {
     const li = document.createElement('li');
-    li.innerHTML = `${data.date} - ${data.message.nickname}: ${data.message.chatMessage}`
+    li.innerHTML = data
     li.setAttribute('data-testid', 'message' )
     messages.appendChild(li);   
    }); 

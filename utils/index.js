@@ -10,9 +10,11 @@ const getDate = () => {
   return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
 };
 
+const format = (chatMessage, nickname, data) => `${data} - ${nickname}: ${chatMessage}`;
+
 // const crypto = require('crypto');
 
 // criação do nickname aleatório
 // const randomNickName = () => crypto.randomBytes(8).toString('hex');
 
-module.exports = { getDate };
+module.exports = { getDate, format };
