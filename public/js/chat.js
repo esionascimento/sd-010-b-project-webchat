@@ -26,8 +26,7 @@ nickChangeBtn.addEventListener('click', () => {
   nickname = nicknameImput.value;
   userNickname.textContent = nickname;
 
-  socket.emit('chageNicknames', { oldNick, newNick });
-
+  socket.emit('changeNicknames', { oldNick, newNick });
   nicknameImput.value = '';
 });
 
