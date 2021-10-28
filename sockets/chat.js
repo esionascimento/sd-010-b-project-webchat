@@ -2,9 +2,7 @@ const { dateNow } = require('../helper/date');
 
 const foundUser = (id, pessoas) => {
   let indexFound = 0;
-  // console.log(pessoas);
   pessoas.forEach((pessoa, index) => {
-    // console.log('aqui', pessoa.id, id);
     if (pessoa.id === id) {
       indexFound = index;
     }
@@ -20,8 +18,10 @@ const pessoas = [];
   });
 
   socket.on('disconnect', () => {
-    socket.broadcast.emit('userOff', pessoas[foundUser(socket.id, pessoas)].nickname);
-    pessoas.splice(foundUser(socket.id, pessoas), 1);
+    if (!pessoas[foundUser(socket.id, pessoas)]) {
+      socket.broadcast.emit('userOff', pessoas[foundUser(socket.id, pessoas)].nickname);
+      pessoas.splice(foundUser(socket.id, pessoas), 1);
+    }
   });
 
   socket.on('updateUserOn', (name) => {
@@ -31,7 +31,6 @@ const pessoas = [];
   });
 
   socket.on('message', (message) => {
-    console.log(`Mensagem ${message.nickname}`);
     io.emit('message', `${dateNow()} - ${message.nickname}: ${message.chatMessage}`);
   });
 });
