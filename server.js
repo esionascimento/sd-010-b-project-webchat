@@ -16,20 +16,37 @@ const io = require('socket.io')(http, {
   },
 });
 
+app.use(express.static(`${__dirname}/views`));
+
 app.get('/', (req, res) => {
   res.render(`${__dirname}/views`);
 });
 
+let allUsers = []; 
+
 io.on('connection', (socket) => {
+  socket.on('userOn', ({ nickname }) => { 
+    allUsers = allUsers.filter(({ id }) => id !== socket.id);
+    allUsers.push({ nickname, id: socket.id }); io.emit('userOn', allUsers);
+    return allUsers;
+  });
+
   socket.on('message', (message) => {
     const { chatMessage, nickname } = message;
     const dateNow = new Date().toLocaleString().replace(/\//g, '-');
     io.emit('message', `${dateNow} - ${nickname} ${chatMessage}`);
   });
 
+// socket.on('newNick', ({ nick }) => {
+//   allUsers = allUsers.map((user) => {
+//  if (user.id === socket.id) { return { nick, id: socket.id }; } return user; 
+// });
+// });
+
   socket.on('disconnect', () => {
-    // console.log('user disconnected');
-  });
+  allUsers = allUsers.filter(({ id }) => id !== socket.id);
+  io.emit('userOn', allUsers);
+});
 });
 
 http.listen(PORT, () => {

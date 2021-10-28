@@ -18,7 +18,7 @@
   <body>
 
     <div>
-      <ul id="ul-id"></ul>
+      <ul id="user-on"></ul>
 
       <form action="">
         <input data-testid="message-box" type="text" id="message"/>
@@ -26,7 +26,7 @@
       </form> 
     </div>
 
-<p id="user-on" data-testid="online-user"></p>
+<p id="ul-id"></p>
 
     <div>
       <form action="">
@@ -36,45 +36,6 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script> 
-    
-    const socket = io();
-    let nick = Math.random().toString(16)
-    .substr(2, 8) + Math.random().toString(16).substr(2, 8);
-
-      const ul = document.getElementById('ul-id');
-      const inputMessage = document.getElementById('message');
-      const btn1 = document.getElementById('enviar-btn');
-      const userOn = document.getElementById('user-on');
-      const inputNickname = document.getElementById('input-nickname');
-      const btn2 = document.getElementById('enviar-btn2');
-      userOn.innerText = nick;
-
-      console.log(userOn);
-    btn1.addEventListener('click', (e) => {
-    e.preventDefault();
-    let chatMessage = inputMessage.value;
-    if (chatMessage) {
-      socket.emit('message', { chatMessage, nickname: nick });
-      chatMessage = '';
-    }
-  });
-
-  btn2.addEventListener('click', (e) => {
-    e.preventDefault();
-    nick = inputNickname.value;
-    userOn.innerText = nick;
-    inputNickname.value = '';
-  });
-
-  socket.on('message', (message) => {
-    const item = document.createElement('li');
-    item.setAttribute('data-testid', 'message');
-    item.innerText = message;
-    ul.appendChild(item);
-  });
-    
-    </script>
-    <script src="js/script.js"></script>
+    <script src="./js/script.js"></script>
   </body>
 </html>
