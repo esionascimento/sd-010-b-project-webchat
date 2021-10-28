@@ -7,6 +7,15 @@ const PORT = 3000;
 const app = express();
 const httpServer = createServer(app);
 
+const io = require('socket.io')(httpServer, {
+  cors: {
+    origin: `http://localhost:${PORT}`,
+    methods: ['GET', 'POST'],
+  },
+});
+
+const connection = require('./models/connection');
+
 app.use(express.static(path.join(__dirname, 'views')));
 
 app.set('view engine', 'ejs');
@@ -23,26 +32,28 @@ const generateRandomString = (num) => {
   return result1;
 };
 
-const io = require('socket.io')(httpServer, {
-  cors: {
-    origin: `http://localhost:${PORT}`,
-    methods: ['GET', 'POST'],
-  },
+app.get('/', async (req, res) => {
+  const messages = await connection().then((db) =>
+  db.collection('messages').find({}).toArray());
+  res.render('webChat', { messages });
 });
 
-app.get('/', (req, res) => {
-  res.render('webChat');
-});
-
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   console.log(socket.id);
 
-  socket.on('message', (message) => {
+  socket.on('message', async ({ nickname, chatMessage }) => {
+    const newMessage = {
+      message: chatMessage,
+      nickname,
+      timestamp: moment(new Date()).format('DD-MM-yyyy HH:mm:ss'),
+    };
+
+    await connection().then((db) =>
+      db.collection('messages').insertOne(newMessage));
+
     io.emit(
       'message',
-      `${moment(new Date()).format('DD-MM-yyyy HH:mm:ss')} - ${
-        message.nickname
-      }: ${message.chatMessage}`,
+      `${newMessage.timestamp} - ${newMessage.nickname}: ${newMessage.message}`,
     );
   });
 

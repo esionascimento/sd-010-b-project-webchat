@@ -9,7 +9,13 @@
   <body>
     <h1>Chat</h1>
     <ul id="usersContainer"></ul>
-    <ul id="messages"></ul>
+    <ul id="messages">
+      <%messages && messages.forEach(({message,nickname,timestamp}) => { %>
+      <li data-testid="message">
+        <%= `${timestamp} - ${nickname}: ${message}` %>
+      </li>
+      <% }) %>
+    </ul>
     <form id="nickNameForm">
       <input
         id="nickNameInput"
@@ -74,9 +80,5 @@
       nickName = randomUser;
       addUser(randomUser);
     });
-
-    window.onbeforeunload = () => {
-      socket.disconnect();
-    };
   </script>
 </html>
