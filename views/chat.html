@@ -64,7 +64,10 @@
 
     nicknameBtn.addEventListener('click', (e) => {
       /*Source https://qastack.com.br/programming/6193574/save-javascript-objects-in-sessionstorage*/
+      const previousNickname = sessionStorage.getItem('nickname');
+      console.log(previousNickname);
       sessionStorage.setItem('nickname', nicknameInput.value);
+      console.log(nicknameInput.value);
       nicknameInput.value = '';
     });
 
