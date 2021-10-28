@@ -23,6 +23,14 @@
   <script>
     const socket = io();
 
+    socket.on('updateNickname', ({ previousNickname, atual }) => {
+      console.log(previousNickname, atual);
+      const previousNicknameUser = document.getElementById(`${previousNickname}`);
+      console.log(previousNicknameUser);
+      previousNicknameUser.id = atual;
+      previousNicknameUser.innerText = atual;
+    });
+
     socket.on('offLineUser', (user) => {
       const disconnectedUser = document.getElementById(`${user}`);
       const usersList = document.querySelector('#users');
@@ -32,12 +40,16 @@
     socket.on('onlineUsers', (user) => {
       const li = document.createElement('li');
         li.append(user);
+        li.id = user
         li.setAttribute("data-testid", "online-user");
         document.getElementById('users').appendChild(li);
     });
 
-    socket.on('generateNickname', (randomNickname) => {
+    socket.on('saveNickname', (randomNickname) => {
       sessionStorage.setItem('nickname', randomNickname);
+    });
+
+    socket.on('generateNickname', (randomNickname) => {
 
       const liUser = document.createTextNode(randomNickname);
       const li = document.createElement('li');
@@ -65,9 +77,8 @@
     nicknameBtn.addEventListener('click', (e) => {
       /*Source https://qastack.com.br/programming/6193574/save-javascript-objects-in-sessionstorage*/
       const previousNickname = sessionStorage.getItem('nickname');
-      console.log(previousNickname);
       sessionStorage.setItem('nickname', nicknameInput.value);
-      console.log(nicknameInput.value);
+      socket.emit('updateNickname', { previousNickname, atual : nicknameInput.value });
       nicknameInput.value = '';
     });
 
