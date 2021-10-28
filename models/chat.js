@@ -4,9 +4,9 @@ const connection = require('./connection');
 // CREATE
 const add = async (message, nickname, timestamp) => {
   const db = await connection();
-  const messageOne = await db.collection('messages')
+  await db.collection('messages')
   .insertOne({ message, nickname, timestamp });
-  console.log(messageOne);
+  // console.log(messageOne);
 };
 
 // GETALL
