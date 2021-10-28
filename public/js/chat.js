@@ -14,12 +14,13 @@ const formMessage = document.querySelector('#formsMessage');
 const formNickName = document.querySelector('#formsNickName');
 const inputMessage = document.querySelector('#messageInput');
 const inputNickName = document.querySelector('#nickInput');
+const atri = `data-${'testid'}`;
 
 const createLiUser = (name, userUl) => {
   const li = document.createElement('li');
   li.innerText = name;
   li.id = 'nickname';
-  li.setAttribute('data-testid', 'online-user');
+  li.setAttribute(atri, 'online-user');
   userUl.appendChild(li);
 };
 
