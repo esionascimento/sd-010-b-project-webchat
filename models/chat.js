@@ -5,7 +5,7 @@ const { dateNow } = require('../helper/date');
 const add = async (message, nickname) => {
   const db = await connection();
   await db.collection('messages')
-  .insertOne({ message, nickname, timestamp: dateNow() });
+  .insertOne({ nickname, message, timestamp: dateNow() });
   // console.log(messageOne);
 };
 
