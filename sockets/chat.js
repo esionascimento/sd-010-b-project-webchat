@@ -1,9 +1,12 @@
 const { dateNow } = require('../helper/date');
- 
+
+const pessoas = [];
  module.exports = (io) => io.on('connection', (socket) => {
   socket.on('userOn', (nickname) => {
     console.log(`ONline ${nickname}`);
-    io.emit('userOn', nickname);
+    pessoas.push(nickname);
+    console.log(pessoas);
+    io.emit('userOn', pessoas);
   });
 
   socket.on('disconnect', (name) => {

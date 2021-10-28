@@ -14,17 +14,31 @@ const formMessage = document.querySelector('#formsMessage');
 const formNickName = document.querySelector('#formsNickName');
 const inputMessage = document.querySelector('#messageInput');
 const inputNickName = document.querySelector('#nickInput');
-const nick = [];
 
-const createUserOn = (nickname) => {
-  const userUl = document.querySelector('#userson');
+const createLiUser = (name, userUl) => {
   const li = document.createElement('li');
-  li.innerText = nickname;
-  nick.add(nickname);
-  console.log(nick);
+  li.innerText = name;
   li.id = 'nickname';
   li.setAttribute('data-testid', 'online-user');
   userUl.appendChild(li);
+};
+
+const createUserOn = (nickname) => {
+  const userUl = document.querySelector('#userson');
+  console.log(`aqui${nickname}`);
+  const listLi = [...document.querySelectorAll('#nickname')];
+  console.log(listLi);
+  const textArray = listLi.map((element) => element.innerText);
+  const li = document.createElement('li');
+  li.innerText = nickname[nickname.length - 1];
+  li.id = 'nickname';
+  li.setAttribute('data-testid', 'online-user');
+  userUl.appendChild(li);
+  nickname.forEach((name, index) => {
+    if (index < (nickname.length - 1) && !textArray.includes(name)) {
+      createLiUser(name, userUl);
+    }
+  });
 };
 
 const updateUserOn = (changeUser) => {
@@ -61,9 +75,9 @@ window.onload = () => {
   socket.emit('userOn', makeid(16)); 
 };
 
-window.onbeforeunload = () => {
-  socket.disconnect();
-};
+// window.onbeforeunload = () => {
+//   socket.disconnect();
+// };
 
 formMessage.addEventListener('submit', async (e) => {
   e.preventDefault();
