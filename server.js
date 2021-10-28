@@ -24,6 +24,7 @@ const io = require('socket.io')(http, {
  io.on('connection', (socket) => {
   console.log(`${socket.id} conectado`);
   socket.on('message', (message) => {
+    console.log(message);
     everyMessage.push({ date, message });
     io.emit('message', { date, message });
   });
