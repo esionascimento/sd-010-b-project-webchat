@@ -121,16 +121,10 @@
       users.appendChild(li);
     })
     
-    socket.on('message', () => {
-      const catchNickName = sessionStorage.getItem('nickname');
-      const li = document.createElement('li');
-      li.innerHTML = `${catchNickName} entrou`;      
-      users.appendChild(li);
-    });
-
   nickname_form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const storageNickName = sessionStorage.setItem('nickname', nickNameInput.value)
+    loadNickName()
+    socket.emit('new-user', loadNickName())
     nickNameInput.value = '';
     return false;
   });
