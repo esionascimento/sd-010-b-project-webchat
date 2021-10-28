@@ -81,7 +81,7 @@
           e.preventDefault();
           const saveNick = sessionStorage.setItem('nickname', inputNick.value);
           createInitialNick()
-          socket.emit('initialNick', notRepeatUser());         
+          socket.emit('initialNick', notRepeatUser(userId));         
           inputNick.value = '';
           return false;
         });
@@ -120,13 +120,13 @@
         socket.on('message', (message) => createMessage(message));
 
         socket.on('initialNick', (msg) => {
-         /*  userId = msg.id; */
+          userId = msg.id;
           const nickStorage = sessionStorage.getItem('nickname');
           const ulNick = document.querySelector('#nickname');
           const liNick = document.createElement('li');
-          /* liNick.setAttribute('id', `${msg.id}`); */
+          liNick.setAttribute('id', `${msg.id}`);
           liNick.setAttribute("data-testid", "online-user"); 
-          liNick.innerText = `${nickStorage}`;
+          liNick.innerHTML = `${msg.nickRender}`;
           ulNick.appendChild(liNick); 
         });
 
@@ -138,13 +138,12 @@
           return user;
         }
 
-        const notRepeatUser = () => {
+        const notRepeatUser = (id) => {
           const oldLi = document.querySelector('li[data-testid="online-user"]');
           const ulNick = document.querySelector('#nickname');
-
           const newLi = document.createElement('li');
           newLi.innerHTML = createInitialNick();
-          
+
           newLi.setAttribute('data-testid', 'online-user')
           ulNick.replaceChild(newLi, oldLi);
 
