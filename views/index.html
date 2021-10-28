@@ -105,7 +105,7 @@
     const nickNameInput = document.querySelector('#nickname_input');
     const messages = document.querySelector('#messages');
     const users = document.querySelector('#users');
-
+   
     const loadNickName = () => {      
       const nickname = nickNameInput.value ? nickNameInput.value : generateNickName(16); 
       sessionStorage.setItem('nickname', nickname); 
@@ -113,7 +113,7 @@
     }
     
     socket.emit('new-user', loadNickName());
-    
+        
     socket.on('new-user', (user) => {
       const li = document.createElement('li');
       li.innerHTML = user
@@ -124,11 +124,27 @@
   nickname_form.addEventListener('submit', (e) => {
     e.preventDefault();
     loadNickName()
-    socket.emit('new-user', loadNickName())
+    socket.emit('new-user', replaceNickName())
     nickNameInput.value = '';
     return false;
   });
-  
+
+    const replaceNickName = () => {
+    const oldNickName = document.querySelector('li[data-testid="online-user"]');
+    const newNickName = document.createElement('li');
+
+    newNickName.innerHTML = loadNickName();
+    newNickName.setAttribute('data-testid', 'online-user')
+    newNickName.setAttribute('className', 'online-user')
+    users.replaceChild(newNickName, oldNickName);
+
+    const removeEmpty = document.getElementsByClassName('online-user')
+
+    removeEmpty.forEach((li) => {
+      if (li.innerHTML === '') return users.removeChild(li);
+    })    
+  }
+
   messageForm.addEventListener('submit', (e) => {
     const catchNickName = sessionStorage.getItem('nickname');
     e.preventDefault();
