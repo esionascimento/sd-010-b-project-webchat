@@ -51,10 +51,21 @@
       const buttonUser = document.getElementById('user-button');
 
       socket.on('loggedUsers', (allUsers) => {
-        for (child of containerUsers.children) {
-          child.remove();
+        console.log(allUsers);
+        const divAllUsers = document.querySelectorAll('.user');
+        for (let index = 0; index < divAllUsers.length; index += 1) {
+          containerUsers.removeChild(divAllUsers[index]);
         }
-        allUsers.forEach((user) => {
+        const userNow = allUsers.filter(
+          (user) => user.username === currentUser,
+        );
+        const orderedUsers = allUsers.filter(
+          (user) => user.username !== currentUser,
+        );
+        orderedUsers.unshift(userNow[0]);
+        console.log(orderedUsers);
+
+        orderedUsers.forEach((user) => {
           const newUser = document.createElement('div');
           const attribute = 'data-testid';
           newUser.setAttribute(attribute, 'online-user');

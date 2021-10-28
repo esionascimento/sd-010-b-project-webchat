@@ -18,7 +18,6 @@ const verifyDate = () => {
     hours = `0${hours}`;
     amOrPm = 'PM';
   }
-  console.log(day, month, year, hours, minutes, secconds, amOrPm);
 
   return { day, month, year, hours, minutes, secconds, amOrPm };
 };

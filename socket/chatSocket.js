@@ -5,7 +5,6 @@ const disconnect = (socket, io) => {
   socket.on('disconnect', () => {
     console.log(`Usuário desconectado: ${socket.id}`);
     allUsers = allUsers.filter((user) => user.id !== socket.id);
-    console.log(allUsers);
     io.emit('loggedUsers', allUsers);
   });
 };
