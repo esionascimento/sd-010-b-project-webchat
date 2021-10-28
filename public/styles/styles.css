@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, input, button {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+}
+
+main {
+  width: 100vw;
+  height: 100vh;
+}
+
+li {
+  list-style: none;
+}
+
+button {
+  background-color: rgb(91, 101, 231);
+  border: none;
+  cursor: pointer;
+
+  border-radius: 5px;
+
+  color: white;
+}
+
+input {
+  border-radius: 5px;
+  outline: none;
+  border: gray solid 1px;
+}
+
+div.container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  
+  height: calc(100% - 100px);
+}
+
+.user form{
+  width: 100%;
+  padding: 50px;
+
+  display: flex;
+  justify-content: space-between;
+
+  border-bottom: gray solid 1px;
+
+}
+
+.user input {
+  height: 30px;
+  width: 100%;
+  padding: 15px;
+  margin-right: 20px ;
+}
+
+.user button {
+  height: 30px;
+  padding: 0 20px;
+}
+
+.user ul li {
+  padding: 20px 50px;
+  border-bottom: gray solid 1px;
+}
+
+.user ul li:nth-child(even) {
+  background-color: rgb(240, 240, 240);
+}
+
+.messages {
+  height: 100%;
+  padding: 20px 50px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  
+  border-left: gray solid 2px;
+}
+
+.form {
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+
+  width: 100vw;
+  height: 100px;
+
+  display: flex;
+  align-items: center;
+}
+
+.form input {
+  height: 50px;
+  margin: 0 20px 0 50px;
+  width: 100%;
+
+  padding: 20px;
+}
+
+.form button {
+  height: 50px;
+  padding: 0 50px;
+  margin-right: 50px;
+}
