@@ -23,10 +23,25 @@
   <script>
     const socket = io();
 
+    const createListItem = (text, ulID, atribute) => {
+      /*SOURCE https://developer.mozilla.org/pt-BR/docs/Web/API/Element/setAttribute*/
+      const li = document.createElement('li');
+      li.append(text);
+      if (ulID === 'users') li.id = text;
+      li.setAttribute("data-testid", `${atribute}`);
+      document.getElementById(`${ulID}`).appendChild(li);
+    }
+
+    socket.on('onlineUsers', (user) => {
+      createListItem(user, 'users', 'online-user')
+    });
+    
+    socket.on('saveNickname', (randomNickname) => {
+      sessionStorage.setItem('nickname', randomNickname);
+    });
+    
     socket.on('updateNickname', ({ previousNickname, atual }) => {
-      console.log(previousNickname, atual);
       const previousNicknameUser = document.getElementById(`${previousNickname}`);
-      console.log(previousNicknameUser);
       previousNicknameUser.id = atual;
       previousNicknameUser.innerText = atual;
     });
@@ -37,36 +52,8 @@
       usersList.removeChild(disconnectedUser)
     });
 
-    socket.on('onlineUsers', (user) => {
-      const li = document.createElement('li');
-        li.append(user);
-        li.id = user
-        li.setAttribute("data-testid", "online-user");
-        document.getElementById('users').appendChild(li);
-    });
-
-    socket.on('saveNickname', (randomNickname) => {
-      sessionStorage.setItem('nickname', randomNickname);
-    });
-
-    socket.on('generateNickname', (randomNickname) => {
-
-      const liUser = document.createTextNode(randomNickname);
-      const li = document.createElement('li');
-      li.append(liUser);
-      li.id = randomNickname
-      /*SOURCE https://developer.mozilla.org/pt-BR/docs/Web/API/Element/setAttribute*/
-      li.setAttribute("data-testid", "online-user");
-      document.getElementById('users').appendChild(li);
-    });
-
     socket.on('message', (message) => {
-      const li = document.createElement('li');
-      const liText = document.createTextNode(message)
-      li.append(liText);
-      /*SOURCE https://developer.mozilla.org/pt-BR/docs/Web/API/Element/setAttribute*/
-      li.setAttribute("data-testid", "message");
-      document.getElementById('messages').appendChild(li);
+      createListItem(message, 'messages', 'message')
     });
 
     const nicknameBtn = document.querySelector('#nicknameBtn');
