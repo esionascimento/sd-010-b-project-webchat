@@ -84,8 +84,9 @@
       return false;
     });
 
+    const messagesUl = document.querySelector('#messages');
+
     const createMessage = (message) => {
-      const messagesUl = document.querySelector('#messages');
       const li = document.createElement('li');
       li.innerText = message;
       li.setAttribute('data-testid', 'message');
@@ -93,6 +94,17 @@
     };
 
     socket.on('message', (message) => createMessage(message));
+
+    socket.on('history', (listMessages) => {
+      messagesUl.innerHTML = '';
+      listMessages.forEach((message) => {
+        const newMess = `${message.time} - ${message.apelido}: ${message.mensagem}`
+        const li = document.createElement('li');
+        li.innerText = newMess;
+        li.setAttribute('data-testid', 'message');
+        messagesUl.appendChild(li);
+      })
+    })
   </script>
 </body>
 
