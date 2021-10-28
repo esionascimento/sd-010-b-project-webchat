@@ -15,7 +15,9 @@ const changeNicknames = (oldNick, newNick, io, socket) => {
       return { nickname, id };
   });
   const onlyNicknames = nicknames.map(({ nickname: nick }) => nick);
+  // console.log(onlyNicknames, 'dale', nicknames);
   io.emit('updateNicknames', onlyNicknames);
+  io.emit('message', `${oldNick} alterou seu nick para ${newNick}`);
 };
 
 const sendMsg = (chatMessage, nickname, io) => {
@@ -34,9 +36,9 @@ module.exports = (io) => io.on('connection', (socket) => {
 
     socket.emit('userConnect', username);
 
-    socket.emit('serverMessage', `Bem vindo ${username} ao chat`);
+    socket.emit('message', `Bem vindo ao chat ${username}`);
 
-    socket.broadcast.emit('serverMessage', `${username} acabou de entrar na sala`);
+    socket.broadcast.emit('message', `${username} acabou de entrar na sala`);
   });
 
   socket.on('changeNicknames', 
