@@ -18,12 +18,12 @@ const generateNickName = () => {
   return newNickName;
 };
 
-window.onload = function setNickname() {
+function setNickname() {
   const nickNameP = document.getElementById('nickname');
   const newNickName = generateNickName();
   sessionStorage.setItem('nickname', newNickName);
   nickNameP.innerText = newNickName;
-};
+}
 
 nicknameForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -49,6 +49,12 @@ const createMessage = (message) => {
   li.setAttribute('data-testid', 'message');
   messagesUl.appendChild(li);
 };
+
+socket.on('connect', () => {
+  setNickname();
+  const nickname = sessionStorage.getItem('nickname');
+  socket.emit('nickname', { nickname });
+});
 
 socket.on('message', (message) => createMessage(message));
 socket.on('messagesList', (messagesList) => {
