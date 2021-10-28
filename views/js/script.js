@@ -9,6 +9,7 @@ let nickname = Math.random().toString(16)
   const inputNickname = document.getElementById('input-nickname');
   const btn2 = document.getElementById('enviar-btn2');
   userOn.innerText = nickname;
+  const DATAID = 'data-testid';
 
 btn1.addEventListener('click', (e) => {
 e.preventDefault();
@@ -27,11 +28,11 @@ inputNickname.value = '';
 socket.emit('userOn', { nickname });
 });
 
-socket.on('message', (message) => {
-const liItem = document.createElement('li');
-liItem.setAttribute('data-testid', 'message');
-liItem.innerText = message;
-ul.appendChild(liItem);
+socket.on('message', (sms) => {
+  const liItem = document.createElement('li');
+  liItem.setAttribute(DATAID, 'message');
+  liItem.innerText = sms;
+  ul.appendChild(liItem);
 });
 
 socket.emit('userOn', { nickname });
@@ -40,10 +41,18 @@ socket.on('userOn', (allUsers) => {
   userOn.innerHTML = '';
   allUsers.forEach(({ nickname: nick, id }) => {
     const liUser = document.createElement('li');
-    liUser.setAttribute('data-testid', 'online-user');
+    liUser.setAttribute(DATAID, 'online-user');
     liUser.innerText = nick;
     if (id === socket.id) { userOn.prepend(liUser); } else userOn.appendChild(liUser);
   });
 });
 
-// socket.on('newNick');
+socket.on('messageAll', (allMessages) => {
+  console.log(allMessages);
+  allMessages.forEach(({ timestamp, message, nickname: apelido }) => {
+    const oldItem = document.createElement('li');
+    oldItem.setAttribute(DATAID, 'message');
+    oldItem.innerText = `${timestamp} - ${apelido} ${message}`;
+    ul.appendChild(oldItem);
+  });
+});

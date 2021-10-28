@@ -16,6 +16,8 @@ const io = require('socket.io')(http, {
   },
 });
 
+const { createMessage, getAllMessages } = require('./controllers/chatController');
+
 app.use(express.static(`${__dirname}/views`));
 
 app.get('/', (req, res) => {
@@ -24,24 +26,22 @@ app.get('/', (req, res) => {
 
 let allUsers = []; 
 
-io.on('connection', (socket) => {
-  socket.on('userOn', ({ nickname }) => { 
+io.on('connection', async (socket) => {
+  socket.on('userOn', async ({ nickname }) => { 
     allUsers = allUsers.filter(({ id }) => id !== socket.id);
     allUsers.push({ nickname, id: socket.id }); io.emit('userOn', allUsers);
     return allUsers;
   });
 
-  socket.on('message', (message) => {
+  socket.on('message', async (message) => {
     const { chatMessage, nickname } = message;
     const dateNow = new Date().toLocaleString().replace(/\//g, '-');
+    createMessage({ dateNow, nickname, chatMessage });
     io.emit('message', `${dateNow} - ${nickname} ${chatMessage}`);
   });
-
-// socket.on('newNick', ({ nick }) => {
-//   allUsers = allUsers.map((user) => {
-//  if (user.id === socket.id) { return { nick, id: socket.id }; } return user; 
-// });
-// });
+  
+  const getAllMessage = await getAllMessages();
+  socket.emit('messageAll', getAllMessage);
 
   socket.on('disconnect', () => {
   allUsers = allUsers.filter(({ id }) => id !== socket.id);
