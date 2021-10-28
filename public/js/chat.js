@@ -1,5 +1,7 @@
 const socket = window.io();
 
+const DATA_TEST_ID = 'data-testid';
+
 const messageForm = document.getElementById('message-form');
 const inputMessage = document.querySelector('#message-input');
 const nicknameForm = document.getElementById('nickname-form');
@@ -19,17 +21,13 @@ const generateNickName = () => {
 };
 
 function setNickname() {
-  const nickNameP = document.getElementById('nickname');
   const newNickName = generateNickName();
   sessionStorage.setItem('nickname', newNickName);
-  nickNameP.innerText = newNickName;
 }
 
 nicknameForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  const nickNameP = document.getElementById('nickname');
   sessionStorage.setItem('nickname', nicknameInput.value);
-  nickNameP.innerText = nicknameInput.value;
   socket.emit('nickname', { nickname: nicknameInput.value });
   nicknameInput.value = '';
   return false;
@@ -47,14 +45,33 @@ const createMessage = (message) => {
   const messagesUl = document.querySelector('#messages');
   const li = document.createElement('li');
   li.innerText = message;
-  li.setAttribute('data-testid', 'message');
+  li.setAttribute(DATA_TEST_ID, 'message');
   messagesUl.appendChild(li);
 };
+
+const renderOnlineUsers = (onlineUsers) => {
+  console.log(onlineUsers);
+  const onlineUsersUl = document.getElementById('online-users-list');
+  const thisUserNickName = sessionStorage.getItem('nickname');
+  const thisUserNickNameLi = document.createElement('li');
+  thisUserNickNameLi.setAttribute(DATA_TEST_ID, 'online-user');
+  thisUserNickNameLi.innerText = thisUserNickName;
+  onlineUsersUl.appendChild(thisUserNickNameLi);
+  onlineUsers.forEach((user) => {
+    const userLi = document.createElement('li');
+    userLi.setAttribute(DATA_TEST_ID, 'online-user');
+    userLi.innerText = user;
+    onlineUsersUl.appendChild(userLi);
+  });
+};
+
+socket.on('onlineUsers', (onlineUsers) => renderOnlineUsers(onlineUsers));
 
 socket.on('connect', () => {
   setNickname();
   const nickname = sessionStorage.getItem('nickname');
-  socket.emit('nickname', { nickname });
+  console.log(nickname);
+  socket.emit('newUserNickname', nickname);
 });
 
 socket.on('message', (message) => createMessage(message));
