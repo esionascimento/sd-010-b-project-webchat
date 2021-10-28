@@ -28,7 +28,7 @@ let conectedUsers = [];
 
 io.on('connection', async (socket) => {
   const arrayMessages = await messagesController.getAllMesssages();
-  io.emit('allMessages', arrayMessages); io.emit('idConnect', socket.id);
+  io.emit('allMessages', arrayMessages);
   socket.on('message', async (payload) => {
     const { chatMessage, nickname } = payload;
     const dateAndHour = new Date().toLocaleString().replace(/\//g, '-');
