@@ -1,16 +1,33 @@
-const getDate = () => {
+const transformDate = (num) => {
+  if (num < 10) {
+    return `0${num}`;
+  }
+  return num;
+};
+const verifyDate = () => {
   const date = new Date();
-  const currentDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-  let currentTime = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} AM`;
-  if (date.getHours() > 12) {
-    currentTime = `${date.getHours() - 12}:${date.getMinutes()}:${date.getSeconds()} PM`;
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  let hours = date.getHours();
+  const minutes = transformDate(date.getMinutes());
+  const secconds = transformDate(date.getSeconds());
+  let amOrPm = 'AM';
+  if (hours > 12) {
+    hours -= 12;
+    hours = `0${hours}`;
+    amOrPm = 'PM';
   }
-  if (date.getMinutes() < 10) {
-    currentTime = `${date.getHours() - 12}:0${date.getMinutes()}:${date.getSeconds()} PM`;
-  }
-  if (date.getSeconds() < 10) {
-    currentTime = `${date.getHours() - 12}:${date.getMinutes()}:0${date.getSeconds()} PM`;
-  }
+  console.log(day, month, year, hours, minutes, secconds, amOrPm);
+
+  return { day, month, year, hours, minutes, secconds, amOrPm };
+};
+const getDate = () => {
+  const { day, month, year, hours, minutes, secconds, amOrPm } = verifyDate();
+  const currentDate = `${day}-${month + 1}-${year}`;
+  const currentTime = `${hours}:${minutes}:${secconds} ${amOrPm}`;
+
   return `${currentDate} ${currentTime}`;
 };
+
 module.exports = { getDate };

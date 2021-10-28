@@ -1,0 +1,11 @@
+#container-messages {
+  border: solid 1px black;
+  padding: 50px;
+  width: auto;
+}
+#container-users {
+  border: solid 1px black;
+  padding: 50px;
+  height: auto;
+  width: 300px;
+}

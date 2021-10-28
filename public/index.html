@@ -2,45 +2,94 @@
 <html>
   <head>
     <title>Chat</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <form id="form-chat">
-      <input name="username" id="input-username" type="text" />
+      <input
+        name="username"
+        id="input-username"
+        type="text"
+        data-testid="nickname-box"
+        placeholder="Insira seu nickname"
+        autocomplete="off"
+      />
+      <button id="user-button" data-testid="nickname-button">Salvar</button>
+      <div id="container-users"></div>
+      <input
+        name="message"
+        id="input-message"
+        type="text"
+        data-testid="message-box"
+        placeholder="Digite uma nova mensagem aqui"
+        autocomplete="off"
+      />
+      <button id="message-button" data-testid="send-button">Enviar</button>
       <div id="container-messages"></div>
-      <input name="message" id="input-message" type="text" />
-      <button id="send-button">Enviar</button>
     </form>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
+      let currentUser = '';
 
-      const form = document.getElementById('form-chat');
+      window.onload = () => {
+        // Função pega no link https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid
+        let randomUser = (
+          Math.random().toString(36).substring(2, 15) +
+          Math.random().toString(36).substring(2, 15)
+        ).substring(0, 16);
+        currentUser = randomUser;
+        socket.emit('newUser', randomUser);
+      };
+
+      const messageButton = document.getElementById('message-button');
       const inputUsername = document.getElementById('input-username');
       const inputMessage = document.getElementById('input-message');
       const containerMessages = document.getElementById('container-messages');
+      const containerUsers = document.getElementById('container-users');
+      const buttonUser = document.getElementById('user-button');
+
+      socket.on('loggedUsers', (allUsers) => {
+        for (child of containerUsers.children) {
+          child.remove();
+        }
+        allUsers.forEach((user) => {
+          const newUser = document.createElement('div');
+          const attribute = 'data-testid';
+          newUser.setAttribute(attribute, 'online-user');
+          newUser.classList.add('user');
+          newUser.textContent = user.username;
+          containerUsers.appendChild(newUser);
+        });
+      });
 
       const renderMessage = (message) => {
         const newMessage = document.createElement('div');
+        const attribute = 'data-testid';
+        newMessage.setAttribute(attribute, 'message');
         newMessage.textContent = message;
         containerMessages.appendChild(newMessage);
       };
-
-      form.addEventListener('submit', (event) => {
+      messageButton.addEventListener('click', (event) => {
         event.preventDefault();
-        if (inputUsername.value && inputUsername.value) {
+        if (inputMessage.value) {
           const message = {
             chatMessage: inputMessage.value,
-            nickname: inputUsername.value,
+            nickname: currentUser,
           };
           socket.emit('message', message);
-          inputUsername.value = '';
           inputMessage.value = '';
         }
       });
 
       socket.on('message', (message) => {
         renderMessage(message);
+      });
+      buttonUser.addEventListener('click', (event) => {
+        event.preventDefault();
+        currentUser = inputUsername.value;
+        socket.emit('changeUser', currentUser);
       });
     </script>
   </body>

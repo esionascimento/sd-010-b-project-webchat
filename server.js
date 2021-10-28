@@ -16,27 +16,16 @@ const io = require('socket.io')(http, {
     methods: ['GET', 'POST'],
   },
 });
-const { getDate } = require('./utils/chatFuctions');
 
-/* require('./sockets/chat')(io); */
+app.set('view engine', 'ejs');
+app.set('views', './views');
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.set('views', path.join(__dirname, 'public'));
-app.engine('html', require('ejs').renderFile);
 
-app.set('view engine', 'html');
+require('./socket/chatSocket')(io);
 
 app.get('/', (_req, res) => {
   res.render('index.html');
-});
-
-io.on('connection', (socket) => {
-  console.log(`Novo usuário conectado: ${socket.id}`);
-  socket.on('message', (message) => {
-    const date = getDate();
-    const newMessage = `${date} - ${message.nickname}: ${message.chatMessage}`;
-    io.emit('message', newMessage);
-  });
 });
 
 http.listen(port, () => console.log(`Example app listening on ${port}!`));
