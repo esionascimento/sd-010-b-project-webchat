@@ -18,6 +18,15 @@ body {
   right: 0;
 }
 
+.form-nick {
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  display: flex;
+  height: 2.5rem;
+  padding: 0.25rem;
+}
+
 .input {
   border: none;
   border-radius: 2rem;
@@ -26,11 +35,18 @@ body {
   padding: 0 1rem;
 }
 
-.input:focus {
+.input-nickname {
+  border: none;
+  border-radius: 2rem;
+  margin: 0.25rem;
+  padding: 0 1rem;
+}
+
+.input:focus , .input-nickname:focus {
   outline: none;
 }
 
-.form > button {
+.form > button , .form-nick > button {
   background: #333;
   border: none;
   border-radius: 3px;
