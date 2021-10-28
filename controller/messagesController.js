@@ -6,7 +6,9 @@ const getAllMesssages = async () => {
 };
 
 const creatMessage = async (params) => {
-  await messagesModel.creatMessage(params);
+  const { dateAndHour: timestamp, nickname, chatMessage: message } = params;
+  const objMessage = { timestamp, nickname, message };
+  await messagesModel.creatMessage(objMessage);
 };
 
 module.exports = {

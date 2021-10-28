@@ -7,6 +7,7 @@ let nickName = randonNumbers;
 let oldNick = '';
 let conectUsers = [];
 conectUsers.push(nickName);
+const DATA_TESTID = 'data-testid';
 
 const inputMessage = document.getElementById('input-message');
 const sendButton = document.getElementById('button-message');
@@ -41,11 +42,22 @@ changeNickButton.addEventListener('click', (e) => {
   inputNick.value = '';
 });
 
-socket.on('message', (msg) => {
+function creatMessage(msg) {
   const li = document.createElement('li');
   li.innerHTML = msg;
-  li.setAttribute('data-testid', 'message');
+  li.setAttribute(DATA_TESTID, 'message');
   ul.appendChild(li);
+}
+
+socket.on('message', (msg) => {
+creatMessage(msg);
+});
+
+socket.on('allMessages', (arrayMessages) => {
+  console.log(arrayMessages);
+  arrayMessages.forEach((msg) => {
+    creatMessage(msg);
+  });
 });
 
 socket.on('allUsers', (allUsers) => {
@@ -55,7 +67,7 @@ socket.on('allUsers', (allUsers) => {
   [nickName, ...firstnick].filter((el) => el !== oldNick).forEach((element) => {
     const li = document.createElement('li');
     li.innerText = element;
-    li.setAttribute('data-testid', 'online-user');
+    li.setAttribute(DATA_TESTID, 'online-user');
     ulUserConect.appendChild(li);
     });
   socket.emit('deleteUser', nickName);
