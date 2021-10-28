@@ -23,35 +23,36 @@ const createLiUser = (name, userUl) => {
   userUl.appendChild(li);
 };
 
-const createUserOn = (nickname) => {
+const createUserOn = (users) => {
   const userUl = document.querySelector('#userson');
-  console.log(`aqui${nickname}`);
+  console.log(`aqui${users}`);
   const listLi = [...document.querySelectorAll('#nickname')];
   console.log(listLi);
   const textArray = listLi.map((element) => element.innerText);
+  console.log(textArray);
   const li = document.createElement('li');
-  li.innerText = nickname[nickname.length - 1];
+  const name1 = users[users.length - 1];
+  li.innerText = name1.nickname;
   li.id = 'nickname';
   li.setAttribute('data-testid', 'online-user');
   userUl.appendChild(li);
-  nickname.forEach((name, index) => {
-    if (index < (nickname.length - 1) && !textArray.includes(name)) {
-      createLiUser(name, userUl);
+  users.forEach((name, index) => {
+    if (index < (users.length - 1) && !textArray.includes(name.nickname)) {
+      createLiUser(name.nickname, userUl);
     }
   });
 };
 
-const updateUserOn = (changeUser) => {
-  // console.log(changeUser);
+const updateUserOn = (newName, pastName) => {
+  console.log(newName, pastName);
   const list = document.querySelectorAll('#nickname');
-  // console.log(list);
+ 
   list.forEach((element) => {
     console.log(element.innerText); 
     const text = element.innerText;
-    if (text.includes(changeUser.elementName)) {
-      // console.log('aqui');
+    if (text.includes(pastName)) {
       const li = element;
-      li.innerText = changeUser.nickname;
+      li.innerText = newName;
     }
   });
 };
@@ -61,23 +62,22 @@ const updateUserOff = (name) => {
   const listUl = document.querySelector('#userson');
   const list = document.querySelectorAll('#nickname');
   console.log(list, name);
-  // list.forEach((element) => {
-  //   console.log(element.innerText); 
-  //   const text = element.innerText;
-  //   if (text.includes(name)) {
-  //     // console.log('aqui');
-  //   }
-  // });
-  listUl.removeChild(list[1]);
+  list.forEach((element) => {
+    console.log(element.innerText); 
+    const text = element.innerText;
+    if (text.includes(name)) {
+      listUl.removeChild(list[1]);
+    }
+  });
 };
 
 window.onload = () => {
   socket.emit('userOn', makeid(16)); 
 };
 
-// window.onbeforeunload = () => {
-//   socket.disconnect();
-// };
+window.onbeforeunload = () => {
+  socket.disconnect();
+};
 
 formMessage.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -97,8 +97,8 @@ formMessage.addEventListener('submit', async (e) => {
 
 formNickName.addEventListener('submit', (e) => {
   e.preventDefault();
-  const li = document.querySelectorAll('#nickname');
-  socket.emit('updateUserOn', { nickname: inputNickName.value, elementName: li[0].innerText });
+  console.log(inputNickName.value);
+  socket.emit('updateUserOn', inputNickName.value);
 });
 
 const createMessage = (message) => {
@@ -113,5 +113,5 @@ const createMessage = (message) => {
 
 socket.on('message', (message) => createMessage(message));
 socket.on('userOn', (nickname) => createUserOn(nickname));
-socket.on('updateUserOn', (changeUser) => updateUserOn(changeUser));
+socket.on('updateUserOn', (changeUser) => updateUserOn(changeUser.newName, changeUser.pastName));
 socket.on('userOff', (name) => updateUserOff(name));
