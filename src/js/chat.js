@@ -5,33 +5,41 @@ const sendNickname = document.querySelector('.send_nickname');
 const inputMsg = document.querySelector('.messages__item');
 const sendMsg = document.querySelector('.send_message');
 
-function createMsg(element, msg, elementTest) {
-  const ul = document.querySelector(element);
-  const li = document.createElement('li');
-  
-  li.setAttribute('data-testid', elementTest);
-  li.innerText = msg;
-  ul.appendChild(li);
-}
-
-const newUser = Math.random().toString(16).substr(2, 8) + Math.random().toString(16).substr(2, 8);
+const generateNewUser = Math.random()
+  .toString(16)
+  .substr(2, 8) + Math
+  .random()
+  .toString(16)
+  .substr(2, 8);
 
 window.onload = () => {
-  createMsg('.nicknames', newUser, 'online-user');
-  sessionStorage.setItem('user', newUser);
+  socket.emit('usersOnline', generateNewUser);
 };
 
-window.onbeforeunload = () => {
-  socket.disconnect();
-};
+socket.on('usersOnline', (usersOnline) => {
+  const ulNicknames = document.querySelector('.nicknames');
+  ulNicknames.innerText = '';
+
+  usersOnline.forEach(([nickname, socketID]) => {
+    const li = document.createElement('li');
+    li.innerText = nickname;
+    li.setAttribute('data-testid', 'online-user');
+    
+    if (socketID === socket.id) {
+      ulNicknames.prepend(li);
+    } else {
+      ulNicknames.appendChild(li);
+    }
+  });
+});
 
 sendNickname.addEventListener('click', (e) => {
   e.preventDefault();
 
   const nickname = inputNickmame.value;
   sessionStorage.setItem('user', nickname);
-
-  createMsg('.nicknames', nickname, 'online-user');
+  
+  socket.emit('changeNickname', nickname);
 
   inputNickmame.value = '';
 
@@ -49,4 +57,11 @@ sendMsg.addEventListener('click', (e) => {
   return false;
 });
 
-socket.on('message', (msg) => createMsg('.messages', msg, 'message'));
+socket.on('message', (msg) => {
+  const ul = document.querySelector('.messages');
+  const li = document.createElement('li');
+  
+  li.setAttribute('data-testid', 'message');
+  li.innerText = msg;
+  ul.appendChild(li);
+});
