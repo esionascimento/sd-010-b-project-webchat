@@ -30,6 +30,7 @@ nicknameForm.addEventListener('submit', (e) => {
   const nickNameP = document.getElementById('nickname');
   sessionStorage.setItem('nickname', nicknameInput.value);
   nickNameP.innerText = nicknameInput.value;
+  socket.emit('nickname', { nickname: nicknameInput.value });
   nicknameInput.value = '';
   return false;
 });
