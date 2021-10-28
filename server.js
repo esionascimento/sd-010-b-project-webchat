@@ -36,6 +36,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('initialNick', (nickRender) => {
+      console.log(socket.id);
       io.emit('initialNick', nickRender); 
     });
 });

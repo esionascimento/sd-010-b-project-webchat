@@ -75,11 +75,13 @@
         const inputMessage = document.querySelector('#messageInput');
         const formNickname = document.querySelector('#form_nickname');
         const inputNick = document.querySelector('#nicknameInput');
-     
+        let userId;
+
         formNickname.addEventListener('submit', (e) => {
           e.preventDefault();
           const saveNick = sessionStorage.setItem('nickname', inputNick.value);
-          socket.emit('initialNick', createInitialNick());         
+          createInitialNick()
+          socket.emit('initialNick', notRepeatUser());         
           inputNick.value = '';
           return false;
         });
@@ -118,20 +120,53 @@
         socket.on('message', (message) => createMessage(message));
 
         socket.on('initialNick', (msg) => {
+         /*  userId = msg.id; */
           const nickStorage = sessionStorage.getItem('nickname');
           const ulNick = document.querySelector('#nickname');
           const liNick = document.createElement('li');
+          /* liNick.setAttribute('id', `${msg.id}`); */
           liNick.setAttribute("data-testid", "online-user"); 
           liNick.innerText = `${nickStorage}`;
           ulNick.appendChild(liNick); 
         });
 
+        // Tive ajuda de Lucas lotar e Rafael Mathias
         const createInitialNick = () => {
           const randomUser = generateNickName(16);
           const user = inputNick.value ? inputNick.value : randomUser;
           sessionStorage.setItem('nickname', user); 
           return user;
         }
+
+        const notRepeatUser = () => {
+          const oldLi = document.querySelector('li[data-testid="online-user"]');
+          const ulNick = document.querySelector('#nickname');
+
+          const newLi = document.createElement('li');
+          newLi.innerHTML = createInitialNick();
+          
+          newLi.setAttribute('data-testid', 'online-user')
+          ulNick.replaceChild(newLi, oldLi);
+
+          const removeEmpty = querySelectorAll('li[data-testid="online-user"]')
+          removeEmpty.forEach((li) => {
+            if (li.innerHTML === '') return ulNick.removeChild(li);
+          })
+        } 
+
+       /*  const notRepeatUser = ( id ) => {
+          const oldLi = document.querySelector('li[data-testid="online-user"]');
+          const newLi = document.createElement('li');
+          const ulNick = document.querySelector('#nickname');
+
+          newLi.setAttribute('id', `${id}`); 
+          newLi.setAttribute("data-testid", "online-user"); 
+
+          newLi.innerText = createInitialNick();
+          
+          ulNick.replaceChild(newLi, oldLi);
+
+        }   */
 
         socket.emit('initialNick', createInitialNick());
 
