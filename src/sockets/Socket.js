@@ -24,6 +24,7 @@ class Socket {
       await this.showSavedMessages(socket);
       socket.on('disconnect', () => {
         this.userList.remove(socket.id);
+        socket.broadcast.emit('newConnection', this.userList.getUsers());
       });
   }
 
@@ -39,18 +40,24 @@ class Socket {
   }
 
   updateNickname(socket) {
-    socket.on('updateNickname', (newNickname) => {
-      if (newNickname) {
-        const updatedUser = this.userList.update(socket.id, newNickname);
-        this.io.emit('updateNickname', this.userList.getUsers(), updatedUser);
-      }
+    socket.on('triggerUpdate', (newNickname) => {
+      this.userList.update(socket.id, newNickname);
+      this.io.emit('updateUserIncoming');
+    });
+    socket.on('updateUserIncoming', () => {
+        socket.emit('updateNickname', 
+         this.userList.getUsers(),
+         this.userList.getUser(socket.id));
     });
   }
 
   newUserConnected(socket) {
     const user = new User(Nickname.createRandomNickname(), socket.id);
     this.userList.add(user);
-    this.io.emit('newConnection', this.userList.getUsers(), user);
+    this.io.emit('newUserJoined');
+    socket.on('newConnection', () => {
+      socket.emit('newConnection', this.userList.getUsers(), user);
+    });  
   }
 
   async showSavedMessages(socket) {

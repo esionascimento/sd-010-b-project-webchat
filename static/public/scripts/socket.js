@@ -8,6 +8,16 @@ const nickNameInput = document.getElementById('nickname');
 
 let currentUser;
 
+const sortUserList = (users) => {
+  const index = users.findIndex((user) => user.userId === currentUser.userId);
+  users.splice(index, 1);
+  return [currentUser, ...users];
+};
+
+const changeCurrentNickName = (newNickName) => {
+  userList.firstChild.innerHTML = newNickName;
+};
+
 const insertElement = ({ el, type, content, id, cl, dt }) => {
   const newElement = document.createElement(type);
   newElement.textContent = content;
@@ -19,19 +29,26 @@ const insertElement = ({ el, type, content, id, cl, dt }) => {
 };
 
 const renderUsers = (users, user) => {
-  currentUser = user;
+  if (user) { currentUser = user; }
+  const sortedList = sortUserList(users);
   userList.innerHTML = '';
-  users.forEach(({ userId, nickName }) => {
-    const el = {
-      el: userList,
-      type: 'li',
-      content: nickName,
-      id: userId,
-      dt: 'online-user',
-    };
-  insertElement(el);
+  sortedList.forEach((cUser) => {
+    if (cUser) {
+      const { userId } = cUser;
+      const { nickName } = cUser;
+      const el = {
+        el: userList,
+        type: 'li',
+        content: nickName,
+        id: userId,
+        dt: 'online-user',
+      };
+    
+    insertElement(el);
+    }
   });
 };
+
 const renderMessage = (msg) => {
   const el = {
     el: messageList,
@@ -58,16 +75,20 @@ const sendMessage = (e) => {
   socket.emit('message', payload);
   sendTextInput.value = '';
 };
+
 const changeNickname = (e) => {
   e.preventDefault();
   const newNickname = nickNameInput.value;
-  socket.emit('updateNickname', newNickname);
+  changeCurrentNickName(newNickname);
+  socket.emit('triggerUpdate', newNickname);
   nickNameInput.value = '';
 };
 
 sendMessageButton.addEventListener('click', sendMessage);
 changeNicknameButton.addEventListener('click', changeNickname);
 
+socket.on('newUserJoined', () => socket.emit('newConnection'));
+socket.on('updateUserIncoming', () => socket.emit('updateUserIncoming'));
 socket.on('newConnection', (users, user) => renderUsers(users, user));
 socket.on('message', (msg) => renderMessage(msg));
 socket.on('updateNickname', (users, user) => renderUsers(users, user));
