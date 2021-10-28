@@ -3,19 +3,20 @@
 
 <head>
   <title>Project WebChat</title>
-  <link rel="stylesheet" href="../public/style.css" />
 </head>
 
 <body>
   <div>
-    <span data-testid="online-user" id="user"></span>
+    <span id="user"></span>
   </div>
   <div>
       <input id="nameInput" data-testid="nickname-box" />
       <button  id="saveName" data-testid="nickname-button">Save</button>
   </div> 
-  
-  <ul id="listUsers" style="list-style-type: none"></ul>
+
+  <div>
+    <ul id="listUsers"></ul>
+  </div>
 
   <ul id="messages"></ul>
   <form>
@@ -26,7 +27,6 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     let nickname = '';
-    let listUsers = [];
     const socket = window.io();
 
     const nameUser = document.querySelector('#user');
