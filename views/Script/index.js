@@ -69,7 +69,6 @@ socket.on('allUsers', (allUsers) => {
     li.setAttribute('data-testid', 'online-user');
     ulUserConect.appendChild(li);
     });
-  socket.emit('deleteUser', nickName);
 });
 
 window.onload = () => {
