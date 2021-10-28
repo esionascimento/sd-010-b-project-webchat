@@ -16,7 +16,8 @@ const io = require('socket.io')(httpServer, {
   },
 });
 
-require('./sockets/chat')(io);
+require('./sockets/userLogger')(io);
+require('./sockets/message')(io);
 
 app.get('/', (_req, res) => {
   res.sendFile(`${__dirname}/views/index.html`);
