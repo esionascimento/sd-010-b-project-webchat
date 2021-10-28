@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const http = require('http').createServer(app);
 
+const PORT = process.env.PORT || 3000;
+
 const io = require('socket.io')(http, {
   cors: {
     origin: 'http://localhost:3000', // url aceita pelo cors
@@ -26,6 +28,6 @@ app.set('views', './views');
 app.get('/', chatController.getMessages);
 
 // a porta precisa ser escutada constantemente para identificar uma requisição
-http.listen(3000, () => {
-  console.log('Servidor ouvindo na porta 3000');
+http.listen(PORT, () => {
+  console.log(`Servidor ouvindo na porta ${PORT}`);
 });
