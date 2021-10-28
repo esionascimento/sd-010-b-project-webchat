@@ -16,6 +16,8 @@ const io = require('socket.io')(socketIoServer, {
   },
 });
 
+const { getDate } = require('./utils/getDate');
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -35,11 +37,14 @@ const dataDb = { messages: ['09-10-2020 2:35:09 PM - Joel: Olá meu caros amigos
 users: ['Joel', 'Paulin', 'DEUS'] };
 
 io.on('connection', (socket) => {
-  console.log(`${socket.id} conectado`);
+  // console.log(`${socket.id} conectado`);
   socket.on('message', (data) => {
     const { chatMessage, nickname } = data;
-    dataDb.messages.push(chatMessage);
-    io.emit('message', { chatMessage, nickname });
+    const completeMessage = `${getDate()} - ${nickname}: ${chatMessage}`;
+    dataDb.messages.push(completeMessage);
+    const datetime = new Date();
+    console.log(datetime.toISOString().slice(0, 10));
+    io.emit('message', completeMessage);
   });
 });
 
@@ -49,16 +54,16 @@ io.on('connection', (socket) => {
 
 app.get('/', (req, res) => res.status(200).render('chat', { dataDb }));
 
-app.post('/', (req, res) => {
-  const { message } = req.body;
-  if (!message) {
-    return res.status(422).json({ message: 'Missing title or message' });
-  }
-  // dataDb.messages.push(message);
-  console.log(message);
-  // io.emit('message', { message });
-  return res.status(200).json({ message: 'Message sent' });
-});
+// app.post('/', (req, res) => {
+//   const { chatMessage } = req.body;
+//   if (!chatMessage) {
+//     return res.status(422).json({ message: 'Missing title or message' });
+//   }
+//   // dataDb.messages.push(message);
+//   console.log('chatMessage');
+//   // io.emit('message', { message });
+//   return res.status(200).json({ message: 'Message sent' });
+// });
 
 socketIoServer.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
