@@ -27,8 +27,9 @@ app.use(express.static(`${__dirname}/views`));
 let conectedUsers = [];
 
 io.on('connection', async (socket) => {
-  const arrayMessages = await messagesController.getAllMesssages();
-  io.emit('allMessages', arrayMessages);
+  // const arrayMessages = await messagesController.getAllMesssages();
+  // console.log(arrayMessages);
+ // io.emit('allMessages', arrayMessages);
   socket.on('message', async (payload) => {
     const { chatMessage, nickname } = payload;
     const dateAndHour = new Date().toLocaleString().replace(/\//g, '-');

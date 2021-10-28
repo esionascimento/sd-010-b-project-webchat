@@ -31,11 +31,8 @@ function userOnline() {
   socket.emit('UserOnline', [conectUsers, oldNick]);
 }
 
-window.onload = () => {
-  userOnline();
-};
-changeNickButton.addEventListener('click', (e) => {
-  e.preventDefault();
+  changeNickButton.addEventListener('click', (e) => {
+    e.preventDefault();
   oldNick = nickName;
   conectUsers = conectUsers.filter((element) => element !== nickName);
   const newNick = inputNick.value;
@@ -68,3 +65,6 @@ socket.on('allUsers', (allUsers) => {
     ulUserConect.appendChild(li);
     });
 });
+window.onload = () => {
+  userOnline();
+};
