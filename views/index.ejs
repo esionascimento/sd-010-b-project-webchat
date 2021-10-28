@@ -42,6 +42,16 @@
 
     socket.on('userConn', (usersList) => {
       usersConnect.innerHTML = '';
+      usersList.forEach((user, index) => {        
+        if (user.name === nickname) {
+          const li = document.createElement('li')
+          li.innerText = user.name;
+          li.setAttribute('data-testid', 'online-user');
+          usersConnect.appendChild(li);
+
+          usersList.splice(index, 1);
+        }
+      })
       usersList.forEach((user) => {
         const li = document.createElement('li')
         li.innerText = user.name;
@@ -49,13 +59,6 @@
         usersConnect.appendChild(li)
       })
     })
-
-    //   console.log(user)
-    //   const li = document.createElement('li')
-    //   li.innerText = user;
-    //   li.setAttribute('data-testid', 'online-user');
-    //   usersList.appendChild(li)
-    // })  
     
     // socket.on('conn', (socketId) => {      
     //   nickname = socketId.slice(0, 16);
@@ -70,6 +73,7 @@
       const inputName = document.querySelector('#nameInput');
       nickname = inputName.value;
       nameUser.innerText = nickname;
+      socket.emit('userConn', nickname)
     })
 
     form.addEventListener('submit', (e) => {
