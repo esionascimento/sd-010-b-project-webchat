@@ -5,12 +5,16 @@
     <link rel="stylesheet" href="./css/chat.css">
   </head>
   <body>
-    <ul id="messages"></ul>
+    <ul id="messages">
+      <% messages.forEach((mess) => { %>
+        <li><%= `${mess.timestamp} - ${mess.nickname}: ${mess.message}` %></li>
+      <% }) %>
+    </ul>
     <p id="nickName" data-testid="online-user"></p>
     <div>
       <form id="formsMessage" action="">
-        <input type="chatMessage" data-testid="message-box" id="messageInput" autocomplete="off" />
-        <button data-testid="send-button">Send</button>
+        <input name="message" type="chatMessage" data-testid="message-box" id="messageInput" autocomplete="off" />
+        <button type="submit" data-testid="send-button">Send</button>
       </form>
       <form id="formsNickName" action="">
         <input id="nickInput" data-testid="nickname-box" autocomplete="off" />

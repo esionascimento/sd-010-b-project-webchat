@@ -18,9 +18,17 @@ const nick = document.querySelector('#nickName');
 
 window.onload = () => { nick.innerText = makeid(16); };
 
-formMessage.addEventListener('submit', (e) => {
+formMessage.addEventListener('submit', async (e) => {
   e.preventDefault();
   socket.emit('message', { chatMessage: inputMessage.value, nickname: nick.innerText });
+  await fetch('http://localhost:3000', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ message: inputMessage.value, nickname: nick.innerText }),
+  });
   inputMessage.value = '';
   return false;
 });
