@@ -23,20 +23,17 @@
   <script>
     const socket = io();
 
-    const users = [];
-
-    const onlineUsers = (name) => {
-      users.forEach((user) => {
-        socket.emit('onlineUsers', user);
-      });
-    };
+    socket.on('offLineUser', (user) => {
+      const disconnectedUser = document.getElementById(`${user}`);
+      const usersList = document.querySelector('#users');
+      usersList.removeChild(disconnectedUser)
+    });
 
     socket.on('onlineUsers', (user) => {
       const li = document.createElement('li');
         li.append(user);
         li.setAttribute("data-testid", "online-user");
         document.getElementById('users').appendChild(li);
-        users.push(user);
     });
 
     socket.on('generateNickname', (randomNickname) => {
@@ -45,12 +42,10 @@
       const liUser = document.createTextNode(randomNickname);
       const li = document.createElement('li');
       li.append(liUser);
+      li.id = randomNickname
       /*SOURCE https://developer.mozilla.org/pt-BR/docs/Web/API/Element/setAttribute*/
       li.setAttribute("data-testid", "online-user");
       document.getElementById('users').appendChild(li);
-
-      if (users.length > 0) onlineUsers(randomNickname);
-      users.push(randomNickname);
     });
 
     socket.on('message', (message) => {
