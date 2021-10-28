@@ -45,27 +45,22 @@ const updateUserOff = (name) => {
   const listUl = document.querySelector('#messages');
   const list = document.querySelectorAll('#nickname');
   console.log(list, name);
-  list.forEach((element) => {
-    console.log(element.innerText); 
-    const text = element.innerText;
-    if (text.includes(name)) {
-      // console.log('aqui');
-     listUl.removeChild(element);
-    }
-  });
-  socket.disconnect();
+  // list.forEach((element) => {
+  //   console.log(element.innerText); 
+  //   const text = element.innerText;
+  //   if (text.includes(name)) {
+  //     // console.log('aqui');
+  //   }
+  // });
+  listUl.removeChild(list[1]);
 };
 
 window.onload = () => {
   socket.emit('userOn', makeid(16)); 
 };
 
-function saveFormData() {
-    console.log('saved');
-}
-window.beforeunload = () => {
-  saveFormData();
-    return null;
+window.onbeforeunload = () => {
+  socket.disconnect();
 };
 
 formMessage.addEventListener('submit', async (e) => {
