@@ -66,7 +66,7 @@ socket.on('allUsers', (allUsers) => {
   [nickName, ...firstnick].filter((el) => el !== oldNick).forEach((element) => {
     const li = document.createElement('li');
     li.innerText = element;
-    li.setAttribute(DATA_TESTID, 'online-user');
+    li.setAttribute('data-testid', 'online-user');
     ulUserConect.appendChild(li);
     });
   socket.emit('deleteUser', nickName);
