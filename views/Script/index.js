@@ -54,7 +54,6 @@ creatMessage(msg);
 });
 
 socket.on('allMessages', (arrayMessages) => {
-  console.log(arrayMessages);
   arrayMessages.forEach((msg) => {
     creatMessage(msg);
   });
