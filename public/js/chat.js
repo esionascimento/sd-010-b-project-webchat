@@ -16,13 +16,23 @@ let initialNickName = randomNickName;
 
 window.onload = () => {
   socket.emit('nickname', initialNickName);
+  sessionStorage.setItem('nickname', initialNickName);
 };
 
 // render nickname
 socket.on('nickname', (users) => {
   let nicks = '';
   const listUsers = document.getElementById('users');
-  users.forEach((user) => {       
+
+  const nicknameStorage = sessionStorage.getItem('nickname');
+
+  // const indexUsers = users.findIndex((user) => user === nicknameStorage);  
+
+  const newUsers = users.filter((user) => user !== nicknameStorage);
+
+  newUsers.unshift(nicknameStorage);
+
+  newUsers.forEach((user) => {       
     nicks += `<li data-testid="online-user">${user}</li>`;
   });
   listUsers.innerHTML = nicks;
@@ -54,6 +64,7 @@ formNickname.addEventListener('submit', (e) => {
     });
     initialNickName = inputNickname.value;
     randomNickName = inputNickname.value;
+    sessionStorage.setItem('nickname', initialNickName);
     inputNickname.value = '';  
   }
 });
