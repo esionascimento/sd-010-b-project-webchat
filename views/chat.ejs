@@ -18,7 +18,7 @@
   <h3>Usuários</h3>
   <h3>Mensagens</h3>
   <ul id="messages">
-    <%dataDb.messages.forEach((message)=>{%><li data-testid="message"><%= `${message.date} - ${message.nickname}: ${message.chatMessage}` %></li><%})%>
+    <%dataDb.forEach((message)=>{%><li data-testid="message"><%= `${message.timestamp} - ${message.nickname}: ${message.chatMessage}` %></li><%})%>
   </ul>
   <form id='newMessageForm'>
     <input type="text" placeholder="Digite uma nova mensagem aqui" id="newMessage" data-testid="message-box">
@@ -53,9 +53,9 @@
         text.value = '';
       });
 
-      const newMessageForm = document.getElementById('newMessageForm');
+    const newMessageForm = document.getElementById('newMessageForm');
       newMessageForm.addEventListener('submit', (e)=> e.preventDefault());
-      const nicknameForm = document.getElementById('nickname-form');
+    const nicknameForm = document.getElementById('nickname-form');
       nicknameForm.addEventListener('submit', (e)=> e.preventDefault());
 
     const nicknameButton = document.getElementById('nickname-button');

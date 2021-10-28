@@ -21,6 +21,7 @@ socketIoServer.listen(PORT, () => {
  });
 
 const { getDate } = require('./utils/getDate');
+const { getAllMessages, postMessage } = require('./controllers/messagesController');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -36,20 +37,22 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const dataDb = { messages: [] };
-
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   io.emit('setIdNickname');
-  socket.on('message', (data) => {
+  socket.on('message', async (data) => {
     const { chatMessage, nickname } = data;
-    const date = getDate();
-    dataDb.messages.push({ chatMessage, nickname, date });
-    const completeMessage = `${date} - ${nickname}: ${chatMessage}`;
+    const timestamp = getDate();
+    // dataDb.messages.push({ chatMessage, nickname, timestamp });
+    await postMessage({ chatMessage, nickname, timestamp });
+    const completeMessage = `${timestamp} - ${nickname}: ${chatMessage}`;
     io.emit('message', completeMessage);
   });
 });
 
-app.get('/', (req, res) => res.status(200).render('chat', { dataDb }));
+app.get('/', async (req, res) => { 
+  const dataDb = await getAllMessages();
+  await res.status(200).render('chat', { dataDb }); 
+});
 
 // app.post('/', (req, res) => {
 //   const { chatMessage } = req.body;
