@@ -19,7 +19,8 @@
     <ul id="messages"></ul>
     <form id="form" action="">
       <input id="nameUser" data-testid="nickname-box" >
-      <button data-testid="nickname-button">name</button>
+      <button data-testid="nickname-button" onclick="saveName()" >name</button>
+      <p data-testid="online-user" id="name"></p>
       <input id="input" autocomplete="off" data-testid="message-box" /><button data-testid="send-button">Send</button>
     </form>
 
@@ -28,6 +29,7 @@
     <script>
       let socket = io();
       let nameUser = document.getElementById('nameUser');
+      let name = document.getElementById('name');
       let messages = document.getElementById('messages');
       let form = document.getElementById('form');
       let input = document.getElementById('input');
@@ -35,15 +37,20 @@
       const generetName = () => {
         let text = "";
         let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        for (let i = 0; i < 18; i++)
+        for (let i = 0; i < 16; i++)
           text += possible.charAt(Math.floor(Math.random() * possible.length));
         return text;
       }
       const createName = () => {
         const newName = generetName();
         nameUser.value = newName;
+        name.innerText = newName;
       }
       createName();
+
+      const saveName = () => {
+        name.innerText = nameUser.value;
+      }
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
