@@ -41,13 +41,13 @@ const changeNickname = (socket, originalNickname, nickname) => {
   const index = users.indexOf(originalNickname);
   if (index >= 0) users[index] = nickname;
   if (index < 0) users.push(originalNickname);
-  return users;
 };
 
 const mapMessages = async () => {
   const objectMessages = await getAll();
-  return objectMessages.map((object) => `${object.timestamp
-    } - ${object.nickname}: ${object.message}`);
+  const messages = objectMessages.map((object) => `${object.nickname
+    } - ${object.timestamp}: ${object.message}`);
+  return messages;
 };
 
 io.on('connection', async (socket) => {
@@ -61,11 +61,15 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('changeNickname', ({ originalNickname, nickname }) => {
-    io.emit('changeNickname', changeNickname(socket, originalNickname, nickname));
+    changeNickname(socket, originalNickname, nickname);
+    io.emit('changeNickname', users);
   });
 
-  socket.on('disconnect', () => {
-    io.emit('changeNickname', removeUser(socket));
+  socket.on('disconnect', (reason) => {
+    console.log(reason);
+    if (reason === 'transport_error') console.log('Transport error');
+    removeUser(socket);
+    io.emit('changeNickname', users);
   });
 });
 
