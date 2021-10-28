@@ -1,41 +1,53 @@
 <!-- Chat Frontend source: https://socket.io/get-started/chat#serving-html -->
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Socket.IO chat</title>
-    <link rel="stylesheet" href="/views/style.css">
-  </head>
-  <body>
-    <ul class="messages"></ul>
-    <form class="form" action="">
-      <input class="input" autocomplete="off" /><button>Send</button>
-    </form>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-      const socket = io();
 
-      const form = document.querySelector('.form');
-      const input = document.querySelector('.input');
-      const messages = document.querySelector('.messages');
+<head>
+  <title>Socket.IO chat</title>
+  <link rel="stylesheet" href="/views/style.css">
+</head>
 
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (input.value) {
-          console.log(socket.id.lenght);
-          const messageData = { nickname: 'Jonnes', chatMessage: input.value };
-          console.log(messageData);
-          socket.emit('message', messageData);
-          input.value = '';
-        }
-      });
+<body>
+  <ul class="messages"></ul>
+  <form class="form" action="">
+    <div id="display-nick"></div>
+    <input class="input" autocomplete="off" /><button>Send</button>
+  </form>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
 
-      socket.on('message', (message) => {
-        console.log(message);
-        const item = document.createElement('li');
-        item.textContent = message;
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
-      });
-    </script>
-  </body>
+    const form = document.querySelector('.form');
+    const input = document.querySelector('.input');
+    const messages = document.querySelector('.messages');
+
+    window.onload = () => {
+      let randomNick = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10); //source: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+      const displayNick = document.querySelector('#display-nick');
+      const span = document.createElement('span');
+      span.setAttribute('data-testid', 'online-user');
+      span.setAttribute('id', 'nickname');
+      span.textContent = randomNick;
+      displayNick.appendChild(span);
+    };
+    
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value) {
+        const nickname = document.querySelector('#nickname').textContent;
+        const messageData = { nickname, chatMessage: input.value };
+        socket.emit('message', messageData);
+        input.value = '';
+      }
+    });
+
+    socket.on('message', (message) => {
+      const item = document.createElement('li');
+      item.textContent = message;
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  </script>
+</body>
+
 </html>
