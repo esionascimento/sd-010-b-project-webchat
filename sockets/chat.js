@@ -18,7 +18,7 @@ const pessoas = [];
   });
 
   socket.on('disconnect', () => {
-    if (!pessoas[foundUser(socket.id, pessoas)]) {
+    if (pessoas[foundUser(socket.id, pessoas)] !== undefined) {
       socket.broadcast.emit('userOff', pessoas[foundUser(socket.id, pessoas)].nickname);
       pessoas.splice(foundUser(socket.id, pessoas), 1);
     }
