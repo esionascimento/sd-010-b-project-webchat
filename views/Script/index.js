@@ -16,7 +16,7 @@ const ul = document.getElementById('ul-message');
 const inputNick = document.getElementById('input-nick');
 const changeNickButton = document.getElementById('button-nick');
 const ulUserConect = document.getElementById('usersConect');
-nickUser.innerText = nickName;
+// nickUser.innerText = nickName;
 
 sendButton.addEventListener('click', (e) => {
   e.preventDefault();
