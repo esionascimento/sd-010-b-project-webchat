@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap') ;
 
 * {
   box-sizing: border-box;
@@ -6,8 +6,8 @@
   padding: 0;
 }
 
-body, input, button {
-  font-family: 'Roboto', sans-serif;
+body , input , button {
+  font-family: Roboto, sans-serif;
   font-size: 16px;
 }
 
@@ -41,16 +41,16 @@ input {
 }
 
 .user form {
-  display: flex;
-  padding: 50px;
   border-bottom: gray solid 1px;
-  width: 100%;
+  display: flex;
   justify-content: space-between;
+  padding: 50px;
+  width: 100%;
 }
 
 .user input {
-  margin-right: 20px;
   height: 30px;
+  margin-right: 20px;
   padding: 15px;
   width: 100%;
 }
@@ -70,22 +70,22 @@ input {
 }
 
 .messages {
+  border-left: gray solid 2px;
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-left: gray solid 2px;
-  padding: 20px 50px;
   justify-content: flex-end;
+  padding: 20px 50px;
 }
 
 .form {
-  bottom: 0px;
-  left: 0px;
-  position: fixed;
   align-items: center;
-  height: 100px;
-  width: 100vw;
+  bottom: 0;
   display: flex;
+  height: 100px;
+  left: 0;
+  position: fixed;
+  width: 100vw;
 }
 
 .form input {
