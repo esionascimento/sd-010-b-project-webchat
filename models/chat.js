@@ -14,6 +14,7 @@ const getAll = async () => {
   const db = await connection();
   const messageAll = await db.collection('messages')
   .find().toArray();
+  console.log(messageAll);
   return messageAll;
 };
 

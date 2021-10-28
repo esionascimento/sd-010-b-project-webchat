@@ -59,7 +59,6 @@ const updateUserOn = (newName, pastName) => {
 };
 
 const updateUserOff = (name) => {
-  // console.log(changeUser);
   const listUl = document.querySelector('#userson');
   const list = document.querySelectorAll('#nickname');
   console.log(list, name);

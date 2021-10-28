@@ -1,4 +1,5 @@
 const { dateNow } = require('../helper/date');
+const { add } = require('../models/chat');
 
 const foundUser = (id, pessoas) => {
   let indexFound = 0;
@@ -10,6 +11,13 @@ const foundUser = (id, pessoas) => {
   return indexFound;
 };
 
+const dele = (socket, pessoas) => {
+  if (pessoas[foundUser(socket.id, pessoas)] !== undefined) {
+    socket.broadcast.emit('userOff', pessoas[foundUser(socket.id, pessoas)].nickname);
+    pessoas.splice(foundUser(socket.id, pessoas), 1);
+  }
+};
+
 const pessoas = [];
  module.exports = (io) => io.on('connection', (socket) => {
   socket.on('userOn', (nickname) => {
@@ -18,19 +26,17 @@ const pessoas = [];
   });
 
   socket.on('disconnect', () => {
-    if (pessoas[foundUser(socket.id, pessoas)] !== undefined) {
-      socket.broadcast.emit('userOff', pessoas[foundUser(socket.id, pessoas)].nickname);
-      pessoas.splice(foundUser(socket.id, pessoas), 1);
-    }
+    dele(socket, pessoas);
   });
 
   socket.on('updateUserOn', (name) => {
-    io.emit('updateUserOn', { 
+    io.emit('updateUserOn', {
       newName: name, pastName: pessoas[foundUser(socket.id, pessoas)].nickname });
     pessoas[foundUser(socket.id, pessoas)] = { nickname: name, id: socket.id };
   });
 
-  socket.on('message', (message) => {
+  socket.on('message', async (message) => {
     io.emit('message', `${dateNow()} - ${message.nickname}: ${message.chatMessage}`);
+    await add({ message: message.chatMessage, nickname: message.nickname });
   });
 });
