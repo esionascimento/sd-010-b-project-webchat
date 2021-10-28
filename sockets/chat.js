@@ -18,12 +18,21 @@ const changeNicknames = (oldNick, newNick, io, socket) => {
   io.emit('updateNicknames', onlyNicknames);
 };
 
+const sendMsg = (chatMessage, nickname, io) => {
+  const formatMsg = {
+    date: new Date().toLocaleString('en-US').replaceAll('/', '-').replace(',', ''),
+    chatMessage,
+    nickname,
+  };
+  io.emit('message', `${formatMsg.date} - ${formatMsg.nickname}: ${formatMsg.chatMessage}`);
+};
+
 module.exports = (io) => io.on('connection', (socket) => {
   socket.on('userLogin', (username) => {
     if (!username) return false;
     nickOnLogin(username, io, socket);
 
-    // socket.emit('userConnect', username);
+    socket.emit('userConnect', username);
 
     socket.emit('serverMessage', `Bem vindo ${username} ao chat`);
 
@@ -33,14 +42,7 @@ module.exports = (io) => io.on('connection', (socket) => {
   socket.on('changeNicknames', 
     ({ oldNick, newNick }) => changeNicknames(oldNick, newNick, io, socket));
 
-  socket.on('clientMessage', (message) => {
-    const formatMsg = {
-      date: new Date().toLocaleString('en-US').replaceAll('/', '-').replace(',', ''),
-      message: message.message,
-      nickname: message.nickname,
-    };
-    // https://stackoverflow.com/questions/3552461/how-to-format-a-javascript-date
-    
-    io.emit('message', `${formatMsg.date} - ${formatMsg.nickname}: ${formatMsg.message}`);
-  });
+  socket.on('message', ({ nickname, chatMessage }) => {
+    sendMsg(chatMessage, nickname, io); 
+});
 });

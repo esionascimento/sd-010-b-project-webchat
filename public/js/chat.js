@@ -24,7 +24,7 @@ nickChangeBtn.addEventListener('click', () => {
   const newNick = nicknameImput.value;
 
   nickname = nicknameImput.value;
-  userNickname.innerText = nickname;
+  userNickname.textContent = nickname;
 
   socket.emit('chageNicknames', { oldNick, newNick });
 
@@ -33,7 +33,7 @@ nickChangeBtn.addEventListener('click', () => {
 
 const createNick = (nick, newNick) => {
   const li = document.createElement('li');
-  li.innerText = nick;
+  li.textContent = nick;
   if (newNick === nickname) li.setAttribute('data-testid', 'online-user');
   usersList.appendChild(li);
 };
@@ -42,13 +42,6 @@ const createArrayOfNicks = (array) => {
   usersList.innerHTML = '';
   array.forEach((nick) => createNick(nick, nickname));
 };
-
-// socket.on('userConnect', (name) => {
-//   if (!name) return false;
-
-//   nicknameUser.innerText = `User connected: ${name}`;
-//   usersList.appendChild(nicknameUser);
-// });
 
 // Chat messages:
 const sendBtn = document.getElementById('sendBtn');
