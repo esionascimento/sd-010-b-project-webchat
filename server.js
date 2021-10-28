@@ -21,6 +21,8 @@ app.get('/', (req, res) => {
   res.render(`${__dirname}/views/index.ejs`);
 });
 
+app.get('/messages', async());
+
 app.use(express.static(`${__dirname}/views`));
 
 let conectedUsers = [];
