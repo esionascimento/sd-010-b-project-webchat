@@ -62,7 +62,7 @@
 </head>
 <body>
     <ul id="mensagens"></ul>
-    <div id="nickname"></div>
+    <ul id="nickname"></ul>
     <form id="form_nickname" action="">
       <input data-testid="nickname-box" type="text" autocomplete="off" id="nicknameInput"><button data-testid="nickname-button">Salvar</button>
     </form>
@@ -110,29 +110,37 @@
           const messageUl = document.querySelector('#mensagens');
           const li = document.createElement('li');
           const span = document.createElement('span');
-          span.innerText = `${msg.newDataHora} - ${msg.data.nickname}: ${msg.data.chatMessage}`
+          span.innerText = msg; /* `${msg.newDataHora} - ${msg.chat.nickname}: ${msg.chat.chatMessage}` */
           li.appendChild(span);
-          li.setAttribute("data-testid", "message");
+          span.setAttribute("data-testid", "message");
           messageUl.appendChild(li);
         }
 
         socket.on('message', (message) => createMessage(message));
 
         socket.on('message', (msg) => {
-          const divNick = document.querySelector('#nickname');
-          const spanNick = document.createElement('span');
-          spanNick.innerText = `${msg.data.nickname}`;
-          divNick.appendChild(spanNick); 
+          const nickStorage = sessionStorage.getItem('nickname');
+          const ulNick = document.querySelector('#nickname');
+          const liNick = document.createElement('li');
+          liNick.innerText = `${/* msg.data.nickname */ nickStorage}`;
+          ulNick.appendChild(liNick); 
         });
 
-        socket.emit('initialNick', generateNickName(16));
+        const createInitialNick = () => {
+          const randomUser = generateNickName(16);
+          const user = inputNick.value ? inputNick.value : randomUser;
+          sessionStorage.setItem('nickname', user); 
+          return user;
+        }
+
+        socket.emit('initialNick', createInitialNick());
 
         socket.on('initialNick', (msg) => {
-          const divNick = document.querySelector('#nickname');
-          const spanNick = document.createElement('span');
-          spanNick.setAttribute("data-testid", "online-user"); 
-          spanNick.innerText = `${msg}`;
-          divNick.appendChild(spanNick); 
+          const ulNick = document.querySelector('#nickname');
+          const liNick = document.createElement('li');
+          liNick.setAttribute("data-testid", "online-user"); 
+          liNick.innerText = `${msg}`;
+          ulNick.appendChild(liNick); 
         });
 
     </script>
