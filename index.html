@@ -18,29 +18,46 @@
   <body>
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
+      <input id="nameUser" data-testid="nickname-box" >
+      <button data-testid="nickname-button">name</button>
+      <input id="input" autocomplete="off" data-testid="message-box" /><button data-testid="send-button">Send</button>
     </form>
+
+
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      var socket = io();
-    
-      var messages = document.getElementById('messages');
-      var form = document.getElementById('form');
-      var input = document.getElementById('input');
-    
+      let socket = io();
+      let nameUser = document.getElementById('nameUser');
+      let messages = document.getElementById('messages');
+      let form = document.getElementById('form');
+      let input = document.getElementById('input');
+
+      const generetName = () => {
+        let text = "";
+        let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for (let i = 0; i < 18; i++)
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+        return text;
+      }
+      const createName = () => {
+        const newName = generetName();
+        nameUser.value = newName;
+      }
+      createName();
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
           const chatMessage = input.value;
-          const nickname = 'jon';
+          const nickname = nameUser.value;
           const messageUser = { chatMessage, nickname }
           socket.emit('message', messageUser);
           input.value = '';
         }
       });
       socket.on('message', function(msg) {
-        var item = document.createElement('li');
+        let item = document.createElement('li');
         item.textContent = msg;
+        item.setAttribute("data-testid", "message")
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
