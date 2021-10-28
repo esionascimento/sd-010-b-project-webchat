@@ -29,11 +29,11 @@ let conectedUsers = [];
 io.on('connection', async (socket) => {
   const arrayMessages = await messagesController.getAllMesssages();
   io.emit('allMessages', arrayMessages); io.emit('idConnect', socket.id);
-  socket.on('message', (payload) => {
+  socket.on('message', async (payload) => {
     const { chatMessage, nickname } = payload;
     const dateAndHour = new Date().toLocaleString().replace(/\//g, '-');
     const sendMensage = `${dateAndHour} - ${nickname} ${chatMessage}`;
-    messagesController.creatMessage({ dateAndHour, nickname, chatMessage });
+    await messagesController.creatMessage({ dateAndHour, nickname, chatMessage });
     io.emit('message', sendMensage);
   });
   socket.on('UserOnline', (conectUser) => {
