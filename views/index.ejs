@@ -11,7 +11,8 @@
   <ul class="messages"></ul>
   <form class="form" action="">
     <div id="display-nick"></div>
-    <input class="input" autocomplete="off" /><button>Send</button>
+    <input class="input" data-testid="message-box" autocomplete="off" />
+    <button data-testid="send-button">Send</button>
   </form>
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -42,9 +43,10 @@
     });
 
     socket.on('message', (message) => {
-      const item = document.createElement('li');
-      item.textContent = message;
-      messages.appendChild(item);
+      const li = document.createElement('li');
+      li.textContent = message;
+      li.setAttribute('data-testid', 'message')
+      messages.appendChild(li);
       window.scrollTo(0, document.body.scrollHeight);
     });
   </script>
