@@ -110,7 +110,7 @@
           const messageUl = document.querySelector('#mensagens');
           const li = document.createElement('li');
           const span = document.createElement('span');
-          span.innerText = msg; /* `${msg.newDataHora} - ${msg.chat.nickname}: ${msg.chat.chatMessage}` */
+          span.innerText = msg;
           li.appendChild(span);
           span.setAttribute("data-testid", "message");
           messageUl.appendChild(li);
@@ -122,7 +122,7 @@
           const nickStorage = sessionStorage.getItem('nickname');
           const ulNick = document.querySelector('#nickname');
           const liNick = document.createElement('li');
-          liNick.innerText = `${/* msg.data.nickname */ nickStorage}`;
+          liNick.innerText = `${nickStorage}`;
           ulNick.appendChild(liNick); 
         });
 
