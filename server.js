@@ -20,8 +20,8 @@ app.use(cors());
 app.use(express.json());
 
 const allMessage = [];
-
-const dataAtual = new Date();
+console.log(allMessage);
+/* const dataAtual = new Date();
 const dia = (dataAtual.getDate() < 10 ? '0' : '') + dataAtual.getDate();
 const mes = ((dataAtual.getMonth() + 1) < 10 ? '0' : '') + (dataAtual.getMonth() + 1);
 
@@ -33,20 +33,22 @@ function dataHora() {
   const segundo = (dataAtual.getSeconds() < 10 ? '0' : '') + dataAtual.getSeconds();
   const dataFormatada = `${dia}-${mes}-${ano} ${hora}:${minuto}:${segundo}`;
   return dataFormatada;
-}
+} */
 
-const newDataHora = dataHora();
+const newDataHora = require('./utils/getDate');
+const chat = require('./utils/format');
 
 io.on('connection', (socket) => {
     console.log(`Usuário conectado. ID: ${socket.id} `);
-    socket.on('message', (data) => {
-      allMessage.push({ data, newDataHora });
-      console.log(allMessage);
-      io.emit('message', { data, newDataHora });
+
+    socket.on('message', ({ chatMessage, nickname }) => {
+      const date = newDataHora();
+      const message = chat(chatMessage, nickname, date);
+      allMessage.push({ chatMessage, nickname }, date);
+      io.emit('message', message);
     });
 
     socket.on('initialNick', (nickRender) => {
-      console.log(nickRender);
       io.emit('initialNick', nickRender); 
     });
 });
