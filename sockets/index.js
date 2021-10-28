@@ -1,5 +1,9 @@
 const webChat = (io) => {
-  console.log('webChat', io);
+  io.on('connection', (socket) => {
+    socket.on('conectado', () => {
+      io.emit('usuario', 'Usuário conectado');
+    });
+  });
 };
 
 module.exports = webChat;
