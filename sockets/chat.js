@@ -35,9 +35,9 @@ const pessoas = [];
     pessoas[foundUser(socket.id, pessoas)] = { nickname: name, id: socket.id };
   });
 
-  socket.on('message', async (message) => {
+  socket.on('message', (message) => {
     io.emit('message', `${dateNow()} - ${message.nickname}: ${message.chatMessage}`);
-    console.log(message);
-    await add(message.chatMessage, message.nickname);
+    // console.log(message);
+    add(message.chatMessage, message.nickname);
   });
 });
