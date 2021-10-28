@@ -99,9 +99,7 @@
 
         form.addEventListener('submit', (e) => {
           e.preventDefault();
-         /*  const renderNick = generateNickName(16); */
           const nickStorage = sessionStorage.getItem('nickname');
-   /*        const nickName = (!nickStorage) ? renderNick : nickStorage; */
           socket.emit('message', { chatMessage: inputMessage.value, nickname: nickStorage});
           inputMessage.value = '';
           return false;
@@ -136,14 +134,6 @@
         }
 
         socket.emit('initialNick', createInitialNick());
-
-      /*   socket.on('initialNick', (msg) => {
-          const ulNick = document.querySelector('#nickname');
-          const liNick = document.createElement('li');
-          liNick.setAttribute("data-testid", "online-user"); 
-          liNick.innerText = `${msg}`;
-          ulNick.appendChild(liNick); 
-        }); */
 
     </script>
 </body>
