@@ -30,6 +30,10 @@ sendButton.addEventListener('click', (e) => {
 function userOnline() {
   socket.emit('UserOnline', [conectUsers, oldNick]);
 }
+
+window.onload = () => {
+  userOnline();
+};
 changeNickButton.addEventListener('click', (e) => {
   e.preventDefault();
   oldNick = nickName;
@@ -53,12 +57,6 @@ socket.on('message', (msg) => {
   creatMessage(msg);
 });
 
-socket.on('allMessages', (arrayMessages) => {
-  arrayMessages.forEach((msg) => {
-    creatMessage(msg);
-  });
-});
-
 socket.on('allUsers', (allUsers) => {
   ulUserConect.innerText = '';
   const newArray = allUsers.map((e) => e[0]);
@@ -70,7 +68,3 @@ socket.on('allUsers', (allUsers) => {
     ulUserConect.appendChild(li);
     });
 });
-
-window.onload = () => {
-  userOnline();
-};
