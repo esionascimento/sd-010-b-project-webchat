@@ -9,21 +9,40 @@
   <body>
     <h1>Chat</h1>
     <ul id="messages"></ul>
-    <form>
-      <input id="messageInput" autocomplete="off" /><button>Send</button>
+    <form id="nickNameForm">
+      <input id="nickNameInput" autocomplete="off" placeholder="Nick name" />
+      <button>Save</button>
+    </form>
+    <form id="messageForm">
+      <input id="messageInput" autocomplete="off" />
+      <button>Send</button>
     </form>
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
+    let nickName;
 
-    const form = document.querySelector("form");
-    const inputMessage = document.querySelector("#messageInput");
+    const nickNameForm = document.querySelector("#nickNameForm");
+    const nickNameInput = document.querySelector("#nickNameInput");
 
-    form.addEventListener("submit", (e) => {
+    const messageForm = document.querySelector("#messageForm");
+    const messageInput = document.querySelector("#messageInput");
+
+    messageForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      socket.emit("clientMessage", inputMessage.value);
-      inputMessage.value = "";
+      socket.emit("clientMessage", {
+        chatMessage: messageInput.value,
+        nickname: nickName,
+      });
+      messageInput.value = "";
+      return false;
+    });
+
+    nickNameForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      nickName = nickNameInput.value;
+      nickNameInput.value = "";
       return false;
     });
 

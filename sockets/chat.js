@@ -1,13 +1,22 @@
+const moment = require('moment');
+
 module.exports = (io) =>
   io.on('connection', (socket) => {
     console.log(socket.id);
 
     socket.on('clientMessage', (message) => {
-      console.log(`Mensagem ${message}`);
-      io.emit('serverMessage', message);
+      io.emit(
+        'serverMessage',
+        `${moment(new Date()).format('DD-MM-yyyy HH:mm:ss')} - ${
+          message.nickname
+        }: ${message.chatMessage}`,
+      );
     });
 
     socket.on('disconnect', () => {
-      socket.broadcast.emit('serverMessage', `Xiii! ${socket.id} acabou de se desconectar! :(`);
+      socket.broadcast.emit(
+        'serverMessage',
+        `Xiii! ${socket.id} acabou de se desconectar! :(`,
+      );
     });
   });
