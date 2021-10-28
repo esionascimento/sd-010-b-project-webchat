@@ -28,6 +28,18 @@ socket.on('nickname', (users) => {
   listUsers.innerHTML = nicks;
 });
 
+socket.on('allMessages', (messages) => {
+  const listMessage = document.getElementById('messages');
+  console.log(messages);
+  messages.forEach((msg) => {
+    const item = document.createElement('li');
+    const message = `${msg.timestamp} - ${msg.nickname}: ${msg.message}`;
+    item.textContent = message;
+    item.setAttribute('data-testid', 'message');
+    listMessage.appendChild(item);
+  });
+});
+
 // change nickname
 const formNickname = document.getElementById('form-nickname');
 const inputNickname = document.getElementById('input-nickname');

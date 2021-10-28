@@ -13,11 +13,13 @@ module.exports = (io) => {
     socket.on('changeNickname', (newNickname) => {
       const indexUser = users.findIndex((user) => user === newNickname.randomNickName);
       users[indexUser] = newNickname.newNick;
+      randomNickName = newNickname.newNick;
       io.emit('nickname', users);
     });
     
     socket.on('disconnect', () => {
       users = users.filter((user) => user !== randomNickName);
+      console.log({ users, randomNickName });
       io.emit('nickname', users);
     });
   });
