@@ -54,6 +54,12 @@ socket.on('message', (msg) => {
   creatMessage(msg);
 });
 
+socket.on('allMessages', (msg) => {
+  if (msg.length > 0) {
+  msg.forEach((e) => creatMessage(e)); 
+}
+});
+
 socket.on('allUsers', (allUsers) => {
   ulUserConect.innerText = '';
   const newArray = allUsers.map((e) => e[0]);
