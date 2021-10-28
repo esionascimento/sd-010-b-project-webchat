@@ -1,6 +1,6 @@
+let users = [];
+
 module.exports = (io) => {
-  let users = [];
-  
   io.on('connection', (socket) => {
     let randomNickName;
     socket.on('nickname', (nick) => {       
@@ -9,7 +9,6 @@ module.exports = (io) => {
       io.emit('nickname', users);
     });
 
-    // criar uma função para troca do nick
     socket.on('changeNickname', (newNickname) => {
       const indexUser = users.findIndex((user) => user === newNickname.randomNickName);
       users[indexUser] = newNickname.newNick;
@@ -19,7 +18,6 @@ module.exports = (io) => {
     
     socket.on('disconnect', () => {
       users = users.filter((user) => user !== randomNickName);
-      console.log({ users, randomNickName });
       io.emit('nickname', users);
     });
   });
