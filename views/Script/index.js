@@ -50,7 +50,7 @@ function creatMessage(msg) {
 }
 
 socket.on('message', (msg) => {
-creatMessage(msg);
+  creatMessage(msg);
 });
 
 socket.on('allMessages', (arrayMessages) => {
