@@ -27,18 +27,7 @@ app.get('/', (req, res) => {
   res.status(200).render('index');
 });
 
-// https://www.codegrepper.com/profile/frantic-finch-jof2l4f54hya
-app.get('/style.css', (req, res) => {
-  res.sendFile(`${__dirname}/css/style.css`);
-});
-
-io.on('connection', (socket) => {
-  socket.on('message', (message) => {
-    const { chatMessage, nickname } = message;
-    const now = new Date().toLocaleString().replace(/\//g, '-');
-    io.emit('message', `${now} - ${nickname} ${chatMessage}`);
-  });
-});
+require('./sockets/webchat')(io);
 
 http.listen(PORT, () => {
   console.log(`listening on ${PORT}`);
