@@ -37,6 +37,7 @@
     const salvar = document.getElementById('salvar');
     const enviar = document.getElementById('enviar');
     let nickname;
+    let name;
     console.log(nickname);
 
     function removeUl() {
@@ -56,15 +57,24 @@
       removeUl();
       addUl();
       const ul = document.getElementById("idUl");
+
+      const li = document.createElement("li");
+      li.appendChild(document.createTextNode(nickname));
+      li.classList.add("content-li");
+      li.setAttribute('data-testid', 'online-user');
+      ul.appendChild(li);
+
       namesLogados.forEach((names) => {
-        const li = document.createElement("li");
-        li.appendChild(document.createTextNode(names));
-        li.classList.add("content-li");
-        li.setAttribute('data-testid', 'online-user');
-        ul.appendChild(li);
+        if (names !== nickname) {
+          const li = document.createElement("li");
+          li.appendChild(document.createTextNode(names));
+          li.classList.add("content-li");
+          li.setAttribute('data-testid', 'online-user');
+          ul.appendChild(li);
+        }
       });
     }
-
+    
     function renderMessage(user) {
       const ul = document.getElementById("ul");
       const li = document.createElement("li");
@@ -75,21 +85,27 @@
     
     function renderGetMessages(all) {
       const ul = document.getElementById("ul");
-      console.log('all db', all);
       all.forEach((messages) => {
-        const { message, nickname, timestamp } = messages;
+        const { message, name, timestamp } = messages;
         const li = document.createElement("li");
-        li.innerText = `${timestamp} - ${nickname} : ${message}`;
+        li.innerText = `${timestamp} - ${name} : ${message}`;
         li.setAttribute('data-testid', 'message');
         ul.appendChild(li);
       })
     };
-
+    
     socket.on('html', (all) => {
       renderGetMessages(all)
     });
-
+    
     socket.on('nomeAleatorio', randomAll => {
+      console.log('Array do front - ', randomAll);
+      if (!name) {
+        nickname = socket.id.slice(0, 16);
+      } else {
+        nickname = name;
+      }
+      
       renderNamesLogados(randomAll);
     });
 
@@ -98,13 +114,12 @@
     });
 
     salvar.addEventListener('click', () => {
-      const name = document.getElementById('name').value;
+      name = document.getElementById('name').value;
       nickname = name;
       socket.emit('salveUser', name);
     });
     enviar.addEventListener('click', () => {
       const chatMessage = document.getElementById('message').value;
-      console.log(chatMessage);
       socket.emit('message', {chatMessage,  nickname});
     });
   </script>
