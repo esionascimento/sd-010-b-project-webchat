@@ -27,4 +27,9 @@ module.exports = async (io) => io.on('connection', async (socket) => {
     const serverReturn = insertMessageinDB(data);
     io.emit('message', serverReturn);
   });
+  socket.on('disconnecting', () => {
+    const userInfo = onlineUsers.find((user) => user.socketId === socket.id);
+    const userInfoIndex = onlineUsers.indexOf(userInfo);
+    onlineUsers.splice(userInfoIndex, 1);
+  });
 });
