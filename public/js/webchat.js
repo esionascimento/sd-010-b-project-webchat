@@ -82,4 +82,5 @@ socket.emit('addUserList', { nickname });
 
 window.onbeforeunload = (_e) => {
   socket.disconnect();
+  // socket.emit('saiu', nickname);
 };
