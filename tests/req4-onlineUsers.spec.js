@@ -435,6 +435,5 @@ describe('4 - Informe a todos os clientes quem está online no momento', () => {
     expect(client1Nicknames.length).toBe(2);
     expect(client1Nicknames[0]).toEqual(nickname);
     expect(client1Nicknames[1]).toMatch(/^[\w'-]{16}$/);
-
   });
 });

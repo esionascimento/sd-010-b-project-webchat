@@ -1,8 +1,8 @@
 const connection = require('./connection');
 
-const create = async ({ message, nickname, timestamp }) => {
+const create = async ({ message, name, timestamp }) => {
   const connect = await connection();
-  await connect.collection('messages').insertOne({ message, nickname, timestamp });
+  await connect.collection('messages').insertOne({ message, name, timestamp });
 };
 
 const getAll = async () => {
