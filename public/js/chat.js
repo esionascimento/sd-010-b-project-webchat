@@ -51,7 +51,9 @@ const createMessage = (message) => {
 
 const renderOnlineUsers = (onlineUsers) => {
   const onlineUsersUl = document.getElementById('online-users-list');
+  onlineUsersUl.innerHTML = '';
   const thisUserNickName = sessionStorage.getItem('nickname');
+  console.log(thisUserNickName);
   const thisUserNickNameLi = document.createElement('li');
   thisUserNickNameLi.setAttribute(DATA_TEST_ID, 'online-user');
   thisUserNickNameLi.innerText = thisUserNickName;

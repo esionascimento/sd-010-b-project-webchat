@@ -31,5 +31,6 @@ module.exports = async (io) => io.on('connection', async (socket) => {
     const userInfo = onlineUsers.find((user) => user.socketId === socket.id);
     const userInfoIndex = onlineUsers.indexOf(userInfo);
     onlineUsers.splice(userInfoIndex, 1);
+    io.emit('onlineUsers', onlineUsers);
   });
 });
