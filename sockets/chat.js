@@ -21,7 +21,8 @@ const dele = (socket, pessoas) => {
 const pessoas = [];
  module.exports = (io) => io.on('connection', (socket) => {
   socket.on('userOn', (nickname) => {
-    pessoas.push({ nickname, id: socket.id });
+    pessoas.push({ nickname: nickname.name, id: socket.id, color: nickname.color });
+    console.log(pessoas);
     io.emit('userOn', pessoas);
   });
 
@@ -32,12 +33,13 @@ const pessoas = [];
   socket.on('updateUserOn', (name) => {
     io.emit('updateUserOn', {
       newName: name, pastName: pessoas[foundUser(socket.id, pessoas)].nickname });
-    pessoas[foundUser(socket.id, pessoas)] = { nickname: name, id: socket.id };
+    pessoas[foundUser(socket.id, pessoas)] = { nickname: name, id: socket.id, color: pessoas[foundUser(socket.id, pessoas)].color };
   });
 
-  socket.on('message', async (message) => {
-    await add(message.chatMessage, message.nickname, dateNow());
-    io.emit('message', `${dateNow()} - ${message.nickname}: ${message.chatMessage}`);
+  socket.on('message', (message) => {
+    // await add(message.chatMessage, message.nickname, dateNow());
+    io.emit('message', { 
+      date: dateNow(), pessoa: pessoas[foundUser(socket.id, pessoas)], message: message.chatMessage });
     console.log(message);
   });
 });
