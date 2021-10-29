@@ -34,6 +34,8 @@ app.get('/', async (req, res) => {
 const addUser = async (_id, nickname) => {
   await connection().then((db) =>
     db.collection('users').insertOne({ _id, nickname }));
+
+  io.emit('userAdded', { _id, nickname });
 };
 
 const addMessage = async (nickname, chatMessage) => {
@@ -86,6 +88,7 @@ io.on('connection', async (socket) => {
   socket.on('disconnect', async () => {
     await connection().then((db) =>
       db.collection('users').deleteOne({ _id: socket.id }));
+      socket.broadcast.emit('userDisconnected', socket.id);
   });
 });
 
