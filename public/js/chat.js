@@ -73,8 +73,9 @@ socket.on('updateNicknames', (nicknames) => {
 });
 
 const renderMessages = (messages) => {
-  if (typeof messages === 'object') return false;
-  messages.forEach((message) => createMessage(message));
+  const txtMsg = messages.map((el) => `${el.timestamp} - ${el.nickname}: ${el.message}`);
+  
+  txtMsg.forEach((message) => createMessage(message));
 };
 
 const getPreviousMessages = async () => {
@@ -82,12 +83,11 @@ const getPreviousMessages = async () => {
     .then((data) => data.json())
     .then((messages) => {
       renderMessages(messages);
-      console.log(messages);
     });
 };
 
 window.onload = async () => {
+  await getPreviousMessages();
   userNickname.innerHTML = nickname;
   socket.emit('userLogin', nickname);
-  await getPreviousMessages();
 };
