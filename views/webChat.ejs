@@ -94,7 +94,13 @@
     socket.on("loadUsers", (users) => {
       const usersContainer = document.querySelector("#usersContainer");
       usersContainer.innerText = "";
-      users.forEach((user) => addUser(user));
+      const firstUser = users.find((user) => user._id == socket.id);
+      addUser(firstUser);
+      users.forEach((user) => {
+        if (user._id != socket.id) {
+          addUser(user);
+        }
+      });
     });
     socket.on("userDisconnected", (id) => removeUser(id));
     socket.on("userNicknameUpdated", (info) => updateUser(info));
