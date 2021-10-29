@@ -8,11 +8,7 @@
   </head>
   <body>
     <h1>Chat</h1>
-    <ul id="usersContainer">
-      <% onlineUsers && onlineUsers.forEach(({nickname,_id}) => { %>
-      <li id="<%= _id %>" data-testid="online-user"><%= `${nickname}` %></li>
-      <% }) %>
-    </ul>
+    <ul id="usersContainer"></ul>
     <ul id="messages">
       <%messages && messages.forEach(({message,nickname,timestamp}) => { %>
       <li data-testid="message">
@@ -36,61 +32,71 @@
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-        const socket = io();
+    const socket = io();
 
-        const messageForm = document.querySelector("#messageForm");
-        const messageInput = document.querySelector("#messageInput");
+    const messageForm = document.querySelector("#messageForm");
+    const messageInput = document.querySelector("#messageInput");
 
-        messageForm.addEventListener("submit", (e) => {
-          e.preventDefault();
-          socket.emit("message", {
-            chatMessage: messageInput.value,
-            nickname: nickname,
-          });
-          messageInput.value = "";
-          return false;
-        });
+    messageForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      socket.emit("message", {
+        chatMessage: messageInput.value,
+        nickname: nickname,
+      });
+      messageInput.value = "";
+      return false;
+    });
 
-        const createMessage = (message) => {
-          const messagesUl = document.querySelector("#messages");
-          const li = document.createElement("li");
-          li.innerText = message;
-          li.setAttribute("data-testid", "message");
-          messagesUl.appendChild(li);
-        };
+    const createMessage = (message) => {
+      const messagesUl = document.querySelector("#messages");
+      const li = document.createElement("li");
+      li.innerText = message;
+      li.setAttribute("data-testid", "message");
+      messagesUl.appendChild(li);
+    };
 
-        let nickname;
+    let nickname;
 
-        const nicknameForm = document.querySelector("#nicknameForm");
-        const nicknameInput = document.querySelector("#nicknameInput");
+    const nicknameForm = document.querySelector("#nicknameForm");
+    const nicknameInput = document.querySelector("#nicknameInput");
 
-        nicknameForm.addEventListener("submit", (e) => {
-          e.preventDefault();
-          const oldNickname = nickname;
-          nickname = nicknameInput.value;
-          nicknameInput.value = "";
-          socket.emit("setNewNickname", { oldNickname, nickname });
-          return false;
-        });
+    nicknameForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const oldNickname = nickname;
+      nickname = nicknameInput.value;
+      nicknameInput.value = "";
+      socket.emit("setNewNickname", { oldNickname, nickname });
+      return false;
+    });
 
-        const addUser = ({ _id, nickname }) => {
-          const usersContainer = document.querySelector("#usersContainer");
-          const li = document.createElement("li");
-          li.innerText = nickname;
-          li.setAttribute("data-testid", "online-user");
-          li.setAttribute("id", _id);
-          usersContainer.appendChild(li);
-        };
+    const addUser = ({ _id, nickname }) => {
+      const usersContainer = document.querySelector("#usersContainer");
+      const li = document.createElement("li");
+      li.innerText = nickname;
+      li.setAttribute("id", _id);
+      li.setAttribute("data-testid", "online-user");
+      usersContainer.appendChild(li);
+    };
 
-        const removeUser = (id) => {
-          const usersContainer = document.querySelector("#usersContainer");
-          const li = document.querySelector(`#${id}`);
-          usersContainer.removeChild(li);
-        };
+    const removeUser = (id) => {
+      const usersContainer = document.querySelector("#usersContainer");
+      const li = document.querySelector(`#${id}`);
+      usersContainer.removeChild(li);
+    };
+    const updateUser = ({ _id, nickname }) => {
+      const li = document.querySelector(`#${_id}`);
+      li.innerText = nickname;
+    };
 
-        socket.on("message", (message) => createMessage(message));
-        socket.on("userAdded", (user) => addUser(user));
-        socket.on("setUser", (randomUser) => (nickname = randomUser));
-        socket.on("userDisconnected", (id) => removeUser(id));
+    socket.on("message", (message) => createMessage(message));
+
+    socket.on("setUser", (randomUser) => (nickname = randomUser));
+    socket.on("loadUsers", (users) => {
+      const usersContainer = document.querySelector("#usersContainer");
+      usersContainer.innerText = "";
+      users.forEach((user) => addUser(user));
+    });
+    socket.on("userDisconnected", (id) => removeUser(id));
+    socket.on("userNicknameUpdated", (info) => updateUser(info));
   </script>
 </html>

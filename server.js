@@ -25,17 +25,12 @@ app.get('/', async (req, res) => {
   const messages = await connection().then((db) =>
     db.collection('messages').find({}).toArray());
 
-  const onlineUsers = await connection().then((db) =>
-    db.collection('users').find({}, { _id: 0 }).toArray());
-
-  res.render('webChat', { messages, onlineUsers });
+  res.render('webChat', { messages });
 });
 
 const addUser = async (_id, nickname) => {
   await connection().then((db) =>
     db.collection('users').insertOne({ _id, nickname }));
-
-  io.emit('userAdded', { _id, nickname });
 };
 
 const addMessage = async (nickname, chatMessage) => {
@@ -55,17 +50,20 @@ const addMessage = async (nickname, chatMessage) => {
 };
 
 const newNickname = async (oldNickname, nickname) => {
-  await connection().then((db) =>
+  const res = await connection().then((db) =>
     db
       .collection('users')
-      .updateOne({ nickname: oldNickname }, { $set: { nickname } }));
+      .findOneAndUpdate({ nickname: oldNickname }, { $set: { nickname } }));
+  const { _id } = res.value;
+
+  io.emit('userNicknameUpdated', { _id, nickname });
 };
 
 const generateRandomString = (num) => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result1 = '';
+  let result1 = 'socket';
   const charactersLength = characters.length;
-  for (let i = 0; i < num; i += 1) {
+  for (let i = 0; i < num - 6; i += 1) {
     result1 += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
 
@@ -75,6 +73,9 @@ const generateRandomString = (num) => {
 io.on('connection', async (socket) => {
   const randomUser = generateRandomString(16);
   await addUser(socket.id, randomUser);
+  const users = await connection().then((db) =>
+    db.collection('users').find({}).toArray());
+  io.emit('loadUsers', users);
   socket.emit('setUser', randomUser);
 
   socket.on('message', async ({ nickname, chatMessage }) => {
@@ -88,7 +89,7 @@ io.on('connection', async (socket) => {
   socket.on('disconnect', async () => {
     await connection().then((db) =>
       db.collection('users').deleteOne({ _id: socket.id }));
-      socket.broadcast.emit('userDisconnected', socket.id);
+    io.emit('userDisconnected', socket.id);
   });
 });
 
