@@ -35,9 +35,13 @@
     socket.on('onlineUsers', (user) => {
       createListItem(user, 'users', 'online-user')
     });
+
+    socket.on('message', (message) => {
+      createListItem(message, 'messages', 'message')
+    });
     
-    socket.on('saveNickname', (randomNickname) => {
-      sessionStorage.setItem('nickname', randomNickname);
+    socket.on('saveNickname', (userNickname) => {
+      sessionStorage.setItem('nickname', userNickname);
     });
     
     socket.on('updateNickname', ({ previousNickname, atual }) => {
@@ -50,10 +54,6 @@
       const disconnectedUser = document.getElementById(`${user}`);
       const usersList = document.querySelector('#users');
       usersList.removeChild(disconnectedUser)
-    });
-
-    socket.on('message', (message) => {
-      createListItem(message, 'messages', 'message')
     });
 
     const nicknameBtn = document.querySelector('#nicknameBtn');

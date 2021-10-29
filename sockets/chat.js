@@ -1,3 +1,5 @@
+const controller = require('../controllers/messages');
+
 /** SOURCE https://www.youtube.com/watch?v=Hr5pAAIXjkA */
 const generateNickname = () => {
   let nickname = '';
@@ -8,20 +10,29 @@ const generateNickname = () => {
   return nickname;
 };
 
+const createMessage = ({ chatMessage, nickname, timestamp }) => {
+  let date = timestamp;
+  if (!date) {
+    date = new Date().toLocaleString('en-US');
+  }
+  return `${date} - ${nickname}: ${chatMessage}`.replace(/\//g, '-');
+};
+
 const users = [];
 
 /* SOURCE https://stackoverflow.com/questions/42862729/convert-date-object-in-dd-mm-yyyy-hhmmss-format
     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString */
 
-module.exports = (io) => io.on('connection', (socket) => {
+module.exports = (io) => io.on('connection', async (socket) => {
   let userNickname = generateNickname();
-  socket.emit('saveNickname', userNickname);
-  io.emit('onlineUsers', userNickname);
+  const messageBackup = await controller.getAllMessages();
+  messageBackup.forEach((msg) => socket.emit('message', createMessage(msg)));
+  socket.emit('saveNickname', userNickname); io.emit('onlineUsers', userNickname);
   if (users.length > 0) users.forEach((user) => socket.emit('onlineUsers', user));
   users.push(userNickname);
-  socket.on('message', ({ chatMessage, nickname }) => {
-    io.emit('message', 
-    `${new Date().toLocaleString('en-US')} - ${nickname}: ${chatMessage}`.replace(/\//g, '-'));
+  socket.on('message', async ({ chatMessage, nickname }) => {
+    await controller.saveMessages({ chatMessage, nickname });
+    io.emit('message', createMessage({ chatMessage, nickname }));
   });
   socket.on('updateNickname', ({ previousNickname, atual }) => {
     users.splice(previousNickname, 1, atual);
@@ -29,7 +40,6 @@ module.exports = (io) => io.on('connection', (socket) => {
     io.emit('updateNickname', { previousNickname, atual });
   });
   socket.on('disconnect', () => {
-    users.splice(userNickname, 1);
-    io.emit('offLineUser', userNickname);
+    users.splice(userNickname, 1); io.emit('offLineUser', userNickname);
   });
 });
