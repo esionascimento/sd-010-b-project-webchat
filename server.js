@@ -21,25 +21,18 @@ app.use(express.static(path.join(__dirname, 'views')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-const generateRandomString = (num) => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result1 = '';
-  const charactersLength = characters.length;
-  for (let i = 0; i < num; i += 1) {
-    result1 += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-
-  return result1;
-};
-
 app.get('/', async (req, res) => {
   const messages = await connection().then((db) =>
-  db.collection('messages').find({}).toArray());
-  res.render('webChat', { messages });
+    db.collection('messages').find({}).toArray());
+  const onlineUsers = await connection().then((db) =>
+    db.collection('users').find({}, { _id: 0 }).toArray());
+  console.log(onlineUsers);
+  res.render('webChat', { messages, onlineUsers });
 });
 
 io.on('connection', async (socket) => {
-  console.log(socket.id);
+  await connection().then((db) =>
+    db.collection('users').insertOne({ nickname: socket.id }));
 
   socket.on('message', async ({ nickname, chatMessage }) => {
     const newMessage = {
@@ -57,7 +50,14 @@ io.on('connection', async (socket) => {
     );
   });
 
-  socket.emit('setUser', generateRandomString(16));
+  socket.on('setNewNickname', async ({ oldNickname, nickname }) => {
+    await connection().then((db) =>
+      db
+        .collection('users')
+        .updateOne({ nickname: oldNickname }, { $set: { nickname } }));
+  });
+
+  socket.emit('setUser', socket.id);
 });
 
 httpServer.listen(PORT, () => console.log(`Rodando na porta ${PORT}`));

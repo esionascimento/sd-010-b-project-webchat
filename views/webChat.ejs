@@ -8,7 +8,11 @@
   </head>
   <body>
     <h1>Chat</h1>
-    <ul id="usersContainer"></ul>
+    <ul id="usersContainer">
+      <% onlineUsers && onlineUsers.forEach(({nickname}) => { %>
+      <li data-testid="message"><%= `${nickname}` %></li>
+      <% }) %>
+    </ul>
     <ul id="messages">
       <%messages && messages.forEach(({message,nickname,timestamp}) => { %>
       <li data-testid="message">
@@ -16,9 +20,9 @@
       </li>
       <% }) %>
     </ul>
-    <form id="nickNameForm">
+    <form id="nicknameForm">
       <input
-        id="nickNameInput"
+        id="nicknameInput"
         autocomplete="off"
         placeholder="Nick name"
         data-testid="nickname-box"
@@ -41,7 +45,7 @@
       e.preventDefault();
       socket.emit("message", {
         chatMessage: messageInput.value,
-        nickname: nickName,
+        nickname: nickname,
       });
       messageInput.value = "";
       return false;
@@ -55,29 +59,31 @@
       messagesUl.appendChild(li);
     };
 
-    let nickName;
+    let nickname;
 
-    const nickNameForm = document.querySelector("#nickNameForm");
-    const nickNameInput = document.querySelector("#nickNameInput");
+    const nicknameForm = document.querySelector("#nicknameForm");
+    const nicknameInput = document.querySelector("#nicknameInput");
 
-    nickNameForm.addEventListener("submit", (e) => {
+    nicknameForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      nickName = nickNameInput.value;
-      nickNameInput.value = "";
+      const oldNickname = nickname;
+      nickname = nicknameInput.value;
+      nicknameInput.value = "";
+      socket.emit("setNewNickname", { oldNickname, nickname });
       return false;
     });
 
-    const addUser = (nickName) => {
+    const addUser = (nickname) => {
       const usersContainer = document.querySelector("#usersContainer");
       const li = document.createElement("li");
-      li.innerText = nickName;
+      li.innerText = nickname;
       li.setAttribute("data-testid", "online-user");
       usersContainer.appendChild(li);
     };
 
     socket.on("message", (message) => createMessage(message));
     socket.on("setUser", (randomUser) => {
-      nickName = randomUser;
+      nickname = randomUser;
       addUser(randomUser);
     });
   </script>
