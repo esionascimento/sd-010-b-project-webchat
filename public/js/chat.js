@@ -58,10 +58,12 @@ const renderOnlineUsers = (onlineUsers) => {
   onlineUsersUl.appendChild(thisUserNickNameLi);
   const onlineUsersNickNames = onlineUsers.map((userObj) => userObj.nickname);
   onlineUsersNickNames.forEach((user) => {
-    const userLi = document.createElement('li');
-    userLi.setAttribute(DATA_TEST_ID, 'online-user');
-    userLi.innerText = user;
-    onlineUsersUl.appendChild(userLi);
+    if (user !== thisUserNickName) {
+      const userLi = document.createElement('li');
+      userLi.setAttribute(DATA_TEST_ID, 'online-user');
+      userLi.innerText = user;
+      onlineUsersUl.appendChild(userLi);
+    }
   });
 };
 
