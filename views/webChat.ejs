@@ -9,8 +9,8 @@
   <body>
     <h1>Chat</h1>
     <ul id="usersContainer">
-      <% onlineUsers && onlineUsers.forEach(({nickname}) => { %>
-      <li data-testid="message"><%= `${nickname}` %></li>
+      <% onlineUsers && onlineUsers.forEach(({nickname,_id}) => { %>
+      <li id="<%= _id %>" data-testid="message"><%= `${nickname}` %></li>
       <% }) %>
     </ul>
     <ul id="messages">
