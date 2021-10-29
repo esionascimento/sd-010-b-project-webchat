@@ -49,6 +49,7 @@ module.exports = (io) => io.on('connection', async (socket) => {
   socket.on('disconnect', () => {
     const usersArray = users.findIndex((item) => item === user);
     users.splice(usersArray, 1);
+    // Fiz a remocao do user com ajuda do Zozimo <3
     io.emit('users', users);
   });
 });
