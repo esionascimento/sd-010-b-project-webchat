@@ -20,8 +20,7 @@ module.exports = async (io) => io.on('connection', async (socket) => {
   const messagesList = messagesInfo.map((m) => `${m.timestamp} - ${m.nickname}: ${m.message}`);
   socket.emit('messagesList', messagesList);
   socket.on('newUserNickname', (nickname) => {
-    onlineUsers.push(nickname);
-    console.log(nickname);
+    onlineUsers.push({ socketId: socket.id, nickname });
     io.emit('onlineUsers', onlineUsers);
   });
   socket.on('message', (data) => {

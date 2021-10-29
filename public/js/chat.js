@@ -50,14 +50,14 @@ const createMessage = (message) => {
 };
 
 const renderOnlineUsers = (onlineUsers) => {
-  console.log(onlineUsers);
   const onlineUsersUl = document.getElementById('online-users-list');
   const thisUserNickName = sessionStorage.getItem('nickname');
   const thisUserNickNameLi = document.createElement('li');
   thisUserNickNameLi.setAttribute(DATA_TEST_ID, 'online-user');
   thisUserNickNameLi.innerText = thisUserNickName;
   onlineUsersUl.appendChild(thisUserNickNameLi);
-  onlineUsers.forEach((user) => {
+  const onlineUsersNickNames = onlineUsers.map((userObj) => userObj.nickname);
+  onlineUsersNickNames.forEach((user) => {
     const userLi = document.createElement('li');
     userLi.setAttribute(DATA_TEST_ID, 'online-user');
     userLi.innerText = user;
@@ -70,7 +70,6 @@ socket.on('onlineUsers', (onlineUsers) => renderOnlineUsers(onlineUsers));
 socket.on('connect', () => {
   setNickname();
   const nickname = sessionStorage.getItem('nickname');
-  console.log(nickname);
   socket.emit('newUserNickname', nickname);
 });
 
