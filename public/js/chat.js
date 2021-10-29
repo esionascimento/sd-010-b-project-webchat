@@ -72,7 +72,22 @@ socket.on('updateNicknames', (nicknames) => {
   // https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift
 });
 
-window.onload = () => {
+const renderMessages = (messages) => {
+  if (typeof messages === 'object') return false;
+  messages.forEach((message) => createMessage(message));
+};
+
+const getPreviousMessages = async () => {
+  fetch('http://localhost:3000/messages')
+    .then((data) => data.json())
+    .then((messages) => {
+      renderMessages(messages);
+      console.log(messages);
+    });
+};
+
+window.onload = async () => {
   userNickname.innerHTML = nickname;
   socket.emit('userLogin', nickname);
+  await getPreviousMessages();
 };

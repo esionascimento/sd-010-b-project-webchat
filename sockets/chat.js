@@ -17,9 +17,17 @@ const changeNicknames = (oldNick, newNick, io, socket) => {
       return { nickname, id };
   });
   const onlyNicknames = nicknames.map(({ nickname: nick }) => nick);
-  // console.log(onlyNicknames, 'dale', nicknames);
   io.emit('updateNicknames', onlyNicknames);
   io.emit('message', `${oldNick} alterou seu nick para ${newNick}`);
+};
+
+const disconnect = (io, socket) => {
+  const offline = nicknames.find(({ id }) => id === socket.id);
+  nicknames = nicknames.filter(({ id }) => id !== socket.id);
+  // traz apenas sockets conectados
+  const onlyNicknames = nicknames.map(({ nickname: nick }) => nick);
+  io.emit('updateNicknames', onlyNicknames);
+  if (offline) return io.emit('message', `${offline.nickname} saiu`);
 };
 
 const sendMsg = async (chatMessage, nickname, io) => {
@@ -28,8 +36,8 @@ const sendMsg = async (chatMessage, nickname, io) => {
     chatMessage,
     nickname,
   };
-  await ChatModel.saveMessage(formatMsg.chatMessage, formatMsg.nickname, formatMsg.date);
   io.emit('message', `${formatMsg.date} - ${formatMsg.nickname}: ${formatMsg.chatMessage}`);
+  await ChatModel.saveMessage(formatMsg.chatMessage, formatMsg.nickname, formatMsg.date);
 };
 
 module.exports = (io) => io.on('connection', (socket) => {
@@ -49,5 +57,7 @@ module.exports = (io) => io.on('connection', (socket) => {
 
   socket.on('message', ({ nickname, chatMessage }) => {
     sendMsg(chatMessage, nickname, io); 
-});
+  });
+
+  socket.on('disconnect', () => disconnect(io, socket));
 });

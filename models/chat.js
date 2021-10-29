@@ -1,11 +1,13 @@
 const connection = require('./connection');
 
 const getAllMessages = async () => { 
-  await connection().collections('messages').find({}).toArray();
+  const db = await connection();
+  await db.collection('messages').find({}).toArray();
 };
 
 const saveMessage = async (message, nickname, timestamp) => {
-  await connection().collections('messages').insertOne({
+  const db = await connection();
+  await db.collection('messages').insertOne({
     message,
     nickname,
     timestamp,
