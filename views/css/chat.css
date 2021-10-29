@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font: 13px Helvetica, Arial, sans-serif;
+}
+
+.form1 {
+  padding: 3px;
+  width: 100%;
+}
+
+.form2 {
+  background: black;
+  bottom: 0;
+  padding: 3px;
+  position: fixed;
+  width: 100%;
+}
+
+.userInput {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.messageInput {
+  border: 0;
+  margin-right: 0.5%;
+  padding: 10px;
+  width: 90%;
+}
+
+.btn1 {
+  background: rgb(130, 224, 255);
+  border: 1px solid black;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.btn2 {
+  background: rgb(130, 224, 255);
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  width: 9%;
+}
+
+.users {
+  list-style: none;
+  padding: 10px 0 5px 15px;
+}
+
+.saveButton {
+  background: rgb(130, 224, 255);
+  border: none;
+  cursor: pointer;
+  margin-left: 15px;
+  padding: 10px;
+}
+
+.main__container {
+  display: flex;
+}
+
+.registry__container {
+  display: flex;
+}
+
+.messages {
+  list-style-type: none;
+  margin-left: 100px;
+  padding: 0;
+}
+
+.messages li {
+  padding: 5px 10px;
+}
+
+.messages li:nth-child( odd ) {
+  background: #eee;
+}

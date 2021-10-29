@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat Online</title>
+    <link rel="stylesheet" href="./css/chat.css">
+  </head>
+  <body>
+    <div class="main__container">
+      <div>
+        <div class="registry__container">
+          <form action="" class="form1">
+            <input 
+              class="userInput" 
+              data-testid="nickname-box" 
+              placeholder="Insira o nickname"
+            /><button type="submit" class=btn1 data-testid="nickname-button">Salvar</button>
+          </form>
+        </div>
+        <ul class="users"></ul>
+        </ul>
+      </div>
+      <ul class="messages"></ul>
+    </div>
+    <form action="" class="form2">
+      <input class="messageInput" autocomplete="off" data-testid="message-box" /><button data-testid="send-button" class="btn2">Enviar</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src='./js/chat.js'></script>
+  </body>
+</html>
