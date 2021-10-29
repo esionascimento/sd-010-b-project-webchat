@@ -1,4 +1,6 @@
 //
+const ChatModel = require('../models/chat');
+
 let nicknames = [];
 
 const nickOnLogin = (nickname, io, socket) => {
@@ -20,12 +22,13 @@ const changeNicknames = (oldNick, newNick, io, socket) => {
   io.emit('message', `${oldNick} alterou seu nick para ${newNick}`);
 };
 
-const sendMsg = (chatMessage, nickname, io) => {
+const sendMsg = async (chatMessage, nickname, io) => {
   const formatMsg = {
     date: new Date().toLocaleString('en-US').replaceAll('/', '-').replace(',', ''),
     chatMessage,
     nickname,
   };
+  await ChatModel.saveMessage(formatMsg.chatMessage, formatMsg.nickname, formatMsg.date);
   io.emit('message', `${formatMsg.date} - ${formatMsg.nickname}: ${formatMsg.chatMessage}`);
 };
 
