@@ -6,7 +6,7 @@ body {
   width: 90%;
 }
 
-#message-container {
+/* #message-container {
   border: 1px solid black;
   flex-grow: 1;
   overflow-y: auto;
@@ -15,4 +15,4 @@ body {
 #message-container div {
   background-color: #ccc;
   padding: 5px;
-}
+} */
