@@ -1,11 +1,7 @@
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font: 13px Helvetica, Arial;
 }
 
 .box-chat {
@@ -25,36 +21,36 @@ body {
 }
 
 .box-nickname {
-  display: flex;
   border: 1px black solid;
+  display: flex;
   justify-content: end;
   width: 30%;
 }
 
 .box-message {
+  border: 1px black solid;
   display: flex;
   justify-content: end;
-  border: 1px black solid;
   width: 70%;
 }
 
 .btn-send {
-  width: 9%;
   background: rgb(130, 224, 255);
   border: none;
-  padding: 10px;
   cursor: pointer;
+  padding: 10px;
+  width: 9%;
 }
 
 .input {
   border: 1px black solid;
+  margin-right: 0.5%;
   padding: 10px;
   width: 88%;
-  margin-right: 0.5%;
 }
 
 .ul-list {
-  margin-left: 20px;
-  margin-bottom: 20px;
   list-style-type: none;
+  margin-bottom: 20px;
+  margin-left: 20px;
 }
