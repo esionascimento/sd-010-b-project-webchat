@@ -1,12 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 
-const app = express();
-const http = require('http').createServer(app);
-
 const PORT = 3000;
 
-let message = [];
+const app = express();
+const http = require('http').createServer(app);
 
 const formattedDate = () => {
   const date = new Date();
@@ -24,6 +22,7 @@ const io = require('socket.io')(http, {
   },
 });
 
+let message = [];
 io.on('connection', (socket) => {
   console.log(`Usuário conectado. ID: ${socket.id}`);
 
@@ -31,17 +30,14 @@ io.on('connection', (socket) => {
     message = `${formattedDate()} - ${data.nickname}: ${data.chatMessage}`;
     io.emit('message', message);
   });
-  // socket.on('randomNick', (data) => {
-  //   message = `${formattedDate()} - ${data.nickname}: ${data.chatMessage}`;
-  //   io.emit('randomNick', message);
-  // });
 });
 
 app.set('view engine', 'ejs');
-app.set('views', './views');
+
+app.use(express.static('public'));
 
 app.use('/', (_req, res) => {
-  res.render('webchat', { message });
+  res.render('index', { message });
 });
 
 http.listen(PORT, () => {
