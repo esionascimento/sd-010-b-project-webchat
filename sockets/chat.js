@@ -22,20 +22,21 @@ const createMessage = ({ chatMessage, nickname, timestamp }) => {
 };
 
 const users = [];
-let userNickname = generateNickname();
 
-const onUserConnection = async (io, socket) => {
+const onUserConnection = async (io, socket, userNickname) => {
   const messageBackup = await controller.getAllMessages();
   messageBackup.forEach((msg) => socket.emit('message', createMessage(msg)));
 
-  socket.emit('saveNickname', userNickname); io.emit('onlineUsers', userNickname);
+  socket.emit('saveNickname', userNickname); 
+  io.emit('onlineUsers', userNickname);
   
   if (users.length > 0) users.forEach((user) => socket.emit('onlineUsers', user));
   users.push(userNickname);
 };
 
 module.exports = (io) => io.on('connection', async (socket) => {
-  onUserConnection(io, socket);
+  let userNickname = generateNickname();
+  onUserConnection(io, socket, userNickname);
 
   socket.on('message', async ({ chatMessage, nickname }) => {
     await controller.saveMessages({ chatMessage, nickname });
