@@ -12,38 +12,27 @@ const io = require('socket.io')(server, {
 });
 
 const webController = require('./controllers/webControler');
+const { dataCerta, horaCerta } = require('./utils/util');
 
 app.use(express.json());
 
-const dataCerta = () => {
-  const date = new Date();
-  const data = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-  return data;
-};
-
-const horaCerta = () => {
-  const date = new Date();
-  let minutos = date.getMinutes();
-
-  if (minutos < 10) {
-    minutos = `0${minutos}`;
-  }
-
-  const hourAndMinute = `${date.getHours()}:${minutos}:${date.getSeconds()}`; 
-  return hourAndMinute;
-};
 app.set('view engine', 'ejs');
 
 app.use(express.static(`${__dirname}/public`));
 
-io.on('connection', (client) => {
+io.on('connection', async (client) => {
   console.log(`client on ID: ${client.id}`);
   client.on('message', ({ chatMessage, nickname }) => {
+    webController.saveMessages({ message: chatMessage, nickname });
     const message = `${dataCerta()} ${horaCerta()} - ${nickname}: ${chatMessage}`;
     io.emit('message', message);
   });
 });
 
-app.get('/', (req, res) => res.render('index'));
-app.post('/', webController.saveMessages);
+const getAll = async () => {
+  const message = await webController.getAll();
+  return message;
+};
+
+app.get('/', async (req, res) => res.render('index', { messages: await getAll() }));
 server.listen(port);
