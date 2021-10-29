@@ -10,7 +10,7 @@ let message = [];
 
 const formattedDate = () => {
   const date = new Date();
-  const currentDate = `${date.getDay()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+  const currentDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
   const fullHour = `${date.getHours()}:${date.getMinutes()}`;
   const pmOrAm = fullHour < 12 ? 'AM' : 'PM';
   return `${currentDate} ${fullHour} ${pmOrAm}`;
@@ -28,10 +28,13 @@ io.on('connection', (socket) => {
   console.log(`Usuário conectado. ID: ${socket.id}`);
 
   socket.on('message', (data) => {
-    console.log(data);
     message = `${formattedDate()} - ${data.nickname}: ${data.chatMessage}`;
     io.emit('message', message);
   });
+  // socket.on('randomNick', (data) => {
+  //   message = `${formattedDate()} - ${data.nickname}: ${data.chatMessage}`;
+  //   io.emit('randomNick', message);
+  // });
 });
 
 app.set('view engine', 'ejs');

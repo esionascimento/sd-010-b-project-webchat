@@ -6,15 +6,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/socket.io/socket.io.js"></script>
   <title>Trybe Web Chat</title>
+  <script>
+    function load() {
+      console.log("Evento de carregamento detectado!");
+      // https://www.youtube.com/watch?v=Hr5pAAIXjkA&ab_channel=DevPleno
+      let nickname = '';
+      const randomString = (length) => {
+        do {
+          nickname += Math.random().toString(36).substr(2);
+        } while(nickname.length < length);
+        nickname = nickname.substr(0, length);
+        return nickname;
+      }
+
+      const inputRandomNickname = document.querySelector('.randomNickname');
+      const stringNickname = randomString(16);
+      inputRandomNickname.innerHTML = stringNickname;
+    }
+    window.onload = load;
+  </script>
 </head>
 <body>
   <h1>Trybe Web Chat</h1>
 
   <form id="chat">
-    <input type="text" name="nickname" class="nickname" placeholder="Digite seu nickname...">
-    <input type="text" name="inputMessage" value="" class="chatMessage" placeholder="Escreva aqui...">
+    <p data-testid="online-user" class="randomNickname"></p>
+    <input type="text" data-testid="nickname-box" name="nickname" class="nickname" placeholder="Digite seu nickname...">
+    <button type="button" data-testid="nickname-button" class="saveNickname">Salvar</button>
+    <input type="text" data-testid="message-box" name="inputMessage" value="" class="chatMessage" placeholder="Escreva aqui...">
     <div class="messages">
-    <button type="submit">Enviar</button>
+    <button data-testid="send-button" type="submit">Enviar</button>
   </form>
 
 </body>
@@ -40,11 +61,29 @@
     const createMessage = (message) => {
         const messagesUl = document.querySelector('.messages');
         const li = document.createElement('li');
+        // https://pt.stackoverflow.com/questions/56766/adicionar-atributo-a-um-elemento
+        li.setAttribute('data-testid', 'message')
         li.innerText = message;
         messagesUl.appendChild(li);
-      }
+    }
 
-      socket.on('message', (message) => createMessage(message));
+    // // https://www.youtube.com/watch?v=Hr5pAAIXjkA&ab_channel=DevPleno
+    // let nickname = '';
+    // const randomString = (length) => {
+    //   do {
+    //     nickname += Math.random().toString(36).substr(2);
+    //   } while(nickname.length < length);
+    //   nickname = nickname.substr(0, length);
+    //   return nickname;
+    // }
+
+    // const inputRandomNickname = document.querySelector('.randomNickname');
+    // const stringNickname = randomString(16);
+    // inputRandomNickname.innerHTML = stringNickname;
+
+    socket.on('message', (message) => createMessage(message));
+    // socket.emit('randomNick', () => createNick());
+
   });
 </script>
 </html>
