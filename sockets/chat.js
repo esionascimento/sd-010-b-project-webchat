@@ -23,10 +23,11 @@ const removeUserFromOnlineUsers = (socketId) => {
     }
 };
 
-const updateUserNickname = (socketId, newNickname) => {
+const updateUserNickname = (socketId, newNickname, io) => {
   const userInfo = onlineUsers.find((user) => user.socketId === socketId);
   const userInfoIndex = onlineUsers.indexOf(userInfo);
   onlineUsers[userInfoIndex] = { socketId, nickname: newNickname };
+  io.emit('onlineUsers', onlineUsers);
 };
 
 module.exports = async (io) => io.on('connection', async (socket) => {
@@ -38,8 +39,7 @@ module.exports = async (io) => io.on('connection', async (socket) => {
     io.emit('onlineUsers', onlineUsers);
   });
   socket.on('updateNickname', (newNickname) => {
-    updateUserNickname(socket.id, newNickname);
-    io.emit('onlineUsers', onlineUsers);
+    updateUserNickname(socket.id, newNickname, io);
   });
   socket.on('message', (data) => {
     const serverReturn = insertMessageinDB(data);
