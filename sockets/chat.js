@@ -47,7 +47,7 @@ module.exports = (io) => io.on('connection', (socket) => {
 
     socket.emit('userConnect', username);
 
-    socket.emit('message', `Bem vindo ao chat ${username}`);
+    // socket.emit('message', `Bem vindo ao chat ${username}`);
 
     socket.broadcast.emit('message', `${username} acabou de entrar na sala`);
   });
