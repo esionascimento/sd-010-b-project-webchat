@@ -1,1 +1,5 @@
-// Faça seu código aqui
+const app = require('express')();
+
+app.listen('3000', () => {
+  console.log('rodando liso');
+});
