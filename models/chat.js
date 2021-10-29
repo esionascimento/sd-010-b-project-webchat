@@ -1,11 +1,11 @@
 // const { ObjectId } = require('mongodb');
 const connection = require('./connection');
-const { dateNow } = require('../helper/date');
+
 // CREATE
-const add = async (message, nickname) => {
+const add = async (message, nickname, timestamp) => {
   const db = await connection();
   await db.collection('messages')
-  .insertOne({ nickname, message, timestamp: dateNow() });
+  .insertOne({ nickname, message, timestamp });
   // console.log(messageOne);
 };
 

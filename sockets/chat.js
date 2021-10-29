@@ -36,7 +36,7 @@ const pessoas = [];
   });
 
   socket.on('message', async (message) => {
-    await add(message.chatMessage, message.nickname);
+    await add(message.chatMessage, message.nickname, dateNow());
     io.emit('message', `${dateNow()} - ${message.nickname}: ${message.chatMessage}`);
     console.log(message);
   });
