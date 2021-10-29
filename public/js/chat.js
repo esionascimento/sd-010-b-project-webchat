@@ -50,6 +50,7 @@ const createMessage = (message) => {
 };
 
 const renderOnlineUsers = (onlineUsers) => {
+  console.log(onlineUsers);
   const onlineUsersUl = document.getElementById('online-users-list');
   onlineUsersUl.innerHTML = '';
   const thisUserNickName = sessionStorage.getItem('nickname');

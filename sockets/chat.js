@@ -15,6 +15,14 @@ const insertMessageinDB = (data) => {
   return serverReturn;
 };
 
+const removeUserFromOnlineUsers = (socketId) => {
+  const userInfo = onlineUsers.find((user) => user.socketId === socketId);
+    const userInfoIndex = onlineUsers.indexOf(userInfo);
+    if (userInfoIndex > -1) {
+      onlineUsers.splice(userInfoIndex, 1);
+    }
+};
+
 module.exports = async (io) => io.on('connection', async (socket) => {
   const messagesInfo = await model.getAllMessages();
   const messagesList = messagesInfo.map((m) => `${m.timestamp} - ${m.nickname}: ${m.message}`);
@@ -28,9 +36,7 @@ module.exports = async (io) => io.on('connection', async (socket) => {
     io.emit('message', serverReturn);
   });
   socket.on('disconnecting', () => {
-    const userInfo = onlineUsers.find((user) => user.socketId === socket.id);
-    const userInfoIndex = onlineUsers.indexOf(userInfo);
-    onlineUsers.splice(userInfoIndex, 1);
-    io.emit('onlineUsers', onlineUsers);
+    removeUserFromOnlineUsers(socket.id);
+    io.emit('onlineUsers', onlineUsers); 
   });
 });
