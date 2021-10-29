@@ -1,0 +1,80 @@
+body , html {
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0;
+}
+
+main {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-around;
+}
+
+.listOnlineContainer {
+  background-color: #131c21;
+  color: white;
+  max-height: 91.3vh;
+  min-width: 27%;
+  overflow-y: scroll;
+  padding: 10px;
+}
+
+.messagesContainer {
+  background-color: #131c21;
+  flex-grow: 1;
+  max-height: 94vh;
+  overflow-y: scroll;
+}
+
+.sendMessages {
+  background-color: rgb(49, 49, 49);
+  padding: 10px;
+}
+
+.inputMessage {
+  border-radius: 3px;
+  margin-right: 3%;
+  width: 82%;
+}
+
+.buttonMessage {
+  width: 14%;
+}
+
+.inputNick {
+  width: 65%;
+}
+
+.buttonNick {
+  min-width: 75px;
+  width: 30%;
+}
+
+.message {
+  background-color: rgb(49, 49, 49);
+  border-radius: 5px;
+  color: rgb(209, 204, 204);
+  margin: 15px;
+  padding: 5px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+*::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+  background: rgb(49, 49, 49);        /* color of the tracking area */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(83, 81, 81);    /* color of the scroll thumb */
+  border: 2px solid rgb(49, 49, 49);  /* creates padding around scroll thumb */
+  border-radius: 3px;       /* roundness of the scroll thumb */
+}

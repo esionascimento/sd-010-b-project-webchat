@@ -12,10 +12,11 @@ function geraStringAleatoria(tamanho) {
 
 let nickname = geraStringAleatoria(16);
 
-const fillUl = (message, id, dataTest) => {
+const fillUl = (message, id, dataTest, classname) => {
   const messagesUl = document.querySelector(`#${id}`);
   const li = document.createElement('li');
   li.innerText = message;
+  if (classname) li.className = classname;
   li.setAttribute('data-testid', dataTest);
   messagesUl.appendChild(li);
 };
@@ -51,7 +52,7 @@ socket.on('message', (chatMessage) => fillUl(chatMessage, 'messages', 'message')
 
 socket.on('LoadOldMessages', ({ oldMessages }) => {
   oldMessages.forEach((chatMessage) => {
-    fillUl(chatMessage, 'messages', 'message');
+    fillUl(chatMessage, 'messages', 'message', 'message');
   });
 });
 

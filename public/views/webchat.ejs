@@ -4,21 +4,30 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <link rel="stylesheet" href="../css/chat.css"> -->
+  <link rel="stylesheet" href="../css/webchat.css">
   <title>WebChat</title>
 </head>
 <body>
-  <h1>WebChat</h1>
-  <h2>Usuários Logados</h2>
-  <ul id="listOnlineUsers"></ul>
-  <form action="" id='formNick'>
-    <input id="inputNick" autocomplete="off" data-testid="nickname-box"/><button data-testid="nickname-button">Alter Nick</button>
-  </form>
-  
-  <form action="" id='formMessage'>
-    <input id="messageInput" autocomplete="off" data-testid="message-box"/><button data-testid="send-button">Send</button>
-  </form>  
-  <ul id="messages"></ul>
+  <!-- <h1>WebChat</h1> -->
+  <main>
+    <div class="listOnlineContainer">
+      <form action="" id='formNick' class="formNick">
+        <input id="inputNick" class="inputNick" autocomplete="off" data-testid="nickname-box" placeholder="Altere seu Nick Aqui"/><button data-testid="nickname-button" class="buttonNick">Alterar</button>
+      </form>
+      <div id="listUsers">
+        <h2>Usuários Logados</h2>
+        <ul id="listOnlineUsers"></ul>
+      </div>
+    </div>
+    <div class="messagesContainer">
+      <ul id="messages"></ul>
+    </div>
+  </main>
+  <div class="sendMessages">    
+    <form action="" id='formMessage'>
+      <input id="messageInput" class="inputMessage" autocomplete="off" data-testid="message-box"/><button data-testid="send-button" class="buttonMessage">Enviar</button>
+    </form>  
+  </div>
   <script src="/socket.io/socket.io.js"></script>
   <script src="../js/webchat.js"></script>
 </body>
