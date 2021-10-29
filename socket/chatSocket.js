@@ -1,4 +1,5 @@
 const { getDate } = require('../utils/chatFuctions');
+const webchatController = require('../controllers/webchat.controller');
 
 let allUsers = [];
 const disconnect = (socket, io) => {
@@ -16,9 +17,14 @@ const changeUser = (socket, io) => {
   });
 };
 const newMessage = (socket, io) => {
-  socket.on('message', (message) => {
+  socket.on('message', async (message) => {
     const date = getDate();
     const messageAlready = `${date} - ${message.nickname}: ${message.chatMessage}`;
+    await webchatController.saveMessage({
+      message: message.chatMessage,
+      nickname: message.nickname,
+      timestamp: date,
+    });
     io.emit('message', messageAlready);
   });
 };

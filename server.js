@@ -16,16 +16,13 @@ const io = require('socket.io')(http, {
     methods: ['GET', 'POST'],
   },
 });
+const webchatController = require('./controllers/webchat.controller');
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-app.use(express.static(path.join(__dirname, 'public')));
-
 require('./socket/chatSocket')(io);
 
-app.get('/', (_req, res) => {
-  res.render('index.html');
-});
+app.get('/', webchatController.getAllMessages);
 
 http.listen(port, () => console.log(`Example app listening on ${port}!`));
