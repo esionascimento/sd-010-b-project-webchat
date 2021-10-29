@@ -12,14 +12,6 @@ const createMessage = async (message) => {
   }
 };
 
-const getMessageHistory = async () => {
-  try {
-    return await webChatModels.getMessageHistory();
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 const convertDate = (string) => {
   if (parseInt(string, 10) < 10) return `0${string}`;
   return string;
@@ -42,13 +34,14 @@ const sendMessage = async (nickname, chatMessage) => {
   return `${message.timestamp} - ${nickname} : ${chatMessage}`;
 };
 
-const addToUsersArray = async (user) => webChatModels.addToUsersArray(user);
+const getUsers = (user) => webChatModels.getUsers(user);
 
-const getDataOnConnect = async (user) => {
-  const users = await addToUsersArray(user);
-  console.log(users);
-  const messagesHistory = await getMessageHistory();
-  return { users, messagesHistory };
+const getMessages = async () => {
+  try {
+    return await webChatModels.getMessages();
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const changeNickname = (id, nickname) => webChatModels.changeNickname(id, nickname);
@@ -57,9 +50,9 @@ const removeFromUsersArray = (id) => webChatModels.removeFromUsersArray(id);
 
 module.exports = {
   renderWebChat,
-  getMessageHistory,
+  getMessages,
   createMessage,
-  getDataOnConnect,
+  getUsers,
   changeNickname,
   removeFromUsersArray,
   sendMessage,

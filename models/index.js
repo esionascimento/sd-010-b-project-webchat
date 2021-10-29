@@ -3,7 +3,7 @@ const connection = require('./connection');
 
 let users = [];
 
-const addToUsersArray = (user) => {
+const getUsers = (user) => {
   users.push(user);
   return users;
 };
@@ -32,7 +32,7 @@ const createMessage = async (message) => {
   .then((db) => db.collection('messages').insertOne(message));
 };
 
-const getMessageHistory = async () => {
+const getMessages = async () => {
   const messages = await connection()
   .then((db) => db.collection('messages').find({}));
   return messages.toArray();
@@ -40,8 +40,8 @@ const getMessageHistory = async () => {
 
 module.exports = {
   createMessage,
-  getMessageHistory,
-  addToUsersArray,
+  getMessages,
+  getUsers,
   changeNickname,
   removeFromUsersArray,
 };
