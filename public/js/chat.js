@@ -28,7 +28,7 @@ function setNickname() {
 nicknameForm.addEventListener('submit', (e) => {
   e.preventDefault();
   sessionStorage.setItem('nickname', nicknameInput.value);
-  socket.emit('nickname', { nickname: nicknameInput.value });
+  socket.emit('updateNickname', nicknameInput.value);
   nicknameInput.value = '';
   return false;
 });
