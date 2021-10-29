@@ -6,25 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/socket.io/socket.io.js"></script>
   <title>Trybe Web Chat</title>
-  <script>
-    function load() {
-      console.log("Evento de carregamento detectado!");
-      // https://www.youtube.com/watch?v=Hr5pAAIXjkA&ab_channel=DevPleno
-      let nickname = '';
-      const randomString = (length) => {
-        do {
-          nickname += Math.random().toString(36).substr(2);
-        } while(nickname.length < length);
-        nickname = nickname.substr(0, length);
-        return nickname;
-      }
-
-      const inputRandomNickname = document.querySelector('.randomNickname');
-      const stringNickname = randomString(16);
-      inputRandomNickname.innerHTML = stringNickname;
-    }
-    window.onload = load;
-  </script>
 </head>
 <body>
   <h1>Trybe Web Chat</h1>
@@ -67,23 +48,21 @@
         messagesUl.appendChild(li);
     }
 
-    // // https://www.youtube.com/watch?v=Hr5pAAIXjkA&ab_channel=DevPleno
-    // let nickname = '';
-    // const randomString = (length) => {
-    //   do {
-    //     nickname += Math.random().toString(36).substr(2);
-    //   } while(nickname.length < length);
-    //   nickname = nickname.substr(0, length);
-    //   return nickname;
-    // }
-
-    // const inputRandomNickname = document.querySelector('.randomNickname');
-    // const stringNickname = randomString(16);
-    // inputRandomNickname.innerHTML = stringNickname;
-
     socket.on('message', (message) => createMessage(message));
-    // socket.emit('randomNick', () => createNick());
-
   });
+
+  // https://www.youtube.com/watch?v=Hr5pAAIXjkA&ab_channel=DevPleno
+  const randomString = (length) => {
+      let nickname = '';
+      do {
+        nickname += Math.random().toString(36).substr(2);
+      } while(nickname.length < length);
+      nickname = nickname.substr(0, length);
+      return nickname;
+    }
+
+    const inputRandomNickname = document.querySelector('.randomNickname');
+    const stringNickname = randomString(16);
+    inputRandomNickname.innerHTML = stringNickname;
 </script>
 </html>
