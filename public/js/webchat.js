@@ -47,13 +47,19 @@ formNick.addEventListener('submit', (e) => {
   inputNick.value = '';
   return false;
 });
+socket.on('message', (chatMessage) => fillUl(chatMessage, 'messages', 'message', 'message'));
 
-socket.on('message', (chatMessage) => fillUl(chatMessage, 'messages', 'message'));
+const conectMs = 'acabou de se conectar ';
+
+socket.on('conectUser', (user) => fillUl(`${user} ${conectMs}`, 'messages', 'message', 'message'));
+
+// const wellComeMs = 'Seja bem vindo ao WebChat !!!';
 
 socket.on('LoadOldMessages', ({ oldMessages }) => {
   oldMessages.forEach((chatMessage) => {
     fillUl(chatMessage, 'messages', 'message', 'message');
   });
+  // fillUl(wellComeMs, 'messages', 'message', 'message');
 });
 
 socket.on('loadUserList', (onlineUsers) => {

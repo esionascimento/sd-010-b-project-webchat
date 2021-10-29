@@ -1,5 +1,7 @@
 const { saveMessage, getAll } = require('../models/webchatModel');
 
+let controlNickName = '';
+
 const BellowTen = (number) => (number < 10 ? `0${number}` : number);
 
 const getNow = () => {
@@ -25,16 +27,17 @@ const onlineUsers = [];
 const updateUserList = (io, oldNick, nickname) => {
   const indexToReplace = onlineUsers.indexOf(oldNick);
   onlineUsers[indexToReplace] = nickname;
+      controlNickName = nickname;
   io.to(Room).emit('updateUserList', onlineUsers);
 };
 
 const disconnect = (io, nickname) => {
   onlineUsers.splice(onlineUsers.indexOf(nickname), 1);
   io.to(Room).emit('updateUserList', onlineUsers);
+  io.to(Room).emit('message', `${nickname} se desconectou!`);
 };
 
 module.exports = (io) => io.on('connection', async (socket) => {
-  let controlNickName = '';
   console.log(`${socket.id} se conectou a sala !`);
   socket.join(Room);
   
@@ -42,6 +45,7 @@ module.exports = (io) => io.on('connection', async (socket) => {
     controlNickName = nickname;
     onlineUsers.push(nickname);
     io.to(Room).emit('updateUserList', onlineUsers);
+    socket.broadcast.emit('conectUser', nickname);
   });
 
   socket.on('updateUserList', ({ oldNick, nickname }) => updateUserList(io, oldNick, nickname));
