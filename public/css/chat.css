@@ -52,3 +52,9 @@ body {
   width: 88%;
   margin-right: 0.5%;
 }
+
+.ul-list {
+  margin-left: 20px;
+  margin-bottom: 20px;
+  list-style-type: none;
+}
