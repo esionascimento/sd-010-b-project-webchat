@@ -5,9 +5,14 @@ const http = require('http');
 
 const server = http.createServer(app);
 
-const { Server } = require('socket.io');
+const io = require('socket.io')(server, {
+  cors: {
+    origin: `http://localhost${3000}`,
+    methods: ['GET', 'POST'],
+  },
+});
 
-const io = new Server(server);
+const { addMessage } = require('./src/models/controllerMessages');
 
 const date = () => {
   const data = new Date();
@@ -29,11 +34,16 @@ app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/index.html`);
   });
 io.on('connection', (socket) => {
-  socket.on('message', (mensageUser) => {
+  socket.on('message', async (mensageUser) => {
     console.log(mensageUser.nickname);
+
     const { chatMessage, nickname } = mensageUser;
-    const messa = `${date()} ${hors()} - ${nickname}: ${chatMessage}`;
-    io.emit('message', messa);
+
+    const now = `${date()} ${hors()}`;
+
+    const userMessage = `${now} - ${nickname}: ${chatMessage}`;
+    await addMessage(chatMessage, nickname, now);
+    io.emit('message', userMessage);
   });
 });
 
