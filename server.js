@@ -12,7 +12,8 @@ const io = require('socket.io')(server, {
   },
 });
 
-const { addMessage } = require('./src/models/controllerMessages');
+const { addMessage } = require('./src/models/modelMessagejs');
+const { controllerGetAllMessages } = require('./src/controller/controllerMessages');
 
 const date = () => {
   const data = new Date();
@@ -46,6 +47,8 @@ io.on('connection', (socket) => {
     io.emit('message', userMessage);
   });
 });
+
+app.get('/messages', controllerGetAllMessages);
 
 server.listen(3000, () => {
   console.log('listening on *:3000');

@@ -51,6 +51,27 @@
       const saveName = () => {
         name.innerText = nameUser.value;
       }
+
+      const allMessages = async () => {
+        let response = await fetch(`http://localhost:3000/messages`);
+        let userData = await response.json();
+        return userData;
+        
+      }
+      const messagesUploads = async (messagesUser) => {
+        messagesUser.forEach((e) => {
+          let li = document.createElement('li');
+          li.textContent = `${e.timestamp} - ${e.nickname}: ${e.message}`;
+          li.setAttribute("data-testid", "message")
+          messages.appendChild(li);
+        })
+      }
+
+      window.onload = async () => {
+        const messages = await allMessages();
+        messagesUploads(messages);
+      }
+
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
