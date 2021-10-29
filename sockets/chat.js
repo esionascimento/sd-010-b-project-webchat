@@ -4,7 +4,6 @@ const { insertMessageToDB } = require('../models/messages');
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    console.log('user connected');
     socket.on('message', ({ chatMessage, nickname }) => {
       const timestamp = getDateTime();
       insertMessage(`${timestamp} - ${nickname}: ${chatMessage}`);
@@ -21,7 +20,6 @@ module.exports = (io) => {
     });
   
     socket.on('disconnect', () => {
-      console.log('user disconnected');
       io.emit('changeNickname', removeUser(socket));
     });
   });
