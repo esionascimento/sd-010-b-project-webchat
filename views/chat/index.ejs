@@ -7,7 +7,7 @@
   <body>
     <ul id="messages">
       <% messages.forEach((mess) => { %>
-        <li><%= `${mess.timestamp} - ${mess.nickname}: ${mess.message}` %></li>
+        <li data-testid="message"><%= `${mess.timestamp} - ${mess.nickname}: ${mess.message}` %></li>
       <% }) %>
     </ul>
     <ul id="userson"></ul>
