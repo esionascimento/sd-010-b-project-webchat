@@ -18,6 +18,6 @@ require('./sockets/chat')(io);
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-app.get('/', (_req, res) => res.render('index'));
+app.get('/', (_req, res) => res.render('webchat'));
 
 server.listen(3000, () => console.log('Servidor na porta: 3000'));

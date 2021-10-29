@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="../public/js/chat.js"></script>
+  <link rel="stylesheet" href="./css/chat.css">
+  <title>Web Chat</title>
+</head>
+
+<body>
+
+  <div class="box-chat">
+
+    <section class="box-section box-nickname">
+
+      <div>
+        <ul id="list-nickname"></ul>
+      </div>
+
+      <form>
+        <input id="input-nickname" class="input" type="text" data-testid="nickname-box">
+        <button id="btn-nickname" class="btn-send" data-testid="nickname-button">Send</button>
+      </form>
+
+    </section>
+
+    <section class="box-section box-message">
+
+      <div>
+        <ul id="list-message"></ul>
+      </div>
+
+      <form>
+        <input id="input-message" class="input" type="text" data-testid="message-box">
+        <button id="btn-message" class="btn-send" data-testid="send-button">Send</button>
+      </form>
+
+    </section>
+
+  </div>
+
+</body>
+</html>
