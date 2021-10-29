@@ -7,7 +7,6 @@ const getAllMessages = async () => {
 };
 
 const saveMessages = async ({ chatMessage, nickname }) => {
-  console.log('no banco');
   const db = await connection();
   await db.collection('messages')
     .insertOne({ 

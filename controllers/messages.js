@@ -6,7 +6,6 @@ const getAllMessages = async () => {
 };
 
 const saveMessages = async (chatData) => {
-  console.log('aqui');
   await model.saveMessages(chatData);
 };
 

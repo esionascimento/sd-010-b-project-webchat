@@ -40,7 +40,8 @@ module.exports = (io) => io.on('connection', async (socket) => {
 
   socket.on('message', async ({ chatMessage, nickname }) => {
     await controller.saveMessages({ chatMessage, nickname });
-    io.emit('message', createMessage({ chatMessage, nickname }));
+    const msg = createMessage({ chatMessage, nickname });
+    io.emit('message', msg);
   });
 
   socket.on('updateNickname', ({ previousNickname, atual }) => {
