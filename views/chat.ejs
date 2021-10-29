@@ -5,7 +5,13 @@
 </head>
 <body>
   <div>
-    <ul id="messages"></ul>
+    <!-- https://app.betrybe.com/course/back-end/sockets/arquitetura-de-software-camada-de-view/6947cf23-ade5-4ef7-a961-085b45a64da3/conteudos/12fa5309-43ba-4ca8-9a3c-e02cd1f0864e/mvc-com-express/4d824e5b-f49f-4f8c-95c8-cefc734c1ceb?use_case=side_bar
+    https://github.com/tryber/sd-10b-live-lectures/blob/lecture/30.4/back-end/server.js -->
+    <ul id="messages">
+      <% messages.forEach(({ chatMessage, nickname, timestamp }) => { %>
+        <li data-testid="message"> <%= `${timestamp} - ${nickname}: ${chatMessage}`.replace(/\//g, '-') %></li>
+      <% }) %>
+    </ul>
   </div>
   <div>
     <ul id="users"></ul>

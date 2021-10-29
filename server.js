@@ -6,7 +6,6 @@ const PORT = process.env || 3000;
 
 const app = express();
 const http = require('http').createServer(app);
-const path = require('path');
 
 const io = require('socket.io')(http, {
   cors: {
@@ -20,11 +19,11 @@ app.use(cors());
 require('./sockets/chat')(io);
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', './views');
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/chat.html'));
-});
+const controller = require('./controllers/messages');
+
+app.get('/', controller.getAllMessages);
 
 http.listen(3000, () => {
   console.log('Servidor ouvindo na porta 3000');
