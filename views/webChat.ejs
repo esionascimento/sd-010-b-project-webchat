@@ -10,7 +10,7 @@
     <h1>Chat</h1>
     <ul id="usersContainer">
       <% onlineUsers && onlineUsers.forEach(({nickname,_id}) => { %>
-      <li id="<%= _id %>" data-testid="message"><%= `${nickname}` %></li>
+      <li id="<%= _id %>" data-testid="online-user"><%= `${nickname}` %></li>
       <% }) %>
     </ul>
     <ul id="messages">
