@@ -1,16 +1,25 @@
+const messagesModel = require('../models/messages');
+
 module.exports = (io) => io.on('connection', (socket) => {
-console.log(socket);
-console.log('a user connected');
+socket.on('message', async (message) => {
+  await messagesModel
+  .createMessageModel(message.message, message.nickname, message.timestamp);
+  const data = ` ${message.timestamp}-${message.nickname}: ${message.message}`;
+  
+  socket.emit('refreshMessages', data);
+});
 
-  // socket.on('likePost', () => {
-  //   currentLikes += 1;
+socket.on('start', async () => {
+  const data = await messagesModel.getAllModel();
+  socket.emit('startMessages', data);
+});
 
-  //   socket.emit('updateLikes', currentLikes);
-  // });
-
-  // socket.on('starPost', () => {
-  //   currentStars += 1;
-
-  //   socket.broadcast.emit('updateStars', currentStars);
-  // });
+socket.on('nick', async (user) => {
+  const users = [];
+  users.push(user.newNick);
+  
+  console.log(users, 'users');
+  // if (user.oldNick) { users.splice(users.indexOf(user.oldNick), 1); }
+  socket.emit('refreshNick', users);
+});
 });

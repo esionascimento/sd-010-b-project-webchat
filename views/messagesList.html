@@ -12,21 +12,21 @@
     <section class="sec-nick-list">
       <h1>Usuários online</h1>
       <ul id="username-list">
-        <li id="userName"> </li>
 
       </ul>
     </section>
     <section class="sec-messages-list">
-      <h1>Mensagens</h1>
+      <h1 >Mensagens</h1>
 
-      <ul>
+      <ul id="messages-list">
 
       </ul>
     </section>
 
       <form  class="create-message-form" id="message-form">
-        <input placeholder="Digite uma nova mensagem aqui" type="text" id="message" />
-        <button type="submit" id="msg-submit">Enviar</button>
+        <input 
+        placeholder="Digite uma nova mensagem aqui"  data-testid="message-box" type="text" id="message" />
+        <button type="submit" id="msg-submit" data-testid="send-button">Enviar</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script src="../utils//utils.js"></script>

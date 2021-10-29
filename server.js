@@ -16,7 +16,7 @@ app.use(express.static(__dirname));
 console.log(__dirname);
 
 require('./socket/socket')(io);
-const { getAll, createMessage, updateMessage } = require('./controller/messages');
+// const { getAll } = require('./controller/messages');
 
 app.set('views', './views');
 
@@ -27,8 +27,11 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(cors());
 
-app.put('/update', updateMessage);
-app.post('/create', createMessage);
-app.get('/', getAll);
+// app.get('/', getAll);
+app.get('/', (req, res) => {
+  res.sendFile(`${__dirname}/views/messagesList.html`);
+  // res.sendFile(`${__dirname}/views/messagesList.ejs`);
+  // res.render('messagesList');
+});
 
 http.listen(PORT, () => console.log(`ouvindo porta ${PORT}!`));

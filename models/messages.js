@@ -12,11 +12,24 @@ const createMessageModel = async (message, nickname, timestamp) => {
   return messages;
 };
 
-const updateMessage = async (nick, oldNick) => {
+const updateUserNick = async (nick, oldNick) => {
   const db = await mongoConnection();
   const messages = db.collection('messages')
     .updateOne({ nickname: nick }, { $set: { nickname: oldNick } });
   return messages;
 };
 
-module.exports = { getAllModel, createMessageModel, updateMessage };
+const getMessageById = async (_id) => {
+  const db = await mongoConnection();
+  const messages = db.collection('messages')
+    .findOne({ _id });
+    return messages;
+};
+
+const createUser = async (nick) => {
+  const db = await mongoConnection();
+  const user = db.insertOne({ nickname: nick, conected: true });
+  return user;
+};
+
+module.exports = { getAllModel, createMessageModel, updateUserNick, getMessageById, createUser };
