@@ -2,7 +2,7 @@ const socket = window.io();
 
 const form = document.querySelector('form');
 const chatMessage = document.querySelector('#messageInput');
-const onlineUsers = document.querySelector('#online-users');
+const onlineUsers = document.querySelector('#online-list');
 const ulmessage = document.querySelector('#messages');
 const save = document.querySelector('#btn');
 const dataTestid = 'data-testid';
@@ -44,7 +44,7 @@ socket.on('messages', (messages) => {
 socket.on('users', (usersList) => {
   onlineUsers.innerHTML = '';
   const userLi = document.createElement('li');
-  userLi.innerText = `${user}: entrou`;
+  userLi.innerText = user;
   userLi.setAttribute('data-testid', 'online-user');
   onlineUsers.appendChild(userLi);
   usersList.forEach((element) => {

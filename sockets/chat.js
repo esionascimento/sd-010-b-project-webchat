@@ -25,13 +25,12 @@ const getMessages = async () => CreateMessage.getAllMessages()
   .then((db) =>
     db.map(({ message, nickname, timestamp }) => `${timestamp} ${nickname} ${message}`));
 
-module.exports = (io) => io.on('connection', async (socket) => {
   const timestamp = moment().format();
 
+module.exports = (io) => io.on('connection', async (socket) => {
   createMessage(io, socket, timestamp);
-  
+
   userList(socket, io);
-  
   const allMessages = await getMessages();
 
   socket.emit('messages', allMessages);
@@ -39,6 +38,7 @@ module.exports = (io) => io.on('connection', async (socket) => {
   user = socket.id.slice(0, 16);
 
   socket.emit('connected', user);
+  console.log(`Usuario ${users} se conectou.`);
 
   socket.on('updateNickname', (nickname) => {
     users = users.map((name) => (name === user ? nickname : name));
@@ -47,7 +47,8 @@ module.exports = (io) => io.on('connection', async (socket) => {
   });
 // https://oieduardorabelo.medium.com/node-js-usando-websockets-5d642456d1f3
   socket.on('disconnect', () => {
-    users = users.filter((name) => name !== user);
-    io.emit('users', user);
+    const usersArray = users.findIndex((item) => item === user);
+    users.splice(usersArray, 1);
+    io.emit('users', users);
   });
 });
